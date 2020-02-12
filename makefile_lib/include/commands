@@ -1,0 +1,171 @@
+################################################################################
+#                       _
+#                      / \   ___ ___ _   _  ___  ___ ___
+#                     / _ \ / __/ __| | | |/ _ \/ __/ __|
+#                    / ___ \ (_| (__| |_| | (_) \__ \__ \
+#                   /_/   \_\___\___|\__,_|\___/|___/___/
+# 
+#                    Accurate Operational Support Systems
+#              (c) 2015-2019 Accuoss, Inc. All rights reserved.
+################################################################################
+################################################################################
+## ACCUOSS LIBERTY LICENSE ( ALL )                                            ##
+## (c) 2015-2019 Accuoss, LLC. All rights reserved.                           ##
+## Permission is hereby granted, free of charge, to any person obtaining a    ##
+## copy of this software and associated documentation files (the "Software"), ##
+## to deal in the Software without restriction, including without limitation  ##
+## the rights to use, copy, modify, merge, publish, distribute, sublicense,   ##
+## and/or sell copies of the Software, and to permit persons to whom the      ##
+## Software is furnished to do so, subject to the following conditions:       ##
+##                                                                            ##
+## The above copyright notice and this permission notice shall be included in ##
+## all copies or substantial portions of the Software.                        ##
+##                                                                            ##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR ##
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,   ##
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL    ##
+## THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER ##
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING    ##
+## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
+## DEALINGS IN THE SOFTWARE.                                                  ##
+################################################################################
+# AccuOSS Common Makefile Commands
+# Version 2.0
+# Michael T. Brown
+# July 5, 2019
+################################################################################
+
+################################################################################
+# COMMANDS
+################################################################################
+
+# old Node 4.2.6 makefile needed		$(CMD_G++)
+# old Node 4.2.6 makefile needed		$(CMD_GCC)
+CMD_ALL=$(CMD_BC) \
+		$(CMD_CAT) \
+		$(CMD_CHKVERSION) \
+		$(CMD_CHKCONFIG) \
+		$(CMD_CHMOD) \
+		$(CMD_CHOWN) \
+		$(CMD_CP) \
+		$(CMD_CRONTAB) \
+		$(CMD_CURL) \
+		$(CMD_CUT) \
+		$(CMD_DATE) \
+		$(CMD_ECHO) \
+		$(CMD_EXPR) \
+		$(CMD_FIND) \
+		$(CMD_GREP) \
+		$(CMD_GROUPADD) \
+		$(CMD_GROUPDEL) \
+		$(CMD_HEAD) \
+		$(CMD_HOSTNAME) \
+		$(CMD_ID) \
+		$(CMD_LDD) \
+		$(CMD_LN) \
+		$(CMD_LS) \
+		$(CMD_MAKE) \
+		$(CMD_MKDIR) \
+		$(CMD_MKTEMP) \
+		$(CMD_MV) \
+		$(CMD_NETSTAT) \
+		$(CMD_PASSWD) \
+		$(CMD_PKILL) \
+		$(CMD_PRINTF) \
+		$(CMD_PS) \
+		$(CMD_PWD) \
+		$(CMD_PYTHON) \
+		$(CMD_RM) \
+		$(CMD_RMDIR) \
+		$(CMD_SCL) \
+		$(CMD_SED) \
+		$(CMD_SERVICE) \
+		$(CMD_SESTATUS) \
+		$(CMD_SHA512SUM) \
+		$(CMD_SLEEP) \
+		$(CMD_SSH) \
+		$(CMD_SSH_KEYGEN) \
+		$(CMD_SU) \
+		$(CMD_SYSTEMCTL) \
+		$(CMD_TAR) \
+		$(CMD_TEST) \
+		$(CMD_TOUCH) \
+		$(CMD_TR) \
+		$(CMD_UNLINK) \
+		$(CMD_UNZIP) \
+		$(CMD_USERADD) \
+		$(CMD_USERDEL) \
+		$(CMD_USERMOD) \
+		$(CMD_WC) \
+		$(CMD_WHICH) \
+		$(CMD_YUM) \
+		$(CMD_YUM_CONFIG_MANAGER)
+
+CMD_BC					:= $(PATH_USR_BIN)/bc
+CMD_CAT					:= $(PATH_BIN)/cat
+CMD_CHKVERSION			:= $(PATH_MAKEFILE_UTILS)/chkversion
+CMD_CHKCONFIG			:= $(PATH_SBIN)/chkconfig
+CMD_CHMOD				:= $(PATH_BIN)/chmod
+CMD_CHOWN				:= $(PATH_BIN)/chown
+CMD_CP					:= $(PATH_BIN)/cp
+CMD_CRONTAB				:= $(PATH_USR_BIN)/crontab
+CMD_CURL				:= $(PATH_USR_BIN)/curl
+CMD_CUT					:= $(PATH_BIN)/cut
+CMD_DATE				:= $(PATH_BIN)/date
+CMD_ECHO				:= $(PATH_BIN)/echo
+CMD_EXPR				:= $(PATH_USR_BIN)/expr
+CMD_FIND				:= $(PATH_USR_BIN)/find
+CMD_G++					:= $(PATH_USR_BIN)/g++
+CMD_GCC					:= $(PATH_USR_BIN)/gcc
+CMD_GREP				:= $(PATH_BIN)/grep
+CMD_GROUPADD			:= $(PATH_USR_SBIN)/groupadd
+CMD_GROUPDEL			:= $(PATH_USR_SBIN)/groupdel
+CMD_HEAD				:= $(PATH_USR_BIN)/head
+CMD_HOSTNAME			:= $(PATH_BIN)/hostname
+CMD_ID					:= $(PATH_USR_BIN)/id
+CMD_LDD					:= $(PATH_USR_BIN)/ldd
+CMD_LN					:= $(PATH_BIN)/ln
+CMD_LS					:= $(PATH_BIN)/ls
+CMD_MAKE				:= $(PATH_USR_BIN)/make
+CMD_MKDIR				:= $(PATH_BIN)/mkdir
+CMD_MKTEMP				:= $(PATH_BIN)/mktemp
+CMD_MV					:= $(PATH_BIN)/mv
+CMD_NETSTAT				:= $(PATH_BIN)/netstat
+CMD_PASSWD				:= $(PATH_USR_BIN)/passwd
+CMD_PKILL				:= $(PATH_USR_BIN)/pkill
+CMD_PRINTF				:= $(PATH_USR_BIN)/printf
+CMD_PS					:= $(PATH_BIN)/ps
+CMD_PWD					:= $(PATH_BIN)/pwd
+CMD_PYTHON				:= $(PATH_USR_BIN)/python
+CMD_RM					:= $(PATH_BIN)/rm
+CMD_RMDIR				:= $(PATH_BIN)/rmdir
+CMD_SCL					:= $(PATH_USR_BIN)/scl
+CMD_SED					:= $(PATH_BIN)/sed
+CMD_SERVICE				:= $(PATH_SBIN)/service
+CMD_SESTATUS			:= $(PATH_USR_SBIN)/sestatus
+CMD_SHA512SUM			:= $(PATH_USR_BIN)/sha512sum
+CMD_SLEEP				:= $(PATH_BIN)/sleep
+CMD_SSH					:= $(PATH_USR_BIN)/ssh
+CMD_SSH_KEYGEN			:= $(PATH_USR_BIN)/ssh-keygen
+CMD_SU					:= $(PATH_BIN)/su
+
+# let's hope grep is available, chicken or the egg race condition
+REDHAT6_CHECK:=$(shell $(CMD_GREP) -i "release 6" /etc/redhat-release)
+ifndef REDHAT6_CHECK
+CMD_SYSTEMCTL			:= $(PATH_BIN)/systemctl
+endif
+
+CMD_TAR					:= $(PATH_BIN)/tar
+CMD_TEST				:= $(PATH_USR_BIN)/test
+CMD_TOUCH				:= $(PATH_BIN)/touch
+CMD_TR					:= $(PATH_USR_BIN)/tr
+CMD_UNLINK				:= $(PATH_BIN)/unlink
+CMD_UNZIP				:= $(PATH_USR_BIN)/unzip
+CMD_USERADD				:= $(PATH_USR_SBIN)/useradd
+CMD_USERDEL				:= $(PATH_USR_SBIN)/userdel
+CMD_USERMOD				:= $(PATH_USR_SBIN)/usermod
+CMD_WC					:= $(PATH_USR_BIN)/wc
+CMD_WHICH				:= $(PATH_USR_BIN)/which
+CMD_YUM					:= $(PATH_USR_BIN)/yum
+CMD_YUM_CONFIG_MANAGER	:= $(PATH_USR_BIN)/yum-config-manager
+

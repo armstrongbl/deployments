@@ -1,0 +1,71 @@
+################################################################################
+#                       _
+#                      / \   ___ ___ _   _  ___  ___ ___
+#                     / _ \ / __/ __| | | |/ _ \/ __/ __|
+#                    / ___ \ (_| (__| |_| | (_) \__ \__ \
+#                   /_/   \_\___\___|\__,_|\___/|___/___/
+# 
+#                    Accurate Operational Support Systems
+#              (c) 2015-2019 Accuoss, Inc. All rights reserved.
+################################################################################
+################################################################################
+## ACCUOSS LIBERTY LICENSE ( ALL )                                            ##
+## (c) 2015-2019 Accuoss, LLC. All rights reserved.                           ##
+## Permission is hereby granted, free of charge, to any person obtaining a    ##
+## copy of this software and associated documentation files (the "Software"), ##
+## to deal in the Software without restriction, including without limitation  ##
+## the rights to use, copy, modify, merge, publish, distribute, sublicense,   ##
+## and/or sell copies of the Software, and to permit persons to whom the      ##
+## Software is furnished to do so, subject to the following conditions:       ##
+##                                                                            ##
+## The above copyright notice and this permission notice shall be included in ##
+## all copies or substantial portions of the Software.                        ##
+##                                                                            ##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR ##
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,   ##
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL    ##
+## THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER ##
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING    ##
+## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
+## DEALINGS IN THE SOFTWARE.                                                  ##
+################################################################################
+# AccuOSS Common Makefile PATHS
+# Version 2.0
+# Michael T. Brown
+# June 13, 2019
+################################################################################
+
+################################################################################
+# SYSTEM PATHS
+################################################################################
+PATH_PWD		=  $(shell $(CMD_PWD))
+PATH_BIN		:= /bin
+PATH_HOME		:= /home
+PATH_LIMITS		:= /etc/security/limits.d
+PATH_SBIN		:= /sbin
+PATH_TMP		:= /tmp
+PATH_USR		:= /usr
+PATH_USR_BIN	:= $(PATH_USR)/bin
+PATH_USR_SBIN	:= $(PATH_USR)/sbin
+
+################################################################################
+# INSTALLATION MANAGER PATHS
+################################################################################
+PATH_IM_RELATIVE_PATH=IBM/InstallationManager
+PATH_IM_SHARED_PATH=IBM/IMShared
+PATH_IM_IMCL_RELATIVE_PATH=$(PATH_IM_RELATIVE_PATH)/eclipse/tools/imcl
+PATH_IM_IMUTILSC_RELATIVE_PATH=$(PATH_IM_RELATIVE_PATH)/eclipse/tools/imutilsc
+
+PATH_IM_IMCL_REPO_RELATIVE_PATH=tools/imcl
+PATH_IM_REPO_REPO_RELATIVE_PATH=repository.config
+
+################################################################################
+# MAKEFILE PATHS
+################################################################################
+PATH_MAKEFILE_INCLUDE		= $(PATH_MAKEFILE_HOME)/include
+PATH_MAKEFILE_MEDIA			= $(PATH_MAKEFILE_HOME)/media
+PATH_MAKEFILE_PRODUCTS		= $(PATH_MAKEFILE_HOME)/products
+PATH_MAKEFILE_REPOSITORY	= $(PATH_MAKEFILE_HOME)/repository
+PATH_MAKEFILE_SOLUTIONS		= $(PATH_MAKEFILE_HOME)/solutions
+PATH_MAKEFILE_UTILS			= $(PATH_MAKEFILE_HOME)/utils
+

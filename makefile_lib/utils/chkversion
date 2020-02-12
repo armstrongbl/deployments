@@ -1,0 +1,81 @@
+#!/bin/bash
+################################################################################
+#                       _
+#                      / \   ___ ___ _   _  ___  ___ ___
+#                     / _ \ / __/ __| | | |/ _ \/ __/ __|
+#                    / ___ \ (_| (__| |_| | (_) \__ \__ \
+#                   /_/   \_\___\___|\__,_|\___/|___/___/
+# 
+#                    Accurate Operational Support Systems
+#              (c) 2015-2019 Accuoss, Inc. All rights reserved.
+################################################################################
+################################################################################
+## ACCUOSS LIBERTY LICENSE ( ALL )                                            ##
+## (c) 2015-2019 Accuoss, LLC. All rights reserved.                           ##
+## Permission is hereby granted, free of charge, to any person obtaining a    ##
+## copy of this software and associated documentation files (the "Software"), ##
+## to deal in the Software without restriction, including without limitation  ##
+## the rights to use, copy, modify, merge, publish, distribute, sublicense,   ##
+## and/or sell copies of the Software, and to permit persons to whom the      ##
+## Software is furnished to do so, subject to the following conditions:       ##
+##                                                                            ##
+## The above copyright notice and this permission notice shall be included in ##
+## all copies or substantial portions of the Software.                        ##
+##                                                                            ##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR ##
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,   ##
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL    ##
+## THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER ##
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING    ##
+## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
+## DEALINGS IN THE SOFTWARE.                                                  ##
+################################################################################
+# AccuOSS Common Makefile Utilities
+# Version 2.0
+# Michael T. Brown
+# June 13, 2019
+################################################################################
+
+# returns 0 is current version is >= minimum version
+# returns 1 is current version is <  minimum version
+# returns 2 if usage error
+version_compare () {
+	if [[ $1 == $2 ]]
+	then
+		return 0
+	fi
+	local IFS=.
+	local i ver1=($1) ver2=($2)
+	# fill empty fields in ver1 with zeros
+	for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+	do
+		ver1[i]=0
+	done
+	for ((i=0; i<${#ver1[@]}; i++))
+	do
+		if [[ -z ${ver2[i]} ]]
+		then
+			# fill empty fields in ver2 with zeros
+			ver2[i]=0
+		fi
+		if ((10#${ver1[i]} > 10#${ver2[i]}))
+		then
+			return 0
+		fi
+		if ((10#${ver1[i]} < 10#${ver2[i]}))
+		then
+			return 1
+		fi
+	done
+	return 0
+}
+
+
+if [ $# -ne 2 ]
+then
+	/bin/echo "Usage: $0 <current_version> <minimum_version>"
+	exit 2
+else
+	version_compare $1 $2
+	exit $?
+fi

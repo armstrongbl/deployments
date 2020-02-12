@@ -1,0 +1,1098 @@
+##############################################################################
+#                       _
+#                      / \   ___ ___ _   _  ___  ___ ___
+#                     / _ \ / __/ __| | | |/ _ \/ __/ __|
+#                    / ___ \ (_| (__| |_| | (_) \__ \__ \
+#                   /_/   \_\___\___|\__,_|\___/|___/___/
+# 
+#                    Accurate Operational Support Systems
+#              (c) 2015-2019 Accuoss, Inc. All rights reserved.
+################################################################################
+################################################################################
+## ACCUOSS LIBERTY LICENSE ( ALL )                                            ##
+## (c) 2015-2019 Accuoss, LLC. All rights reserved.                           ##
+## Permission is hereby granted, free of charge, to any person obtaining a    ##
+## copy of this software and associated documentation files (the "Software"), ##
+## to deal in the Software without restriction, including without limitation  ##
+## the rights to use, copy, modify, merge, publish, distribute, sublicense,   ##
+## and/or sell copies of the Software, and to permit persons to whom the      ##
+## Software is furnished to do so, subject to the following conditions:       ##
+##                                                                            ##
+## The above copyright notice and this permission notice shall be included in ##
+## all copies or substantial portions of the Software.                        ##
+##                                                                            ##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR ##
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,   ##
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL    ##
+## THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER ##
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING    ##
+## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
+## DEALINGS IN THE SOFTWARE.                                                  ##
+################################################################################
+# AccuOSS Common Makefile Functions
+# Version 2.0
+# Michael T. Brown
+# July 10, 2019
+################################################################################
+
+# PROPOSED FUTURE ENHANCEMENT
+# 1)  func_print_caption CANNOT BE PASSED A COMMA CURRENTLY
+# 2)  CONFIRM USERS TO BE REMOVED ARE NOT LOGGED IN WHICH
+#     CAUSED MAKEFILE TO FAIL ON USERDEL
+# 3)  IN func_create_user, CHECK GROUP MATCHES $(4) WHEN
+#     USER ALREADY EXISTS
+# 4)  IN func_create_user, CHECK HOME MATCHES $(5) WHEN
+#     USER ALREADY EXISTS
+# 5)  IN func_create_user, CHECK SHELL MATCHES $(6) WHEN
+#     USER ALREADY EXISTS
+# 6) IN func_create_user, CHECK PASSWD MATCHES $(7) WHEN
+#     USER ALREADY EXISTS
+
+################################################################################
+
+# $(1) line (string) to add
+# $(2) file
+func_add_line_to_file = \
+	FUNC_PROFILE_EXIST_CHECK="$(shell $(CMD_GREP) "^$(1)$$" $(2) 2>/dev/null )" ; \
+	if [ "$$FUNC_PROFILE_EXIST_CHECK" = "$(1)" ] ; \
+	then \
+		$(CMD_ECHO) "Line add (OK):           \#$(1) already in $(2)" ; \
+	else \
+		$(CMD_PRINTF) "\n$(1)\n" >> $(2) || { $(CMD_ECHO) \
+			"Line add (FAIL):         \#$(1) add to $(2) failed" ; \
+			exit 255; } ; \
+		$(CMD_ECHO) "Line add (OK):           \#$(1) added to $(2)" ; \
+	fi
+
+################################################################################
+
+# $(1) profile to add
+# $(2) file
+func_add_profile_to_file = \
+	$(CMD_TEST) -f $(1) || \
+	{ $(CMD_ECHO) "Profile Check (WARN):    \#$(1) non-existent" ; } ; \
+	FUNC_PROFILE_EXIST_CHECK="$(shell $(CMD_GREP) $(1) $(2) 2>/dev/null | $(CMD_GREP) -v ^\# )" ; \
+	if [ "$$FUNC_PROFILE_EXIST_CHECK" = "" ] ; \
+	then \
+		$(CMD_PRINTF) "\nif [ -f $(1) ]; then\n. $(1)\nfi\n" >> $(2) || { $(CMD_ECHO) \
+			"Profile add (FAIL):      \#$(1) add to $(2) failed" ; \
+			exit 254; } ; \
+		$(CMD_ECHO) "Profile add (OK):        \#$(1) added to $(2)" ; \
+	else \
+		$(CMD_ECHO) "Profile add (OK):        \#$(1) already in $(2)" ; \
+	fi
+
+################################################################################
+
+# $(1) ulimit option to set
+# $(2) ulimit value to set
+# $(3) bashrc file
+func_add_ulimit_bashrc = \
+	FUNC_ULIMIT_CHECK="$(strip $(shell $(CMD_GREP) "ulimit $(1) $(2)" $(3) 2>/dev/null | $(CMD_GREP) -v ^"\#"))" ; \
+	if [ "$$FUNC_ULIMIT_CHECK" = "" ] ; \
+	then \
+		$(CMD_PRINTF) "\nulimit $(1) $(2)\n" >> $(3) || { $(CMD_ECHO) \
+			"Add ulimit (FAIL):       ulimit $(1) $(2) >> $(3) \#add failed" ; \
+			exit 253; } ; \
+		$(CMD_ECHO) "Add ulimit (OK):         ulimit $(1) $(2) >> $(3) \#added" ; \
+	else \
+		$(CMD_ECHO) "Add ulimit (OK):         ulimit $(1) $(2) >> $(3) \#already exists" ; \
+	fi
+
+################################################################################
+
+# $(1) user to add to group
+# $(2) group to add user to
+func_add_user_to_group = \
+	FUNC_USER_GROUP_CHECK=$(shell $(CMD_GREP) ^$(2): /etc/group | $(CMD_CUT) -d":" -f1) ; \
+	if [ "$(2)" = "$$FUNC_USER_GROUP_CHECK" ] ; \
+	then \
+		$(CMD_ECHO) "Group Exists (OK):       \#$(2) exists, so can add user $(1) to it" ; \
+		$(CMD_USERMOD) -a -G $(2) $(1) || { $(CMD_ECHO) \
+			"usermod Result (FAIL):   $(CMD_USERMOD) -a -G $(2) $(1)" ; \
+			exit 252; } ; \
+		$(CMD_ECHO) "usermod Result (OK):     $(CMD_USERMOD) -a -G $(2) $(1)" ; \
+	else \
+		$(CMD_ECHO) "Group Exists (FAIL):     \#$(2) non-existent, so can't add user $(1) to it" ; \
+		exit 251; \
+	fi
+
+################################################################################
+
+# $(1) file to append content from
+# $(2) file to append content to
+func_cat_append = \
+	$(CMD_CAT) $(1) >> $(2) || { $(CMD_ECHO) \
+		"cat Result (FAIL):       $(CMD_CAT) $(1) >> $(2)" ; \
+		exit 250; } ; \
+	$(CMD_ECHO) "cat Result (OK):         $(CMD_CAT) $(1) >> $(2)"
+
+################################################################################
+
+# $(1) file to check
+# $(2) checksum expected
+func_check_file_cksum = \
+	if [ $(2) = `$(CMD_SHA512SUM) $(1) | $(CMD_CUT) -d" " -f1` ] ; \
+	then \
+		$(CMD_ECHO) "Media Checksum (OK):     \#$(2) = \`$(CMD_SHA512SUM) $(1) | $(CMD_CUT) -d\" \" -f1\`" ; \
+	else \
+		$(CMD_ECHO) "Media Checksum (FAIL):   \#$(2) = \`$(CMD_SHA512SUM) $(1) | $(CMD_CUT) -d\" \" -f1\`" ; \
+		$(CMD_ECHO) "Expect $(CMD_SHA512SUM) of $(2)" ; \
+		exit 249; \
+	fi
+
+################################################################################
+
+# $(1) list of media files to confirm exist
+func_check_makefiles_exists = \
+	$(foreach itr_m,$(1),\
+		$(CMD_TEST) -f $(itr_m) || { $(CMD_ECHO) \
+			"Makefile Check (FAIL):   \#$(itr_m) non-existent" ; \
+			exit 248; } ; \
+		$(CMD_TEST) -r $(itr_m) || { $(CMD_ECHO) \
+			"Makefile Check (FAIL):   \#$(itr_m) not readable" ; \
+			exit 247; } ; \
+		$(CMD_ECHO) "Makefile Check (OK):     \#$(itr_m)" \
+	)
+
+################################################################################
+
+# $(1) list of media files to confirm exist
+func_check_media_exists = \
+	$(foreach itr_m,$(1),\
+		$(CMD_TEST) -f $(itr_m) || { $(CMD_ECHO) \
+			"Media Check (FAIL):      \#$(itr_m) non-existent" ; \
+			exit 246; } ; \
+		$(CMD_TEST) -r $(itr_m) || { $(CMD_ECHO) \
+			"Media Check (FAIL):      \#$(itr_m) not readable" ; \
+			exit 245; } ; \
+		$(CMD_ECHO) "Media Check (OK):        \#$(itr_m)" \
+	)
+
+################################################################################
+
+# $(1) command to be checked
+# $(2) current version
+# $(3) minimum required version
+func_check_version = \
+	$(CMD_CHKVERSION) $(2) $(3); rc=$$?; \
+	$(CMD_TEST) $$rc -eq 0 && { $(CMD_ECHO) \
+		"Version Check (OK):      \#$(1) is version $(2), minimum required is $(3)" ; exit 0; } ; \
+	$(CMD_TEST) $$rc -eq 1 && { $(CMD_ECHO) \
+		"Version Check (FAIL):    \#$(1) is version $(2), but $(3) is minimum required" ; exit 244; } ; \
+	$(CMD_TEST) $$rc -ne 0 -a $$rc -ne 1 && { $(CMD_ECHO) \
+		"Version Check (FAIL):    \#$(CMD_CHKVERSION) $(2) $(3) returned error" ; exit 243; }
+
+################################################################################
+
+# $(1) title of product or solution being installed
+func_check_whoami = \
+	$(call func_command_check,$(CMD_ID)) ; \
+	EFFECTIVE_USER=$(shell $(CMD_ID) -nu) ; \
+	if [ "$$EFFECTIVE_USER" = "root" ] ; \
+	then \
+		$(CMD_ECHO) "id -nu (OK):             \#$$EFFECTIVE_USER" ; \
+	else \
+		$(CMD_ECHO) "id -nu (FAIL):           \#$$EFFECTIVE_USER" ; \
+		$(CMD_PRINTF) "\n\
+Please run this makefile as root for the necessary permissions to install\n\
+or uninstall $(1).\n\n" ; \
+		exit 242; \
+	fi
+
+################################################################################
+
+# $(1) permissions to assign (e.g. 755)
+# $(2) target to chmod
+func_chmod = \
+	$(CMD_CHMOD) $(1) $(2) || { $(CMD_ECHO) \
+		"chmod Result (FAIL):     $(CMD_CHMOD) $(1) $(2)" ; \
+		exit 241; } ; \
+	$(CMD_ECHO) "chmod Result (OK):       $(CMD_CHMOD) $(1) $(2)"
+
+################################################################################
+
+# $(1) user to chown to
+# $(2) group to chown to
+# $(3) target to chown
+func_chown = \
+	$(CMD_CHOWN) $(1):$(2) $(3) || { $(CMD_ECHO) \
+		"chown Result (FAIL):     $(CMD_CHOWN) $(1):$(2) $(3)" ; \
+		exit 240; } ; \
+	$(CMD_ECHO) "chown Result (OK):       $(CMD_CHOWN) $(1):$(2) $(3)"
+
+################################################################################
+
+# $(1) user to chown to
+# $(2) group to chown to
+# $(3) target to chown
+func_chown_recursive = \
+	$(CMD_CHOWN) -R $(1):$(2) $(3) || { $(CMD_ECHO) \
+		"chown Result (FAIL):     $(CMD_CHOWN) -R $(1):$(2) $(3)" ; \
+		exit 239; } ; \
+	$(CMD_ECHO) "chown Result (OK):       $(CMD_CHOWN) -R $(1):$(2) $(3)"
+
+################################################################################
+
+# $(1) command to check
+func_command_check = \
+	$(CMD_TEST) -f $(1) || { $(CMD_ECHO) \
+		"Command Check (FAIL):    -f $(1) \# non-existent" ; exit 238; } ; \
+	$(CMD_TEST) -r $(1) || { $(CMD_ECHO) \
+		"Command Check (FAIL):    -r $(1) \# not readable" ; exit 237; } ; \
+	$(CMD_TEST) -x $(1) || { $(CMD_ECHO) \
+		"Command Check (FAIL):    -x $(1) \# not executable" ; exit 236; } ; \
+	$(CMD_ECHO) "Command Check (OK):      \#$(1)"
+
+################################################################################
+
+# $(1) user to copy as
+# $(2) copy source
+# $(3) copy target
+# $(4) chmod value to set on target
+func_cp_must_exist = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(call func_file_must_exist,$(1),$(2)) ; \
+	$(CMD_SU) - $(1) -c "$(CMD_CP) $(2) $(3)" || \
+		{ $(CMD_ECHO) "Copy Result (FAIL):      $(CMD_SU) - $(1) -c \"$(CMD_CP) $(2) $(3)\"" ; \
+		exit 235; } ; \
+	$(CMD_ECHO) "Copy Result (OK):        $(CMD_SU) - $(1) -c \"$(CMD_CP) $(2) $(3)\"" ; \
+	$(CMD_SU) - $(1) -c "$(CMD_CHMOD) $(4) $(3)" || { $(CMD_ECHO) \
+		"chmod Result (FAIL)      $(CMD_SU) - $(1) -c \"$(CMD_CHMOD) $(4) $(3)\"" ; \
+		exit 234; } ; \
+	$(CMD_ECHO) "chmod Result (OK):       $(CMD_SU) - $(1) -c \"$(CMD_CHMOD) $(4) $(3)\""
+
+################################################################################
+
+# $(1) file to create
+# $(2) file content to use
+# $(3) user to chown to
+# $(4) group to chown to
+# $(5) permissions to chmod to
+func_create_file =  \
+	if [ -e $(1) ] ; \
+	then \
+		$(CMD_ECHO) "File Exist? (WARN):      -e $(1) \#exists already, not creating" ; \
+	else \
+		$(CMD_ECHO) "File Exist? (OK):        -e $(1) \#non-existent" ; \
+		$(CMD_ECHO) "$(2)" > $(1) || { $(CMD_ECHO) ; \
+			"Create File (FAIL):      $(CMD_ECHO) \"$(2)\" > $(1)" ; \
+			exit 233; } ; \
+		$(CMD_ECHO) "Create File (OK):        $(CMD_ECHO) \"$(2)\" > $(1)" ; \
+		$(call func_chmod,$(5),$(1)) ; \
+		$(call func_chown,$(3),$(4),$(1)) ; \
+	fi
+
+################################################################################
+
+# $(1) group name to create
+# $(2) group description
+func_create_group = \
+	FUNC_CREATE_GROUP_CHECK=$(shell $(CMD_GREP) ^$(1): /etc/group | $(CMD_CUT) -d":" -f1) ; \
+	if [ "$(1)" = "$$FUNC_CREATE_GROUP_CHECK" ] ; \
+	then \
+		$(CMD_ECHO) "Group Existence Check:   $(CMD_GREP) ^$(1): /etc/group | $(CMD_CUT) -d\":\" -f1 \#$(2) group exists" ; \
+	else \
+		$(CMD_ECHO) "Group Existence Check:   $(CMD_GREP) ^$(1): /etc/group | $(CMD_CUT) -d\":\" -f1 \#$(2) group non-existent" ; \
+		$(CMD_GROUPADD) $(1) || { $(CMD_ECHO) \
+			"groupadd Result (FAIL):  $(CMD_GROUPADD) $(1)" ; \
+		exit 232; } ; \
+		$(CMD_ECHO) "groupadd Result (OK):    $(CMD_GROUPADD) $(1)" ; \
+	fi
+
+################################################################################
+
+# $(1) username to create
+# $(2) user description
+# $(3) group assignment
+# $(4) home directory
+# $(5) user shell
+# $(6) password to set
+func_create_user = \
+	FUNC_USER_CHECK=$(shell $(CMD_GREP) ^$(1): /etc/passwd | $(CMD_CUT) -d":" -f1) ; \
+	if [ "$(1)" = "$$FUNC_USER_CHECK" ] ; \
+	then \
+		$(CMD_ECHO) "User Existence Check:    $(CMD_GREP) ^$(1): /etc/passwd | $(CMD_CUT) -d\":\" -f1 \#$(2) user exists" ; \
+	else \
+		$(CMD_ECHO) "User Existence Check:    $(CMD_GREP) ^$(1): /etc/passwd | $(CMD_CUT) -d\":\" -f1 \#$(2) user non-existent" ; \
+		$(CMD_TEST) -e $(5) || { $(CMD_ECHO) \
+		"User Shell (FAIL):       -e $(5) \#non-existent" ; exit 231; } ; \
+		$(CMD_USERADD) -g $(3) -d $(4) -s $(5) $(1) || { $(CMD_ECHO) \
+			"useradd Result (FAIL):   $(CMD_USERADD) -g $(3) -d $(4) -s $(5) $(1)" ; \
+		exit 230; } ; \
+		$(CMD_ECHO) "useradd Result (OK):     $(CMD_USERADD) -g $(3) -d $(4) -s $(5) $(1)" ; \
+		$(CMD_ECHO) $(6) | $(CMD_PASSWD) $(1) --stdin 1> /dev/null || {\
+			$(CMD_ECHO) "passwd Set (FAIL):       $(CMD_PASSWD) $(1) --stdin 1> /dev/null" ; \
+			exit 229; } ; \
+		$(CMD_ECHO) "passwd Set (OK):         $(CMD_PASSWD) $(1) --stdin 1> /dev/null" ; \
+	fi
+
+################################################################################
+
+# $(1) source URL
+# $(2) destination file
+# $(3) checksum to validate
+# $(4) additional curl options
+func_curl = \
+	download_required=false ; \
+	if [ ! -e "$(2)" ] ; \
+	then \
+		download_required=true ; \
+		$(CMD_ECHO) "Existence Check (OK):    ! -e \"$(2)\" \#returned non-existent, so download" ; \
+	else \
+		if [ $(3) != `$(CMD_SHA512SUM) $(2) | $(CMD_CUT) -d" " -f1` ] ; \
+		then \
+			download_required=true ; \
+			$(CMD_ECHO) "Media Checksum (OK):     $(3) != \`$(CMD_SHA512SUM) $(2) $(CMD_CUT) -d\" \" -f1\` \#returned invalid checksum, so re-download" ; \
+		else \
+			$(CMD_ECHO) "Media Checksum (OK):     $(3) = \`$(CMD_SHA512SUM) $(2) $(CMD_CUT) -d\" \" -f1\` \#file exists with valid checksum, download not required" ; \
+		fi ; \
+	fi ; \
+	if [ "$$download_required" = "true" ] ; \
+	then \
+		$(CMD_CURL) $(4) -L -o $(2) $(1) || \
+			{ $(CMD_ECHO) "curl Result (FAIL):      $(CMD_CURL) $(4) -L -o $(2) $(1)" ; \
+			exit 228; } ; \
+		$(CMD_ECHO) "curl Result (OK):        $(CMD_CURL) $(4) -L -o $(2) $(1)" ; \
+		$(call func_check_file_cksum,$(2),$(3)) ; \
+	fi
+
+################################################################################
+
+# $(1) user to check that directory exists as
+# $(2) directory to check
+func_dir_must_exist = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_SU) - $(1) -c "$(CMD_TEST) -d $(2)" || \
+		{ $(CMD_ECHO) "Directory Check (FAIL):  $(CMD_SU) - $(1) -c \"$(CMD_TEST) -d $(2)\" \#$(2) non-existent" ; exit 227; } ; \
+	$(CMD_ECHO) "Directory Check (OK):    $(CMD_SU) - $(1) -c \"$(CMD_TEST) -d $(2)\" \#$(2) exists"
+
+################################################################################
+
+func_disable_selinux = \
+	FUNC_SELINUX_ETC=$(shell $(CMD_CAT) /etc/sysconfig/selinux | $(CMD_SED) -e 's/[[:space:]]\+/ /g' | $(CMD_SED) 's/^[ \t]*//' | $(CMD_GREP) -v ^\# | $(CMD_GREP) 'SELINUX=') ; \
+	if [ "$$FUNC_SELINUX_ETC" != "SELINUX=disabled" ] ; \
+	then \
+		$(CMD_ECHO) "SELinux /etc (FAIL):     \#$$FUNC_SELINUX_ETC" ; \
+		$(CMD_PRINTF) "\n\
+Please disable Security-Enhanced (SELinux) in the /etc/sysconfig/selinux file,\n\
+reboot the server, and then rerun makefile to continue.\n\n" ; \
+		exit 226; \
+	else \
+		$(CMD_ECHO) "SELinux /etc (OK):       \#$$FUNC_SELINUX_ETC" ; \
+	fi ; \
+	FUNC_SELINUX_STATUS=$(shell $(CMD_SESTATUS) | $(CMD_GREP) "SELinux status:" | $(CMD_CUT) -d":" -f2 | $(CMD_SED) 's/^[ \t]*//') ; \
+	if [ "$$FUNC_SELINUX_STATUS" != "disabled" ] ; \
+	then \
+		$(CMD_ECHO) "SELinux Status (FAIL):   \#$$FUNC_SELINUX_STATUS" ; \
+		$(CMD_PRINTF) "\n\
+Disabled in /etc/sysconfig/selinux but still running, need to reboot the\n\
+server and then rerun this makefile to continue.\n\n" ; \
+		exit 225; \
+	else \
+		$(CMD_ECHO) "SELinux Status (OK):     \#$$FUNC_SELINUX_STATUS" ; \
+	fi
+
+################################################################################
+
+# $(1) user to perform work as
+# $(2) is file to copy content from
+# $(3) start copy line
+# $(4) end copy line
+# $(5) is file to append "copy" content to
+func_file_content_copy = \
+	\
+	$(call func_user_must_exist,$(1)) ; \
+	$(call func_file_must_exist,$(1),$(2)) ; \
+	if [ "$(3)" != "" ] ; \
+	then \
+		$(CMD_ECHO) "Copy Start? (OK):        \# Start copying at line $(3)" ; \
+	else \
+		$(CMD_ECHO) "Copy Start? (FAIL):      \# No start line passed to func_file_content_copy" ; \
+		exit 224; \
+	fi ; \
+	if [ "$(4)" != "" ] ; \
+	then \
+		$(CMD_ECHO) "Copy End? (OK):          \# End copying at line $(4)" ; \
+	else \
+		$(CMD_ECHO) "Copy End? (FAIL):        \# No end line passed to func_file_content_copy" ; \
+		exit 223; \
+	fi ; \
+	\
+	$(CMD_SU) - $(1) -c "$(CMD_SED) -ne $(3),$(4)\p $(2) >>  $(5)" || { \
+		$(CMD_ECHO) "Copy Result (FAIL):      $(CMD_SU) - $(1) -c \"$(CMD_SED) -ne $(3),$(4)\p $(2) >>  $(5)\"" ; \
+			exit 222; } ; \
+	$(CMD_ECHO) "Copy Result (OK):        $(CMD_SU) - $(1) -c \"$(CMD_SED) -ne $(3),$(4)\p $(2) >>  $(5)\""
+
+################################################################################
+
+# $(1) user to perform work as
+# $(2) is file to remove content from
+# $(3) start line to remove
+# $(4) end line to remove
+# $(5) sha512sum of content to remove
+func_file_content_remove = \
+	\
+	$(call func_file_must_exist,$(1),$(2)) ; \
+	if [ "$(3)" != "" ] ; \
+	then \
+		$(CMD_ECHO) "Remove Start? (OK):      \# Start removing at line $(3)" ; \
+	else \
+		$(CMD_ECHO) "Remove Start? (FAIL):    \# No start line passed to func_file_content_remove" ; \
+		exit 221; \
+	fi ; \
+	if [ "$(4)" != "" ] ; \
+	then \
+		$(CMD_ECHO) "Remove End? (OK):        \# End removing at line $(4)" ; \
+	else \
+		$(CMD_ECHO) "Remove End? (FAIL):      \# No end line passed to func_file_content_remove" ; \
+		exit 220; \
+	fi ; \
+	\
+	TEMP_CHECKSUM=`$(CMD_SED) -ne $(3),$(4)\p $(2) | $(CMD_SHA512SUM)` ; \
+	if [ "$$TEMP_CHECKSUM" = "$(5)" ] ; \
+	then \
+		$(CMD_ECHO) "Remove Checksum (OK):    \# $$TEMP_CHECKSUM = $(5)" ; \
+		$(CMD_SED) -i $(2) -e $(3),$(4)\d || { $(CMD_ECHO) \
+			"Remove Content (FAIL):   $(CMD_SED) -i $(2) -e $(3),$(4)\d" ; \
+			exit 219; } ; \
+		$(CMD_ECHO) "Remove Content (OK):     $(CMD_SED) -i $(2) -e $(3),$(4)\d" ; \
+	else \
+		$(CMD_ECHO) "Remove Checksum (FAIL):  \# $$TEMP_CHECKSUM != $(5)" ; \
+		exit 218; \
+	fi
+
+################################################################################
+
+# $(1) user to check that file exists as
+# $(2) regular file to check
+func_file_must_exist = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_SU) - $(1) -c "$(CMD_TEST) -f $(2)" || \
+		{ $(CMD_ECHO) "File Check (FAIL):       $(CMD_SU) - $(1) -c \"$(CMD_TEST) -f $(2)\" \#$(2) non-existent" ; exit 217; } ; \
+	$(CMD_ECHO) "File Check (OK):         $(CMD_SU) - $(1) -c \"$(CMD_TEST) -f $(2)\" \#$(2) exists"
+
+################################################################################
+
+# $(1) user to check that file exists as
+# $(2) regular file to check
+func_file_must_not_exist = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_SU) - $(1) -c "$(CMD_TEST) ! -f $(2)" || \
+		{ $(CMD_ECHO) "File Check (FAIL):       $(CMD_SU) - $(1) -c \"$(CMD_TEST) ! -f $(2)\" \#$(2) exists" ; exit 216; } ; \
+	$(CMD_ECHO) "File Check (OK):         $(CMD_SU) - $(1) -c \"$(CMD_TEST) ! -f $(2)\" \#$(2) non-existent"
+
+################################################################################
+
+# $(1) user to check exists
+func_group_must_exist = \
+	FUNC_GROUP_EXIST_CHECK=$(shell $(CMD_GREP) ^$(1): /etc/group | $(CMD_CUT) -d":" -f1) ; \
+	if [ "$(1)" = "$$FUNC_GROUP_EXIST_CHECK" ] ; \
+	then \
+		$(CMD_ECHO) "Group Exists? (OK):      $(CMD_GREP) ^$(1): /etc/group | $(CMD_CUT) -d\":\" -f1 \# $(1) group exists" ; \
+	else \
+		$(CMD_ECHO) "Group Exists? (FAIL):    $(CMD_GREP) ^$(1): /etc/group | $(CMD_CUT) -d\":\" -f1 \# $(1) group non-existent" ; \
+		exit 215; \
+	fi
+
+################################################################################
+
+# $(1) packages to install
+func_install_packages = \
+	$(CMD_ECHO) "Packages Install:        \#In progress..." ; \
+	$(CMD_YUM) -y install $(1) || { $(CMD_ECHO) \
+		"Packages Install (FAIL): $(CMD_YUM) -y install $(1)" ; \
+		exit 214; } ; \
+	$(CMD_ECHO) "Packages Install (OK):   $(CMD_YUM) -y install $(1)"
+
+################################################################################
+
+# $(1) user to create symbolic link as
+# $(2) target
+# $(3) link name
+func_ln_s = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_SU) - $(1) -c "$(CMD_LN) -fs $(2) $(3)" || \
+		{ $(CMD_ECHO) "Symbolic Link (FAIL):    $(CMD_SU) - $(1) -c \"$(CMD_LN) -fs $(2) $(3)\"" ; \
+		exit 213; } ; \
+	$(CMD_ECHO) "Symbolic Link (OK):      $(CMD_SU) - $(1) -c \"$(CMD_LN) -fs $(2) $(3)\""
+
+################################################################################
+
+# $(1) user to own directory
+# $(2) group to own directory
+# $(3) permissions for directory (e.g. 755)
+# $(4) directory to make
+func_mkdir = \
+	MKDIR_LIST=`$(CMD_MKDIR) -v -p -m $(3) $(4)` || { $(CMD_ECHO) \
+		"Make directory (FAIL):   $(CMD_MKDIR) -v -p -m $(3) $(4)" ; \
+		exit 212; } ; \
+	$(CMD_ECHO) "Make directory (OK):     $(CMD_MKDIR) -v -p -m $(3) $(4)" ; \
+	\
+	CHOWN_TOPDIR=`$(CMD_PRINTF) "$$MKDIR_LIST" | $(CMD_GREP) "$(CMD_MKDIR): created directory" | $(CMD_HEAD) -1 | $(CMD_CUT) -c32- | $(CMD_SED) -e 's/ /\\\\ /g' -e "s/'//g" -e "s/’//g" | $(CMD_TR) -d '\n'` ; \
+	if [ "$$CHOWN_TOPDIR" != "" ] ; \
+	then \
+		$(call func_chown_recursive,$(1),$(2),$$CHOWN_TOPDIR) ; \
+	fi
+
+################################################################################
+
+# $(1) user to move as
+# $(2) move source
+# $(3) move destination
+func_mv_if_exists = \
+	if [ -e "$(2)" ] ; \
+	then \
+		$(CMD_ECHO) "Existence Check (OK):    -e \"$(2)\" \#returned exists, so moving" ; \
+		$(call func_mv_must_exist,$(1),$(2),$(3)) ; \
+	else \
+		$(CMD_ECHO) "Existence Check (OK):    -e \"$(2)\" \#returned non-existent, so no need to move" ; \
+	fi
+
+################################################################################
+
+# $(1) user to move as
+# $(2) move source
+# $(3) move destination
+func_mv_must_exist = \
+	$(CMD_SU) - $(1) -c "$(CMD_MV) $(2) $(3)" || \
+		{ $(CMD_ECHO) "Move Result (FAIL):      $(CMD_SU) - $(1) -c \"$(CMD_MV) $(2) $(3)\"" ; \
+		exit 211; } ; \
+	$(CMD_ECHO) "Move Result (OK):        $(CMD_SU) - $(1) -c \"$(CMD_MV) $(2) $(3)\""
+
+################################################################################
+
+# $(1) port to check
+func_port_must_be_available = \
+	FUNC_PORT_CHECK="$(shell $(CMD_NETSTAT) -ln | $(CMD_GREP) ":$(1) ")" ; \
+	if [ "$$FUNC_PORT_CHECK" = "" ] ; \
+	then \
+		$(CMD_ECHO) "Port Check (OK):         $(CMD_NETSTAT) -ln | $(CMD_GREP) \":$(1) \" \#Port $(1) available" ; \
+	else \
+		$(CMD_ECHO) "Port Check (FAIL):       $(CMD_NETSTAT) -ln | $(CMD_GREP) \":$(1) \" \#Port $(1) already in use" ; \
+		exit 210; \
+	fi
+
+################################################################################
+
+# $(1) user to check for Installation Manager existence (default location)
+# $(2) user's home directory
+# $(3) source repository directory to install/upgrade Installation Manager from
+# 
+# This function confirms user's ($1) Installation Manager is available by
+# checking the default location under the user's home directory $(2).  If
+# not, installs Installation Manager from source repository ($3).
+#
+# If user's $(1) Installation Manager does exist but source repository $(3)
+# provides a newer version, then the Installation Manager is upgraded.
+#
+func_prepare_installation_manager = \
+	$(call func_user_must_exist,$(1)) ; \
+	imtgt=$(2)/$(PATH_IM_IMCL_RELATIVE_PATH) ; \
+	imsrc=$(3)/$(PATH_IM_IMCL_REPO_RELATIVE_PATH) ; \
+	if [ ! -e $$imtgt ] ; \
+	then \
+		$(CMD_ECHO) "Install Mgr Check (OK):  \#$$imtgt non-existent" ; \
+		if [ ! -e $$imsrc ] ; \
+		then \
+			$(CMD_ECHO) "Src Install Mgr (OK):    \#$$imsrc non-existent" ; \
+			exit 209; \
+		else if [ ! -r $$imsrc ] ; \
+		then \
+			$(CMD_ECHO) "Src Install  Mgr (FAIL): \#$$imsrc not readable" ; \
+			exit 208; \
+		else if [ ! -x $$imsrc ] ; \
+		then \
+			$(CMD_ECHO) "Src Install  Mgr (FAIL): \#$$imsrc not executable" ; \
+			exit 207; \
+		else \
+			$(CMD_ECHO) "Src Install Mgr (OK):    \#$$imsrc exists" ; \
+			$(CMD_ECHO) "Install Mgr Install:     \#In progress..." ; \
+			$(CMD_SU) - $(1) -c "$$imsrc install com.ibm.cic.agent -repositories $(3)/$(PATH_IM_REPO_REPO_RELATIVE_PATH) $(OPTIONS_MAKEFILE_IM)" || \
+			{ $(CMD_ECHO) "Install Mgr Install (FL):$(CMD_SU) - $(1) -c \"$$imsrc install com.ibm.cic.agent -repositories $(3)/$(PATH_IM_REPO_REPO_RELATIVE_PATH) $(OPTIONS_MAKEFILE_IM)\"" ; \
+			exit 206; } ; \
+			$(CMD_ECHO)  "Install Mgr Install (OK):$(CMD_SU) - $(1) -c \"$$imsrc install com.ibm.cic.agent -repositories $(3)/$(PATH_IM_REPO_REPO_RELATIVE_PATH) $(OPTIONS_MAKEFILE_IM)\"" ; \
+		fi ; \
+		fi ; \
+		fi ; \
+	else if [ ! -r $$imtgt ] ; \
+	then \
+		$(CMD_ECHO) "Install Mgr Check (FAIL):\#$$imtgt not readable" ; \
+		exit 205; \
+	else if [ ! -x $$imtgt ] ; \
+	then \
+		$(CMD_ECHO) "Install Mgr Check (FAIL):\#$$imtgt not executable" ; \
+		exit 204; \
+	else \
+		imvers=`$(CMD_SU) - $(1) -c "$$imsrc version | $(CMD_GREP) ^Internal | $(CMD_SED) -e 's/$$/:/' | $(CMD_TR) -d '\n'"` ; \
+		imtgtver=`$(CMD_ECHO) $$imvers | $(CMD_CUT) -d":" -f 4` ; \
+		imsrcver=`$(CMD_ECHO) $$imvers | $(CMD_CUT) -d":" -f 2` ; \
+		$(CMD_ECHO) "Install Mgr Check (OK):  \#Version$$imtgtver (installed)" ; \
+		$(CMD_ECHO) "Install Mgr Check (OK):  \#Version$$imsrcver (available)" ; \
+		if [[ "$$imsrcver" > "$$imtgtver" ]] ; \
+		then \
+			$(CMD_ECHO) "Install Mgr Upgrade:     \#In progress..." ; \
+			$(CMD_SU) - $(1) -c "$$imsrc install com.ibm.cic.agent -repositories $(3)/$(PATH_IM_REPO_REPO_RELATIVE_PATH) $(OPTIONS_MAKEFILE_IM)" || \
+			{ $(CMD_ECHO) "Install Mgr Upgrade (FL):\#Failure" ; \
+			exit 203; } ; \
+			$(CMD_ECHO)  "Install Mgr Upgrade (OK):\#Complete" ; \
+		else \
+			$(CMD_ECHO) "Install Mgr Upgrade:     \#Not necessary" ; \
+		fi ; \
+	fi ; \
+	fi ; \
+	fi
+
+################################################################################
+
+# !!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!
+#   func_print_caption CANNOT BE PASSED A COMMA CURRENTLY
+# !!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!
+# !!!!!!!!!!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!!!!!!!!
+func_print_caption = \
+	$(CMD_ECHO) ; \
+	CAPTION_LENGTH=$(shell $(CMD_PRINTF) $(1) | $(CMD_WC) -m) ; \
+	CAPTION_PAD=`$(CMD_EXPR) 80 - $$CAPTION_LENGTH - 4` ; \
+	CAPTION_PAD_L=`$(CMD_EXPR) $$CAPTION_PAD / 2` ; \
+	CAPTION_PAD_R=`$(CMD_EXPR) 80 - $$CAPTION_LENGTH - 4 - $$CAPTION_PAD_L` ; \
+	if [ $$CAPTION_LENGTH -lt 73 ] ; \
+	then \
+		eval $(CMD_PRINTF) %.0s* {1..$$CAPTION_PAD_L} ; \
+		$(CMD_PRINTF) "  " ; \
+		$(CMD_PRINTF) $(1) ; \
+		$(CMD_PRINTF) "  " ; \
+		eval $(CMD_PRINTF) %.0s* {1..$$CAPTION_PAD_R} ; \
+		$(CMD_PRINTF) "\n" ; \
+	else \
+		$(CMD_PRINTF) "**  " ; \
+		$(CMD_PRINTF) $(1) ; \
+		$(CMD_PRINTF) "  **" ; \
+		$(CMD_PRINTF) "\n" ; \
+	fi
+
+################################################################################
+
+# $(1) group name to remove
+# $(2) group description
+func_remove_group = \
+	-FUNC_REMOVE_GROUP_CHECK=$(shell $(CMD_GREP) ^$(1): /etc/group | $(CMD_CUT) -d":" -f1) ; \
+	if [ "$(1)" = "$$FUNC_REMOVE_GROUP_CHECK" ] ; \
+	then \
+		$(CMD_ECHO) "Group Existence Check:   $(CMD_GREP) ^$(1) /etc/group | $(CMD_CUT) -d\":\" -f1 \#$(2) group exists" ; \
+		$(CMD_GROUPDEL) $(1) ; \
+		$(CMD_ECHO) "groupdel Result (OK):    $(CMD_GROUPDEL) $(1)" ; \
+	else \
+		$(CMD_ECHO) "Group Existence Check:   $(CMD_GREP) ^$(1) /etc/group | $(CMD_CUT) -d\":\" -f1 \#$(2) group non-existent" ; \
+	fi
+
+################################################################################
+
+# $(1) user that should own file
+# $(2) group that should own file
+# $(3) chmod value to set on file
+# $(4) line to remove from the file
+# $(5) file to remove line from
+func_remove_line_from_file = \
+	$(CMD_ECHO) "Removing File Line:      $(CMD_GREP) -v $(4) $(5)" ; \
+	$(CMD_GREP) -v $(4) $(5) > $(5).REMOVE_LINE ; \
+	$(call func_chmod,$(3),$(5).REMOVE_LINE) ; \
+	$(call func_chown,$(1),$(2),$(5).REMOVE_LINE) ; \
+	$(call func_mv_must_exist,$(1),$(5).REMOVE_LINE,$(5))
+
+################################################################################
+
+# $(1) user name to remove
+# $(2) user description
+func_remove_user = \
+	FUNC_REMOVE_USER_CHECK=$(shell $(CMD_GREP) ^$(1): /etc/passwd | $(CMD_CUT) -d":" -f1) ; \
+	if [ "$(1)" = "$$FUNC_REMOVE_USER_CHECK" ] ; \
+	then \
+		$(CMD_ECHO) "User Existence Check:    $(CMD_GREP) ^$(1) /etc/passwd | $(CMD_CUT) -d\":\" -f1 \#$(2) user exists" ; \
+		$(CMD_USERDEL) $(1) -r || { $(CMD_ECHO) \
+			"userdel Result (FAIL):   $(CMD_USERDEL) $(1) -r" ; \
+			exit 202; } ; \
+		$(CMD_ECHO) "userdel Result (OK):     $(CMD_USERDEL) $(1) -r" ; \
+	else \
+		$(CMD_ECHO) "User Existence Check:    $(CMD_GREP) ^$(1) /etc/passwd | $(CMD_CUT) -d\":\" -f1 \#$(2) user non-existent" ; \
+	fi
+
+################################################################################
+
+# $(1) user to perform replacement as (sed)
+# $(2) token to replace
+# $(3) replacement for token
+# $(4) source file
+# $(5) destination file
+# $(6) chmod value to set on destination
+func_replace_token_in_file = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_SU) - $(1) -c "$(CMD_SED) 's/$(2)/$(3)/g' $(4) > $(5)" || \
+		{ $(CMD_ECHO) "Replace Result (FAIL):   $(CMD_SU) - $(1) -c \"$(CMD_SED) 's/$(2)/$(3)/g' $(4) > $(5)\"" ; \
+		exit 201; } ; \
+	$(CMD_ECHO) "Replace Result (OK):     $(CMD_SU) - $(1) -c \"$(CMD_SED) 's/$(2)/$(3)/g' $(4) > $(5)\"" ; \
+	$(CMD_SU) - $(1) -c "$(CMD_CHMOD) $(6) $(5)" || { $(CMD_ECHO) \
+		"chmod Result (FAIL)      $(CMD_SU) - $(1) -c \"$(CMD_CHMOD) $(6) $(5)\"" ; \
+		exit 200; } ; \
+	$(CMD_ECHO) "chmod Result (OK):       $(CMD_SU) - $(1) -c \"$(CMD_CHMOD) $(6) $(5)\""
+
+################################################################################
+
+# $(1) directory to remove (and parents) if empty
+func_rmdir_if_empty = \
+	if [ -d "$(1)" ] ; \
+	then \
+		$(CMD_ECHO) "Existence Check (OK):    -d \"$(1)\" \#returned exists, so removing" ; \
+		$(CMD_RMDIR) --ignore-fail-on-non-empty -p $(1) || { $(CMD_ECHO) \
+			"rmdir Result (FAIL):     $(CMD_RMDIR) --ignore-fail-on-non-empty -p $(1)" ; \
+			exit 199; } ; \
+		$(CMD_ECHO) "rmdir Result (OK):       $(CMD_RMDIR) --ignore-fail-on-non-empty -p $(1)" ; \
+	else \
+		$(CMD_ECHO) "Existence Check (OK):    -d \"$(1)\" \#returned non-existent, so no need to remove" ; \
+	fi
+
+################################################################################
+
+# $(1) file to remove
+# $(2) sha512sum
+func_rm_if_sha512sum_match = \
+	if [ -e $(1) ] ; \
+	then \
+		$(CMD_ECHO) "File Exist? (OK):        -e $(1) \# exists" ; \
+		\
+		if [ $(2) = `$(CMD_SHA512SUM) $(1) | $(CMD_CUT) -d" " -f1` ] ; \
+		then \
+			$(CMD_ECHO) "Match Checksum (OK):     \#$(2) = \`$(CMD_SHA512SUM) $(1) | $(CMD_CUT) -d\" \" -f1\` matches, so removing file..." ; \
+			$(CMD_RM) -f $(1) || { $(CMD_ECHO) \
+				"Remove File (FAIL):      $(CMD_RM) -f $(1)" ; \
+				exit 198; } ; \
+			$(CMD_ECHO) "Remove File (OK):        $(CMD_RM) -f $(1)" ; \
+		else \
+			$(CMD_ECHO) "Match Checksum (OK):     \#$(2) != \`$(CMD_SHA512SUM) $(1) | $(CMD_CUT) -d\" \" -f1\` does not match" ; \
+		fi ; \
+	else \
+		$(CMD_ECHO) "File Exist? (OK):        -e $(1) \# non-existent" ; \
+	fi
+
+################################################################################
+
+# $(1) file to append to environmental variable in
+# $(2) environmental variable to append value to
+# $(3) value to add
+func_setenv_append_and_export_in_file = \
+	$(CMD_TEST) -r $(1) || { $(CMD_ECHO) \
+		"File read (FAIL):        $(1) when checking $(2)" ; exit 197; } ; \
+	temp_var_check=`$(CMD_GREP) $(2)= $(1) 2>/dev/null | $(CMD_GREP) -v '^\s*\#' | $(CMD_SED) -e 's/^/:/g' | $(CMD_SED) -e 's/$$/:/g' | $(CMD_TR) -d '\n' | $(CMD_SED) -e 's/\s*//g' | $(CMD_SED) -e 's/$(2)=//g' | $(CMD_SED) -e 's/$$$(2)/:/g' | $(CMD_SED) -e 's/:\+/:/g' ` ; \
+	if [[ $$temp_var_check == *":$(3):"* ]] ; \
+	then \
+		$(CMD_ECHO) "Setenv append (OK):      $(1)'s $(2) has $(3)" ;  \
+	else \
+		$(CMD_PRINTF) "\n$(2)=\$$$(2):$(3)\nexport $(2)\n" >> $(1) ; \
+		$(CMD_ECHO) "Setenv append (OK):      $(3) added to $(1)'s $(2)" ;  \
+	fi
+
+################################################################################
+
+# $(1) file to append to environmental variable in
+# $(2) environmental variable to append value to
+# $(3) value to add
+func_setenv_prepend_and_export_in_file = \
+	$(CMD_TEST) -r $(1) || { $(CMD_ECHO) \
+		"File read (FAIL):        $(CMD_TEST) -r $(1) \#$(1) when checking $(2)" ; exit 196; } ; \
+	temp_var_check=`$(CMD_GREP) $(2)= $(1) 2>/dev/null | $(CMD_GREP) -v '^\s*\#' | $(CMD_SED) -e 's/^/:/g' | $(CMD_SED) -e 's/$$/:/g' | $(CMD_TR) -d '\n' | $(CMD_SED) -e 's/\s*//g' | $(CMD_SED) -e 's/$(2)=//g' | $(CMD_SED) -e 's/$$$(2)/:/g' | $(CMD_SED) -e 's/:\+/:/g' ` ; \
+	if [[ $$temp_var_check == *":$(3):"* ]] ; \
+	then \
+		$(CMD_ECHO) "Setenv prepend (OK):     \#$(1)'s $(2) has $(3)" ;  \
+	else \
+		$(CMD_PRINTF) "\n$(2)=$(3):\$$$(2)\nexport $(2)\n" >> $(1) ; \
+		$(CMD_ECHO) "Setenv prepend (OK):     \#$(3) prepended to $(1)'s $(2)" ;  \
+	fi
+
+################################################################################
+
+# $(1) user that should own file
+# $(2) file to set environmental variable in
+# $(3) environmental variable to set value
+# $(4) value to set
+# $(5) chmod value to set on file
+func_setenv_set_and_export_in_file = \
+	FUNC_TIMESTAMP_SETENV=$(shell $(CMD_DATE) +'%Y%m%d_%H%M%S') ; \
+	$(CMD_TEST) -r $(2) || { $(CMD_ECHO) \
+		"File read (FAIL):        \#$(2) when checking $(3)" ; exit 195; } ; \
+	$(call func_mv_must_exist,$(1),$(2),$(2).$$FUNC_TIMESTAMP_SETENV) ; \
+	\
+	$(CMD_SU) - $(1) -c "$(CMD_CAT) $(2).$$FUNC_TIMESTAMP_SETENV | $(CMD_GREP) -v $(3)= | $(CMD_GREP) -v ^\"export $(3)$$\" > $(2)" || { $(CMD_ECHO) \
+		"Setenv set prep (FAIL):  $(CMD_SU) - $(1) -c \"$(CMD_CAT) $(2).$$FUNC_TIMESTAMP_SETENV | $(CMD_GREP) -v $(3)= | $(CMD_GREP) -v ^\"export $(3)$$\" > $(2)\"" ; exit 194; } ; \
+	$(CMD_ECHO) "Setenv set prep (OK):    $(CMD_SU) - $(1) -c \"$(CMD_CAT) $(2).$$FUNC_TIMESTAMP_SETENV | $(CMD_GREP) -v $(3)= | $(CMD_GREP) -v ^\"export $(3)$$\" > $(2)\"" ; \
+	\
+	$(CMD_SU) - $(1) -c "$(CMD_CHMOD) $(5) $(2)" || { $(CMD_ECHO) \
+		"chmod Result (FAIL)      $(CMD_SU) - $(1) -c \"$(CMD_CHMOD) $(5) $(2)\"" ; \
+		exit 193; } ; \
+	$(CMD_ECHO) "chmod Result (OK):       $(CMD_SU) - $(1) -c \"$(CMD_CHMOD) $(5) $(2)\"" ; \
+	\
+	$(CMD_PRINTF) "\n$(3)=$(4)\nexport $(3)\n" >> $(2) ; \
+	$(CMD_ECHO) "Setenv set (OK):         \#$(3)=$(4) appended to $(2)"
+
+################################################################################
+
+# $(1) limit file
+# $(2) limit file content
+func_set_limits = \
+	FUNC_TIMESTAMP_LIMITS=$(shell $(CMD_DATE) +'%Y%m%d_%H%M%S') ; \
+	if [ -e $(1) ] ; \
+	then \
+		$(CMD_ECHO) "Limit File Check (WARN): -e $(1) \#exists" ; \
+		$(CMD_MV) $(1) $(1).$$FUNC_TIMESTAMP_LIMITS || { $(CMD_ECHO) \
+			 "File Backup (FAIL):      $(CMD_MV) $(1) $(1).$$FUNC_TIMESTAMP_LIMITS" ; \
+			exit 192; } ; \
+		$(CMD_ECHO) "File Backup (OK):        $(CMD_MV) $(1) $(1).$$FUNC_TIMESTAMP_LIMITS" ; \
+	else \
+		$(CMD_ECHO) "Limit File Check (OK):   -e $(1) \#non-existent" ; \
+	fi ; \
+	$(CMD_PRINTF) $(2) > $(1) || { $(CMD_ECHO) ; \
+		 "New Limit File (FAIL):   \#$(1)" ; \
+		exit 191; } ; \
+	$(CMD_ECHO) "New Limit File (OK):     \#$(1)" ; \
+	$(call func_chmod,644,$(1))
+
+################################################################################
+
+# $(1) user to untar file as
+# $(2) file to untar
+# $(3) directory to untar file to (must exist)
+func_tar_xf_to_existing_dir = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_ECHO) "Untarring tar file:      \#$(2) to $(3)..." ; \
+	$(CMD_SU) - $(1) -c "$(CMD_TAR) xf $(2) -C $(3)" || \
+		{ $(CMD_ECHO) "Untar xf file (FAIL):   $(CMD_SU) - $(1) -c \"$(CMD_TAR) xf $(2) -C $(3)\"" ; \
+		exit 190; } ; \
+	$(CMD_ECHO) "Untar xf file (OK):     $(CMD_SU) - $(1) -c \"$(CMD_TAR) xf $(2) -C $(3)\""
+
+################################################################################
+
+# $(1) user to own new directory and untar file as
+# $(2) group to own new directory
+# $(3) permissions to assign new directory (e.g. 755)
+# $(4) file to untar
+# $(5) directory to untar file to (make directory if doesn't exist, skip unzip if exists))
+func_tar_xf_to_new_dir = \
+	if [ -d "$(5)" ] ; \
+	then \
+		$(CMD_ECHO) "Untar dir? (OK):         \#$(5) already exists, skipping untar" ; \
+	else \
+		$(CMD_ECHO) "Untar dir? (OK):         \#$(5) non-existent, creating and untar'ing" ; \
+		$(call func_mkdir,$(1),$(2),$(3),$(5)) ; \
+		$(call func_tar_xf_to_existing_dir,$(1),$(4),$(5)) ; \
+	fi
+
+################################################################################
+
+# $(1) user to untar file as
+# $(2) file to untar
+# $(3) directory to untar file to (must exist)
+func_tar_zxf_to_existing_dir = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_ECHO) "Untarring tgz file:      \#$(2) to $(3)..." ; \
+	$(CMD_SU) - $(1) -c "$(CMD_TAR) zxf $(2) -C $(3)" || \
+		{ $(CMD_ECHO) "Untar zxf file (FAIL):   $(CMD_SU) - $(1) -c \"$(CMD_TAR) zxf $(2) -C $(3)\"" ; \
+		exit 189; } ; \
+	$(CMD_ECHO) "Untar zxf file (OK):     $(CMD_SU) - $(1) -c \"$(CMD_TAR) zxf $(2) -C $(3)\""
+
+################################################################################
+
+# $(1) user to own new directory and untar file as
+# $(2) group to own new directory
+# $(3) permissions to assign new directory (e.g. 755)
+# $(4) file to untar
+# $(5) directory to untar file to (make directory if doesn't exist, skip unzip if exists))
+func_tar_zxf_to_new_dir = \
+	if [ -d "$(5)" ] ; \
+	then \
+		$(CMD_ECHO) "Untar dir? (OK):         \#$(5) already exists, skipping untar" ; \
+	else \
+		$(CMD_ECHO) "Untar dir? (OK):         \#$(5) non-existent, creating and untar'ing" ; \
+		$(call func_mkdir,$(1),$(2),$(3),$(5)) ; \
+		$(call func_tar_zxf_to_existing_dir,$(1),$(4),$(5)) ; \
+	fi
+
+################################################################################
+
+# $(1) Installation Manager command line (i.e. path to imcl)
+# $(2) user to run Installation Manager as
+# $(3) base name of package to uninstall (e.g. com.ibm.tivoli.omnibus.core_)
+# $(4) package name for logging messages (e.g. OMNIbus Core)
+func_uninstall_im_package = \
+	$(call func_user_must_exist,$(2)) ; \
+	$(call func_command_check,$(1)) ; \
+	temp_package=`$(CMD_SU) - $(2) -c "$(1) listInstalledPackages" | $(CMD_GREP) ^$(3)` ; \
+	temp_package_count=`$(CMD_ECHO) $$temp_package | $(CMD_WC) -w` ; \
+	if [ $$temp_package_count -eq 1 ] ; \
+	then \
+		$(CMD_ECHO) "Uninstall Package? (OK): \#$$temp_package found for $(4)" ; \
+		$(CMD_ECHO) "Uninstall Package:       \#In progress..." ; \
+		$(CMD_SU) - $(2) -c "$(1) uninstall $$temp_package $(OPTIONS_MAKEFILE_IM)" || \
+			{ $(CMD_ECHO) "Uninstall Package (FAIL):$(CMD_SU) - $(2) -c \"$(1) uninstall $$temp_package $(OPTIONS_MAKEFILE_IM)\"" ; \
+			exit 188; } ; \
+		$(CMD_ECHO) "Uninstall Package (OK):  $(CMD_SU) - $(2) -c \"$(1) uninstall $$temp_package $(OPTIONS_MAKEFILE_IM)\"" ; \
+	else \
+		if [ $$temp_package_count -eq 0 ] ; \
+		then \
+			$(CMD_ECHO) "Uninstall Package? (FL): ^$(3)* not found" ; \
+			exit 187; \
+		else \
+			$(CMD_ECHO) "Uninstall Package? (FL): More than one found, count=$$temp_package_count ($$temp_package)" ; \
+			exit 186; \
+		fi ; \
+	fi
+
+################################################################################
+
+# $(1) target to unlink
+func_unlink = \
+	if [ -e $(1) ] ; \
+	then \
+		$(CMD_ECHO) "Target Exist? (OK):      -e $(1) \#exists, so unlink" ; \
+		$(CMD_UNLINK) $(1) || { $(CMD_ECHO) ; \
+			"Unlink Target (FAIL):    $(CMD_UNLINK) $(1)" ; \
+			exit 185; } ; \
+		$(CMD_ECHO) "Unlink Target (OK):      $(CMD_UNLINK) $(1)" ; \
+	else \
+		$(CMD_ECHO) "Target Exist? (OK):      -e $(1) \#non-existent, no need to unlink" ; \
+	fi
+
+################################################################################
+
+# $(1) user to unzip as
+# $(2) zip file
+# $(3) directory to unzip file to (must exist)
+func_unzip = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_ECHO) "Unzipping file:          \#In progress..." ; \
+	$(CMD_SU) - $(1) -c "$(CMD_UNZIP) -q $(2) -d $(3)" || \
+		{ $(CMD_ECHO) "Unzip file (FAIL):       $(CMD_SU) - $(1) -c \"$(CMD_UNZIP) -q $(2) -d $(3)\"" ; \
+		exit 184; } ; \
+	$(CMD_ECHO) "Unzip file (OK):         $(CMD_SU) - $(1) -c \"$(CMD_UNZIP) -q $(2) -d $(3)\""
+
+################################################################################
+
+# $(1) user to unzip as
+# $(2) zip file
+# $(3) directory to unzip file to (must exist)
+# $(4) file to extract from the zip file
+func_unzip_extract_file = \
+	$(call func_user_must_exist,$(1)) ; \
+	$(CMD_ECHO) "Unzipping file:          \#In progress..." ; \
+	$(CMD_SU) - $(1) -c "$(CMD_UNZIP) -q -j $(2) $(4) -d $(3)" || \
+		{ $(CMD_ECHO) "Unzip file (FAIL):       $(CMD_SU) - $(1) -c \"$(CMD_UNZIP) -q -j $(2) $(4) -d $(3)\"" ; \
+		exit 183; } ; \
+	$(CMD_ECHO) "Unzip file (OK):         $(CMD_SU) - $(1) -c \"$(CMD_UNZIP) -q -j $(2) $(4) -d $(3)\""
+
+################################################################################
+
+# $(1) user to unzip as
+# $(2) zip file
+# $(3) directory to unzip file to (must exist)
+# $(4) file to extract from the zip file
+func_unzip_extract_file_to_existing_dir = \
+	if [ -d "$(3)" ] ; \
+	then \
+		$(CMD_ECHO) "Unzip dir? (OK):         -d $(3) \# already exists, unzipping to it" ; \
+		$(call func_unzip_extract_file,$(1),$(2),$(3),$(4)) ; \
+	else \
+		$(CMD_ECHO) "Unzip dir? (FAIL):       -d $(3) \# non-existent, cannot unzip $(2)" ; \
+		exit 182; \
+	fi
+
+################################################################################
+
+
+# $(1) user to unzip as
+# $(2) zip file
+# $(3) directory to unzip file to (must exist or failure)
+func_unzip_to_existing_dir = \
+	if [ -d "$(3)" ] ; \
+	then \
+		$(CMD_ECHO) "Unzip dir? (OK):         -d $(3) \# already exists, unzipping to it" ; \
+		$(call func_unzip,$(1),$(2),$(3)) ; \
+	else \
+		$(CMD_ECHO) "Unzip dir? (FAIL):       -d $(3) \# non-existent, cannot unzip $(2)" ; \
+		exit 181; \
+	fi
+
+################################################################################
+
+# $(1) user to own new directory and unzip as
+# $(2) group to own new directory
+# $(3) permissions to assign new directory (e.g. 755)
+# $(4) zip file
+# $(5) directory to unzip file to (make directory if doesn't exist, skip unzip if exists))
+func_unzip_to_new_dir = \
+	if [ -d "$(5)" ] ; \
+	then \
+		$(CMD_ECHO) "Unzip dir? (OK):         -d $(5) \# already exists, skipping unzip" ; \
+	else \
+		$(CMD_ECHO) "Unzip dir? (OK):         -d $(5) \# non-existent, creating and unzipping" ; \
+		$(call func_mkdir,$(1),$(2),$(3),$(5)) ; \
+		$(call func_unzip,$(1),$(4),$(5)) ; \
+	fi
+
+################################################################################
+
+# UNDER CONSIDERATION FOR FUTURE, NOT CURRENTLY USED
+# $(1) user to check exists
+NEW_func_user_must_exist = \
+	$(CMD_GETENT) passwd $(1); rc=$$?; \
+	$(CMD_TEST) $$rc -ne 0 && { $(CMD_ECHO) \
+		"User Exists (FAIL):      $(GETENT) passwd $(1) \# $(1) cannot be confirmed to exist" ; exit 180; } ; \
+	$(CMD_ECHO) \
+		"User Exists (OK):        $(GETENT) passwd $(1) \# $(1) exists" 
+
+################################################################################
+
+# $(1) user to check exists
+func_user_must_exist = \
+	FUNC_USER_EXIST_CHECK=$(shell $(CMD_GREP) ^$(1): /etc/passwd | $(CMD_CUT) -d":" -f1) ; \
+	if [ "$(1)" = "$$FUNC_USER_EXIST_CHECK" ] ; \
+	then \
+		$(CMD_ECHO) "User Exists? (OK):       $(CMD_GREP) ^$(1) /etc/passwd | $(CMD_CUT) -d\":\" -f1 \# $(1) user exists" ; \
+	else \
+		$(CMD_ECHO) "User Exists? (FAIL):     $(CMD_GREP) ^$(1) /etc/passwd | $(CMD_CUT) -d\":\" -f1 \# $(1) user non-existent" ; \
+		exit 179; \
+	fi
+
+################################################################################
+
+# $(1) is Linux user that WebSphere runs as (e.g., scadmin)
+# $(2) is WebSphere directory (e.g., /opt/IBM/WebSphere)
+# $(3) is WebSphere profile directory (e.g., /opt/IBM/JazzSM/profile)
+# $(4) is WebSphere user that profile should be running as (e.g., smadmin)
+# $(5) is WebSphere user's password
+# $(6) is WebSphere servername
+func_websphere_profile_stop = \
+	$(call func_user_must_exist,$(1)) ; \
+	if [ `$(CMD_PS) -ef | $(CMD_GREP) -v grep | $(CMD_GREP) ^$(1) | \
+		$(CMD_GREP) $(2) | $(CMD_GREP) $(3) | $(CMD_GREP) $(6) | $(CMD_WC) -l` -eq 0 ] ; \
+	then \
+		$(CMD_ECHO) "WebSphere Profile (OK):  \#$(3) not running (as $(1) from $(2))" ; \
+	else \
+		$(CMD_ECHO) "WebSphere Profile (OK):  \#$(3) running (as $(1) from $(2))" ; \
+		$(CMD_ECHO) "WebSphere Stop:          \#In progress..." ; \
+		$(CMD_SU) - $(1) -c "$(3)/bin/stopServer.sh $(6) -quiet -username $(4) -password $(5) 1> /dev/null" || \
+			{ $(CMD_ECHO) "WebSphere Stop (FAIL):   $(3)/bin/stopServer.sh $(6) -quiet" ; \
+			exit 178; } ; \
+		$(CMD_ECHO) "WebSphere Stop (OK):     $(3)/bin/stopServer.sh $(6) -quiet" ; \
+	fi
+
+################################################################################
+
+# $(1) is command to confirm is available
+# $(2) user to confirm has access to command
+func_which_as = \
+	$(CMD_SU) - $(2) -c "$(CMD_WHICH) $(1) 1>/dev/null 2>&1" || \
+		{ $(CMD_ECHO) "Which As (FAIL):         $(CMD_SU) - $(2) -c \"$(CMD_WHICH) $(1) 1>/dev/null 2>&1\"" ; \
+			exit 177; \
+		} ; \
+	$(CMD_ECHO) "Which As (OK):           $(CMD_SU) - $(2) -c \"$(CMD_WHICH) $(1) 1>/dev/null 2>&1\""
+
