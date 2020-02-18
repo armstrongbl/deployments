@@ -267,11 +267,11 @@ MEDIA_STEP3_D	:= IBM Tivoli Netcool OMNIbus 8.1.0 Fix Pack 7 Core Linux 64bit\n\
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
 MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/TVL_NTCL_OMN_V8.1.0.19_CORE_LNX_M.zip
-MEDIA_STEP3_F	:= $(PATH_MAKEFILE_MEDIA)/8.1.0-TIV-OMNIbusCore-linux-x86_64-FP0007.zip
+#MEDIA_STEP3_F	:= $(PATH_MAKEFILE_MEDIA)/8.1.0-TIV-OMNIbusCore-linux-x86_64-FP0007.zip
 
 MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
 MEDIA_STEP2_B	:= 36d779246309bb511489e0bfd90c01f38073a4feb45706e9e5185de1deca5cc33df0b7da35c06a8216f4d13cbf16cfab55fa3b253993fd34357763392b8e8cd2
-MEDIA_STEP3_B	:= 5324ee5f3307ea719fd06642da0f0b2f1383cd96bc9827c52748b25c3e24c38c46da25c1fffcf6d22a9bffb0a6628bbf8daff556a3b5f4300f304ab4eedafcfa
+#MEDIA_STEP3_B	:= 5324ee5f3307ea719fd06642da0f0b2f1383cd96bc9827c52748b25c3e24c38c46da25c1fffcf6d22a9bffb0a6628bbf8daff556a3b5f4300f304ab4eedafcfa
 
 ################################################################################
 # COMMAND TO BE INSTALLED BEFORE USE
@@ -531,7 +531,7 @@ check_media_checksums:	check_commands
 	@$(call func_print_caption,"CHECKING INSTALLATION MEDIA CHECKSUMS")
 	@$(call func_check_file_cksum,$(MEDIA_STEP1_F),$(MEDIA_STEP1_B))
 	@$(call func_check_file_cksum,$(MEDIA_STEP2_F),$(MEDIA_STEP2_B))
-	@$(call func_check_file_cksum,$(MEDIA_STEP3_F),$(MEDIA_STEP3_B))
+	#@$(call func_check_file_cksum,$(MEDIA_STEP3_F),$(MEDIA_STEP3_B))
 	@$(CMD_ECHO)
 
 ################################################################################
