@@ -68,7 +68,7 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 # REPOSITORY PATHS
 ################################################################################
-PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_5_install
+PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_install
 PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_7_upgrade
 
 PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core_
