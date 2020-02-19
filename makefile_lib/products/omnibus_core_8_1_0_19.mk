@@ -10,7 +10,7 @@
 ################################################################################
 ################################################################################
 ## ACCUOSS LIBERTY LICENSE ( ALL )                                            ##
-## (c) 2015-2019 Accuoss, LLC. All rights reserved.                           ##
+## (c) 2015-2020 Accuoss, LLC. All rights reserved.                           ##
 ## Permission is hereby granted, free of charge, to any person obtaining a    ##
 ## copy of this software and associated documentation files (the "Software"), ##
 ## to deal in the Software without restriction, including without limitation  ##
@@ -296,11 +296,10 @@ define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
     <data key='user.migratedata,com.ibm.tivoli.omnibus.core' value='false'/>
   </profile>
   <install>
-    <!-- IBM Tivoli Netcool/OMNIbus 8.1.0.5 -->
-    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.core' version='5.50.49.20151123_1445' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_tec_migration,nco_operator_gui_feature,nco_objserv_feature,nco_g_objserv_feature,nco_bridgeserv_feature,nco_proxyserv_feature,nco_pa_feature,nco_probes_support_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_extensions_feature'/>
+	<!-- IBM Tivoli Netcool/OMNIbus 8.1.0.19 -->
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.core' version='5.50.85.20190328_0606' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_tec_migration,nco_operator_gui_feature,nco_objserv_feature,nco_g_objserv_feature,nco_bridgeserv_feature,nco_proxyserv_feature,nco_pa_feature,nco_probes_support_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_extensions_feature'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
-  <preference name='offering.service.repositories.areUsed' value='false'/>
 </agent-input>
 endef
 export OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
@@ -444,8 +443,6 @@ preinstall:			set_limits
 
 theinstall:			install_omnibus \
 					confirm_shared_libraries \
-					upgrade_omnibus \
-					configure_omnibus \
 					autostarton_omnibus
 
 postinstall:		clean
