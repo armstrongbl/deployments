@@ -166,11 +166,11 @@ MEDIA_STEP2a1_D := IBM WebSphere Application Server V8.5.5.4 for Jazz for Servic
 MEDIA_STEP2a2_D := Jazz for Service Management V1.1.2.1 for Linux Multilingual (CN6WAML)
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
-MEDIA_STEP2a1_F := $(PATH_MAKEFILE_MEDIA)/WSPAS8.5.5.15_FOR_JSM_LNX_ML.tar
+MEDIA_STEP2a1_F := $(PATH_MAKEFILE_MEDIA)/WSPAS8.5.5.15_FOR_JSM_LNX_ML.tar.gz
 MEDIA_STEP2a2_F := $(PATH_MAKEFILE_MEDIA)/JSM1.1.3.3_FOR_LNX_ML.zip
 
 MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
-MEDIA_STEP2a1_B := 
+MEDIA_STEP2a1_B := 29dedc306c8ed15735f25983de5332c47c1d8dd5acf4c1de8b3aa98fc6361cd3e8c92d273434e5adb4d827f86b96dc18a3af5436e47c689f482f16d6635bd0cf
 MEDIA_STEP2a2_B := 6dc5e757b2b10dc3dbbac572f8ec6c9634cde9a81b7b8b0d59748d227c8b7dce00298298ca8f8aa7a8eb9c967e1e3e29ca56a8dda14e48003a1b4ac30b227289
 
 ################################################################################
@@ -690,8 +690,8 @@ prepare_jazzsm_install_media:	check_whoami \
 		$(CMD_ECHO) "JazzSM Repo? (OK):       -d $(PATH_REPOSITORY_INSTALL) # already exists" ; \
 	else \
 		$(CMD_ECHO) "JazzSM Repo? (OK):       -d $(PATH_REPOSITORY_INSTALL) # non-existent" ; \
-		$(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
-		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_tar_zxf_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_tar_zxf_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
 	fi ;
 	@$(CMD_ECHO)
 
