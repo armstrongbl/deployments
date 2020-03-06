@@ -685,13 +685,13 @@ prepare_jazzsm_install_media:	check_whoami \
 								check_commands \
 								create_jazzsm_user
 	@$(call func_print_caption,"PREPARING JAZZ FOR SERVICE MANAGEMENT INSTALLATION MEDIA")
-	@if [ -d "$(PATH_REPOSITORY_INSTALL)" ] ; \
+	@if [ -d "$(PATH_REPOSITORY_INSTALL)" ];  \
 	then \
 		$(CMD_ECHO) "JazzSM Repo? (OK):       -d $(PATH_REPOSITORY_INSTALL) # already exists" ; \
 	else \
 		$(CMD_ECHO) "JazzSM Repo? (OK):       -d $(PATH_REPOSITORY_INSTALL) # non-existent" ; \
 		$(call func_tar_zxf_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
-		$(call func_tar_zxf_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
 	fi ;
 	@$(CMD_ECHO)
 
