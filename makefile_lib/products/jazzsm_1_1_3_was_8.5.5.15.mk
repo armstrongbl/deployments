@@ -72,7 +72,7 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 # REPOSITORY PATHS
 ################################################################################
-PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_2_1_was_8_5_5_4_install
+PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_15_install
 
 PATH_REPOSITORY_JAZZSM_EXT_PACKAGE=com.ibm.tivoli.tacct.psc.install.was85.extension_
 PATH_REPOSITORY_JAZZSM_JVM_PACKAGE=com.ibm.websphere.IBMJAVA.v70_
@@ -166,12 +166,12 @@ MEDIA_STEP2a1_D := IBM WebSphere Application Server V8.5.5.4 for Jazz for Servic
 MEDIA_STEP2a2_D := Jazz for Service Management V1.1.2.1 for Linux Multilingual (CN6WAML)
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
-MEDIA_STEP2a1_F := $(PATH_MAKEFILE_MEDIA)/WSPAS8.5.5.15_FOR_JSM_LNX_ML.tar.gz
-MEDIA_STEP2a2_F := $(PATH_MAKEFILE_MEDIA)/JSM1.1.3.3_FOR_LNX_ML.zip
+MEDIA_STEP2a1_F := $(PATH_MAKEFILE_MEDIA)/WAS_V8.5.5.9_FOR_JSM_FOR_LINUX_ML.zip
+MEDIA_STEP2a2_F := $(PATH_MAKEFILE_MEDIA)/JAZZ_FOR_SM_1.1.3.0_FOR_LNX.zip
 
 MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
-MEDIA_STEP2a1_B := 29dedc306c8ed15735f25983de5332c47c1d8dd5acf4c1de8b3aa98fc6361cd3e8c92d273434e5adb4d827f86b96dc18a3af5436e47c689f482f16d6635bd0cf
-MEDIA_STEP2a2_B := 6dc5e757b2b10dc3dbbac572f8ec6c9634cde9a81b7b8b0d59748d227c8b7dce00298298ca8f8aa7a8eb9c967e1e3e29ca56a8dda14e48003a1b4ac30b227289
+MEDIA_STEP2a1_B := 53ca59c270bfa026a8fb3e83578413f18c7bcb9b1bf7e976b7ea768070006cf9b1257e46023ce26e4e8bb8e30f90e6a9e2059646864965b822880074e0cecbf1
+MEDIA_STEP2a2_B := c8e7253013dd24dee12d1e226de2ba2e3a40f32380b69bdce65676c78628f7742a75f7f5ed88005899905965035a32ce2550599e3b0c50fd5307ddf0172b2845
 
 ################################################################################
 # COMMAND TO BE INSTALLED BEFORE USE
@@ -203,12 +203,12 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
     <data key='cic.selector.nl' value='en'/>
   </profile>
   <install modify='false'>
-    <!-- IBM WebSphere Application Server 8.5.5.4 -->
-    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.websphere.BASE.v85' version='8.5.5004.20141119_1746' features='core.feature,ejbdeploy,thinclient,embeddablecontainer,com.ibm.sdk.6_64bit' installFixes='none'/>
-    <!-- IBM WebSphere SDK Java Technology Edition (Optional) 7.0.8.0 -->
-    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.websphere.IBMJAVA.v70' version='7.0.8000.20141118_1016' features='com.ibm.sdk.7' installFixes='none'/>
+    <!-- IBM WebSphere Application Server 8.5.5.9 -->
+    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.websphere.BASE.v85' version='8.5.5009.20160225_0435' features='core.feature,ejbdeploy,thinclient,embeddablecontainer,com.ibm.sdk.6_64bit'/>
+    <!-- IBM WebSphere SDK Java Technology Edition (Optional) 7.0.9.30 -->
+    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.websphere.IBMJAVA.v70' version='7.0.9030.20160224_1826' features='com.ibm.sdk.7'/>
     <!-- Jazz for Service Management extension for IBM WebSphere 8.5 1.1.2.1 -->
-    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.tivoli.tacct.psc.install.was85.extension' version='1.1.2001.20150821-0351' features='main.feature' installFixes='none'/>
+    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.tivoli.tacct.psc.install.was85.extension' version='1.1.2001.20160606-1749' features='main.feature'/>
   </install>
   <profile id='Core services in Jazz for Service Management' installLocation='$(PATH_INSTALL_JAZZSM)'>
     <data key='eclipseLocation' value='$(PATH_INSTALL_JAZZSM)'/>
@@ -243,8 +243,8 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
     <data key='user.WAS_CELL' value='$(WAS_JAZZSM_CELL)'/>
   </profile>
   <install modify='false'>
-    <!-- IBM Dashboard Application Services Hub 3.1.2.1 -->
-    <offering profile='Core services in Jazz for Service Management' id='com.ibm.tivoli.tacct.psc.tip.install' version='3.1.2001.20150821-0351' features='com.ibm.tivoli.tacct.psc.install.server.feature.tip.install,com.ibm.tivoli.tacct.psc.install.server.feature.tip.config' installFixes='none'/>
+    <!-- IBM Dashboard Application Services Hub 3.1.3.0 -->
+    <offering profile='Core services in Jazz for Service Management' id='com.ibm.tivoli.tacct.psc.tip.install' version='3.1.3000.20160606-1749' features='com.ibm.tivoli.tacct.psc.install.server.feature.tip.install,com.ibm.tivoli.tacct.psc.install.server.feature.tip.config'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
   <preference name='com.ibm.cic.common.core.preferences.connectTimeout' value='30'/>
@@ -690,7 +690,7 @@ prepare_jazzsm_install_media:	check_whoami \
 		$(CMD_ECHO) "JazzSM Repo? (OK):       -d $(PATH_REPOSITORY_INSTALL) # already exists" ; \
 	else \
 		$(CMD_ECHO) "JazzSM Repo? (OK):       -d $(PATH_REPOSITORY_INSTALL) # non-existent" ; \
-		$(call func_tar_zxf_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
 		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
 	fi ;
 	@$(CMD_ECHO)
