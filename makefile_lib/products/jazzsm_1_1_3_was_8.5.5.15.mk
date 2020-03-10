@@ -73,6 +73,7 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 # REPOSITORY PATHS
 ################################################################################
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_15_install
+PATH_REPOSITORY_UPGRADE := $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_15_upgrade
 
 PATH_REPOSITORY_JAZZSM_EXT_PACKAGE=com.ibm.tivoli.tacct.psc.install.was85.extension_
 PATH_REPOSITORY_JAZZSM_JVM_PACKAGE=com.ibm.websphere.IBMJAVA.v70_
@@ -695,6 +696,26 @@ prepare_jazzsm_install_media:	check_whoami \
 	fi ;
 	@$(CMD_ECHO)
 
+
+
+################################################################################
+# PREPARE WAS UPGRADE INSTALLATION MEDIA
+################################################################################
+prepare_was_upgrade_media:   check_whoami \
+                                                                check_commands \
+                                                                create_jazzsm_user
+        @$(call func_print_caption,"PREPARING WAS UPGRADE INSTALLATION MEDIA")
+        @if [ -d "$(PATH_REPOSITORY_UPGRADE)" ];  \
+        then \
+                $(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # already exists" ; \
+        else \
+                $(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # non-existent" ; \
+                $(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
+                $(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
+        fi ;
+        @$(CMD_ECHO)
+
+
 ################################################################################
 # CREATE THE JAZZSM INSTALLATION RESPONSE FILE
 ################################################################################
@@ -717,6 +738,33 @@ remove_jazzsm_install_response_file:	check_commands
 	@$(call func_print_caption,"REMOVING JAZZSM INSTALLATION RESPONSE FILE")
 	@$(CMD_RM) -f $(JAZZSM_INSTALL_RESPONSE_FILE)
 	@$(CMD_ECHO)
+
+################################################################################
+# UPGRADE WAS TO 8.5.5.15
+################################################################################
+upgrade_was: check_whoami \
+                                check_commands \
+                                prepare_was_upgrade_media \
+                                create_was_upgrade_response_file
+
+        @$(call func_print_caption,"UPGRADING WEBGUI")
+        @if [ -d "$(PATH_INSTALL_OMNIBUS_WEBGUI)" ] ; \
+        then \
+                $(CMD_ECHO) "WebGUI Exists? (OK):     -d $(PATH_INSTALL_OMNIBUS_WEBGUI) # exists" ; \
+        else \
+                $(CMD_ECHO) "WebGUI Exists? (FAIL):   -d $(PATH_INSTALL_OMNIBUS_WEBGUI) # non-existent" ; \
+                exit 7 ; \
+        fi ;
+
+        @$(call func_command_check,$(WEBGUI_CMD_IMCL))
+        @$(CMD_ECHO) "WebGUI Upgrade:          #In progress..."
+        @$(CMD_SU) - $(WEBGUI_USER) -c "$(WEBGUI_CMD_IMCL) input \
+                $(WEBGUI_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
+                { $(CMD_ECHO) "WebGUI Upgrade (FAIL):   $(CMD_SU) - $(WEBGUI_USER) -c \"$(WEBGUI_CMD_IMCL) input $(WEBGUI_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+                exit 8; }
+        @$(CMD_ECHO) "WebGUI Upgrade (OK):     $(CMD_SU) - $(WEBGUI_USER) -c \"$(WEBGUI_CMD_IMCL) input $(WEBGUI_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
+        @$(CMD_ECHO)
+
 
 ################################################################################
 # INSTALL JAZZ FOR SERVICE MANAGEMENT
