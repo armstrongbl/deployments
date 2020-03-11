@@ -294,7 +294,7 @@ define WAS_UPGRADE_RESPONSE_FILE_CONTENT
     <variable name='sharedLocation' value='$(JAZZSM_IMSHARED)'/>
   </variables>
   <server>
-    <repository location='$(PATH_REPOSITORY_UPGRADE)/'/>
+    <repository location='$(PATH_REPOSITORY_UPGRADE)'/>
   </server>
 <profile installLocation="$(PATH_INSTALL_WEBSPHERE)/AppServer" id="IBM WebSphere Application Server V8.5">
     <data value="x86" key="cic.selector.arch"/>
@@ -785,6 +785,24 @@ remove_jazzsm_install_response_file:	check_commands
 	@$(CMD_ECHO)
 
 ################################################################################
+# CREATE THE WEBSPHERE UPGRADE RESPONSE FILE
+################################################################################
+create_was_upgrade_response_file:	check_commands \
+										create_jazzsm_user \
+										prepare_was_upgrade_media
+	@$(call func_print_caption,"CREATING WEBSPHERE UPGRADE RESPONSE FILE")
+	@$(call func_command_check,$(CMD_IBM_IMUTILSC))
+	@$(CMD_ECHO) "Encrypt Password:        #$(CMD_IBM_IMUTILSC) encryptString..."
+	@$(eval TEMP_WAS_JAZZSM_PASSWD_ENCRYPT=`$(CMD_SU) - $(JAZZSM_USER) -c "$(CMD_IBM_IMUTILSC) encryptString $(WAS_JAZZSM_PASSWD) -silent -noSplash"`)
+	@$(CMD_ECHO) "Encrypt Password (OK):   #$(TEMP_WAS_JAZZSM_PASSWD_ENCRYPT) for $(WAS_JAZZSM_USER)"
+	@$(CMD_ECHO) "$$WAS_UPGRADE_RESPONSE_FILE_CONTENT" | $(CMD_SED) -e "s/<WAS_JAZZSM_PASSWD>/$(TEMP_WAS_JAZZSM_PASSWD_ENCRYPT)/g" > $(WAS_UPGRADE_RESPONSE_FILE) || { $(CMD_ECHO) ; \
+		 "Websphere Resp File (FAIL): #$(JAZZSM_INSTALL_RESPONSE_FILE)" ; \
+		exit 3; } ; \
+	$(CMD_ECHO) "Websphere Resp File (OK):   #$(WAS_UPGRADE_RESPONSE_FILE)"
+	@$(call func_chmod,444,$(WAS_UPGRADE_RESPONSE_FILE))
+	@$(CMD_ECHO)
+
+################################################################################
 # UPGRADE WAS TO 8.5.5.15
 ################################################################################
 upgrade_was: check_whoami \
@@ -793,23 +811,23 @@ upgrade_was: check_whoami \
                                 create_was_upgrade_response_file \
 				stop_jazzsm_natively
 
-        @$(call func_print_caption,"UPGRADING WEBSPHERE")
-        @if [ -d "$(PATH_INSTALL_OMNIBUS_WEBGUI)" ] ; \
-        then \
-                $(CMD_ECHO) "WebGUI Exists? (OK):     -d $(PATH_INSTALL_WEBSPHERE) # exists" ; \
-        else \
-                $(CMD_ECHO) "WebGUI Exists? (FAIL):   -d $(PATH_INSTALL_WEBSPHERE) # non-existent" ; \
-                exit 7 ; \
-        fi ;
+	@$(call func_print_caption,"UPGRADING WEBSPHERE")
+	@if [ -d "$(PATH_INSTALL_WEBSPHERE)" ] ; \
+	then \
+		$(CMD_ECHO) "Websphere Exists? (OK):     -d $(PATH_INSTALL_WEBSPHERE) # exists" ; \
+	else \
+		$(CMD_ECHO) "Websphere Exists? (FAIL):   -d $(PATH_INSTALL_WEBSPHERE) # non-existent" ; \
+		exit 7 ; \
+	fi ;
 
-        @$(call func_command_check,$(JAZZSM_CMD_IMCL))
-        @$(CMD_ECHO) "Websphere Upgrade:          #In progress..."
-        @$(CMD_SU) - $(JAZZSM_USER) -c "$(JAZZSM_CMD_IMCL) input \
-                $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
-                { $(CMD_ECHO) "Websphere Upgrade (FAIL):   $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
-                exit 8; }
-        @$(CMD_ECHO) "Websphere Upgrade (OK):     $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
-        @$(CMD_ECHO)
+	@$(call func_command_check,$(JAZZSM_CMD_IMCL))
+	@$(CMD_ECHO) "Websphere Upgrade:          #In progress..."
+	@$(CMD_SU) - $(JAZZSM_USER) -c "$(JAZZSM_CMD_IMCL) input \
+		$(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
+		{ $(CMD_ECHO) "Websphere Upgrade (FAIL):   $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+	exit 8; }
+	@$(CMD_ECHO) "Websphere Upgrade (OK):     $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
+	@$(CMD_ECHO)
 
 
 ################################################################################
