@@ -748,17 +748,17 @@ prepare_jazzsm_install_media:	check_whoami \
 prepare_was_upgrade_media:   check_whoami \
                                           check_commands \
 
-        @$(call func_print_caption,"PREPARING WAS UPGRADE INSTALLATION MEDIA")
-        @if [ -d "$(PATH_REPOSITORY_UPGRADE)" ];  \
-        then \
-                $(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # already exists" ; \
-        else \
-                $(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # non-existent" ; \
-                $(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP3a_F),$(PATH_REPOSITORY_UPGRADE)) ; \
-                $(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3b_F),$(PATH_REPOSITORY_UPGRADE)) ; \
-                $(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3c_F),$(PATH_REPOSITORY_UPGRADE)) ; \
-        fi ;
-        @$(CMD_ECHO)
+	@$(call func_print_caption,"PREPARING WAS UPGRADE INSTALLATION MEDIA")
+	@if [ -d "$(PATH_REPOSITORY_UPGRADE)" ];  \
+	then \
+		$(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # already exists" ; \
+	else \
+		$(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # non-existent" ; \
+		$(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP3a_F),$(PATH_REPOSITORY_UPGRADE)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3b_F),$(PATH_REPOSITORY_UPGRADE)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3c_F),$(PATH_REPOSITORY_UPGRADE)) ; \
+	fi ;
+	@$(CMD_ECHO)
 
 
 ################################################################################
