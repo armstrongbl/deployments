@@ -156,23 +156,38 @@ TIMESTAMP	=  $(shell $(CMD_DATE) +'%Y%m%d_%H%M%S')
 ################################################################################
 MEDIA_ALL_DESC	=	\t$(MEDIA_STEP1_D)\n \
 					\t$(MEDIA_STEP2a1_D)\n \
-					\t$(MEDIA_STEP2a2_D)\n
+					\t$(MEDIA_STEP2a2_D)\n \
+					$(MEDIA_STEP3a_F)\n \
+					$(MEDIA_STEP3b_F)\n \
+					$(MEDIA_STEP3c_F)\n
 
 MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 					$(MEDIA_STEP2a1_F) \
-					$(MEDIA_STEP2a2_F)
+					$(MEDIA_STEP2a2_F)\
+					$(MEDIA_STEP3a_F)\
+					$(MEDIA_STEP3b_F)\
+					$(MEDIA_STEP3c_F)
 
 MEDIA_STEP1_D	:= IBM Prerequisite Scanner V1.2.0.17, Build 20150827
 MEDIA_STEP2a1_D := IBM WebSphere Application Server V8.5.5.4 for Jazz for Service\n\t\tManagement 1.1.2.0 for Linux Multilingual (CN553ML)
 MEDIA_STEP2a2_D := Jazz for Service Management V1.1.2.1 for Linux Multilingual (CN6WAML)
+MEDIA_STEP3a_D  := IBM WebSphere Application Server V8.5.5.15 Fixpack Part1
+MEDIA_STEP3b_D  := IBM WebSphere Application Server V8.5.5.15 Fixpack Part2
+MEDIA_STEP3c_D  := IBM WebSphere Application Server V8.5.5.15 Fixpack Part3
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
 MEDIA_STEP2a1_F := $(PATH_MAKEFILE_MEDIA)/WAS_V8.5.5.9_FOR_JSM_FOR_LINUX_ML.zip
 MEDIA_STEP2a2_F := $(PATH_MAKEFILE_MEDIA)/JAZZ_FOR_SM_1.1.3.0_FOR_LNX.zip
+MEDIA_STEP3a_F  := $(PATH_MAKEFILE_MEDIA)/8.5.5-WS-WAS-FP015-part1.zip
+MEDIA_STEP3b_F  := $(PATH_MAKEFILE_MEDIA)/8.5.5-WS-WAS-FP015-part2.zip
+MEDIA_STEP3c_F  := $(PATH_MAKEFILE_MEDIA)/8.5.5-WS-WAS-FP015-part3.zip
 
 MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
 MEDIA_STEP2a1_B := 53ca59c270bfa026a8fb3e83578413f18c7bcb9b1bf7e976b7ea768070006cf9b1257e46023ce26e4e8bb8e30f90e6a9e2059646864965b822880074e0cecbf1
 MEDIA_STEP2a2_B := c8e7253013dd24dee12d1e226de2ba2e3a40f32380b69bdce65676c78628f7742a75f7f5ed88005899905965035a32ce2550599e3b0c50fd5307ddf0172b2845
+MEDIA_STEP3a_B := 214e849b4b06c9fe14644e7838192564d511c71deded369e4e4b1faad0f44bdfe3b15c7ce8f3f7548a3acedd0be9cd20846f16bb9e7ae3fd6310fae808714e74
+MEDIA_STEP3b_B := 70b8f8243386d93c13188c40142f29ca0c79268a8fc7eca5d0dfc931aa6a3e2b40b7ee13b54bc5dc4fb403bd5ec04138989eab2862c11b1166da79623a4602bc
+MEDIA_STEP3c_B := f74c6fbafde4b13766659d046c4c4f4271ff83236abde89256b4c8f762e17a72ae29a6ee64cd162d49dc625deffd5aac7b5bc6ef855021f9cf4cca60e76ed943
 
 ################################################################################
 # COMMAND TO BE INSTALLED BEFORE USE
@@ -267,6 +282,35 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
 </agent-input>
 endef
 export JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
+
+################################################################################
+# WAS  RESPONSE FILE TEMPLATE (UPGRADE)
+################################################################################
+WAS_UPGRADE_RESPONSE_FILE=$(PATH_TMP)/was_upgrade_response.xml
+define WAS_UPGRADE_RESPONSE_FILE_CONTENT
+<?xml version='1.0' encoding='UTF-8'?>
+<agent-input>
+  <variables>
+    <variable name='sharedLocation' value='$(JAZZSM_IMSHARED)'/>
+  </variables>
+  <server>
+    <repository location='$(PATH_REPOSITORY_UPGRADE)/'/>
+  </server>
+<profile installLocation="$(PATH_INSTALL_WEBSPHERE)/AppServer" id="IBM WebSphere Application Server V8.5">
+    <data value="x86" key="cic.selector.arch"/>
+    <data value="java8" key="user.wasjava"/>
+    <data value="java8" key="user.internal.use.only.prev.wasjava"/>
+    <data value="java6" key="user.internal.use.only.rollback.wasjava"/>
+</profile>
+<install>
+<!-- IBM WebSphere Application Server 8.5.5.15 -->
+    <offering id="com.ibm.websphere.BASE.v85" features="com.ibm.sdk.6_64bit,core.feature,ejbdeploy,embeddablecontainer,thinclient" version="8.5.5015.20190128_1828" profile="IBM WebSphere Application Server V8.5"/>
+</install>
+<preference value="${sharedLocation}" name="com.ibm.cic.common.core.preferences.eclipseCache"/>
+<preference value="false" name="offering.service.repositories.areUsed"/>
+</agent-input>
+endef
+export WAS_UPGRADE_RESPONSE_FILE_CONTENT
 
 ################################################################################
 # JAZZSM RESPONSE FILE TEMPLATE (UNINSTALL SERVICES)
@@ -702,16 +746,17 @@ prepare_jazzsm_install_media:	check_whoami \
 # PREPARE WAS UPGRADE INSTALLATION MEDIA
 ################################################################################
 prepare_was_upgrade_media:   check_whoami \
-                                                                check_commands \
-                                                                create_jazzsm_user
+                                          check_commands \
+
         @$(call func_print_caption,"PREPARING WAS UPGRADE INSTALLATION MEDIA")
         @if [ -d "$(PATH_REPOSITORY_UPGRADE)" ];  \
         then \
                 $(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # already exists" ; \
         else \
                 $(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # non-existent" ; \
-                $(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
-                $(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
+                $(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP3a_F),$(PATH_REPOSITORY_UPGRADE)) ; \
+                $(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3b_F),$(PATH_REPOSITORY_UPGRADE)) ; \
+                $(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3c_F),$(PATH_REPOSITORY_UPGRADE)) ; \
         fi ;
         @$(CMD_ECHO)
 
@@ -745,24 +790,25 @@ remove_jazzsm_install_response_file:	check_commands
 upgrade_was: check_whoami \
                                 check_commands \
                                 prepare_was_upgrade_media \
-                                create_was_upgrade_response_file
+                                create_was_upgrade_response_file \
+				stop_jazzsm_natively
 
-        @$(call func_print_caption,"UPGRADING WEBGUI")
+        @$(call func_print_caption,"UPGRADING WEBSPHERE")
         @if [ -d "$(PATH_INSTALL_OMNIBUS_WEBGUI)" ] ; \
         then \
-                $(CMD_ECHO) "WebGUI Exists? (OK):     -d $(PATH_INSTALL_OMNIBUS_WEBGUI) # exists" ; \
+                $(CMD_ECHO) "WebGUI Exists? (OK):     -d $(PATH_INSTALL_WEBSPHERE) # exists" ; \
         else \
-                $(CMD_ECHO) "WebGUI Exists? (FAIL):   -d $(PATH_INSTALL_OMNIBUS_WEBGUI) # non-existent" ; \
+                $(CMD_ECHO) "WebGUI Exists? (FAIL):   -d $(PATH_INSTALL_WEBSPHERE) # non-existent" ; \
                 exit 7 ; \
         fi ;
 
-        @$(call func_command_check,$(WEBGUI_CMD_IMCL))
-        @$(CMD_ECHO) "WebGUI Upgrade:          #In progress..."
-        @$(CMD_SU) - $(WEBGUI_USER) -c "$(WEBGUI_CMD_IMCL) input \
-                $(WEBGUI_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
-                { $(CMD_ECHO) "WebGUI Upgrade (FAIL):   $(CMD_SU) - $(WEBGUI_USER) -c \"$(WEBGUI_CMD_IMCL) input $(WEBGUI_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+        @$(call func_command_check,$(JAZZSM_CMD_IMCL))
+        @$(CMD_ECHO) "Websphere Upgrade:          #In progress..."
+        @$(CMD_SU) - $(JAZZSM_USER) -c "$(JAZZSM_CMD_IMCL) input \
+                $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
+                { $(CMD_ECHO) "Websphere Upgrade (FAIL):   $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
                 exit 8; }
-        @$(CMD_ECHO) "WebGUI Upgrade (OK):     $(CMD_SU) - $(WEBGUI_USER) -c \"$(WEBGUI_CMD_IMCL) input $(WEBGUI_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
+        @$(CMD_ECHO) "Websphere Upgrade (OK):     $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(WAS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
         @$(CMD_ECHO)
 
 
