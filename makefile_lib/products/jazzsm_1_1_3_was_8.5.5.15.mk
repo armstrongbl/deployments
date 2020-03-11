@@ -531,7 +531,7 @@ preinstall:
 theinstall:			install_jazzsm \
 					configure_jazzsm \
 					configure_TLSv1_2 \
-					stop_jazzsm_natively \
+					upgrade_was \
 					autostarton_jazzsm
 
 postinstall:		clean
