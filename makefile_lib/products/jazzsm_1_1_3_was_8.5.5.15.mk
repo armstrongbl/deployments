@@ -191,24 +191,25 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
     <variable name='sharedLocation' value='$(JAZZSM_IMSHARED)'/>
   </variables>
   <server>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64'/>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/'/>
     <repository location='$(PATH_REPOSITORY_INSTALL)/JazzSMRepository/disk1'/>
     <repository location='$(PATH_REPOSITORY_INSTALL)/WASRepository/disk1'/>
   </server>
-  <profile id='IBM WebSphere Application Server V8.5' installLocation='$(PATH_INSTALL_WEBSPHERE)/AppServer'>
-    <data key='eclipseLocation' value='$(PATH_INSTALL_WEBSPHERE)/AppServer'/>
-    <data key='user.import.profile' value='false'/>
-    <data key='cic.selector.os' value='linux'/>
-    <data key='cic.selector.arch' value='x86'/>
-    <data key='cic.selector.ws' value='gtk'/>
-    <data key='cic.selector.nl' value='en'/>
+  <profile kind="self" installLocation="/home/netcool/IBM/InstallationManager/eclipse" id="IBM Installation Manager">
+	<data value="x86_64" key="cic.selector.arch"/>
   </profile>
-  <install modify='false'>
-    <!-- IBM WebSphere Application Server 8.5.5.9 -->
-    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.websphere.BASE.v85' version='8.5.5009.20160225_0435' features='core.feature,ejbdeploy,thinclient,embeddablecontainer,com.ibm.sdk.6_64bit'/>
-    <!-- IBM WebSphere SDK Java Technology Edition (Optional) 7.0.9.30 -->
-    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.websphere.IBMJAVA.v70' version='7.0.9030.20160224_1826' features='com.ibm.sdk.7'/>
-    <!-- Jazz for Service Management extension for IBM WebSphere 8.5 1.1.2.1 -->
-    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.tivoli.tacct.psc.install.was85.extension' version='1.1.2001.20160606-1749' features='main.feature'/>
+  <install>
+	<!-- IBM® Installation Manager 1.8.9.3 -->
+      <offering id="com.ibm.cic.agent" features="agent_core,agent_jre,agent_web" version="1.8.9003.20190204_1751" profile="IBM Installation Manager"/>
+  </install>
+  <install>
+	<!-- IBM WebSphere Application Server 8.5.5.15 -->
+    <offering id="com.ibm.websphere.BASE.v85" features="core.feature,ejbdeploy,thinclient,embeddablecontainer,com.ibm.sdk.6_64bit" version="8.5.5015.20190128_1828" profile="IBM WebSphere Application Server V8.5"/>
+	<!-- IBM WebSphere SDK Java Technology Edition (Optional) 7.0.9.30 -->
+    <offering id="com.ibm.websphere.IBMJAVA.v70" features="com.ibm.sdk.7" version="7.0.9030.20160224_1826" profile="IBM WebSphere Application Server V8.5"/>
+	<!-- Jazz for Service Management extension for IBM WebSphere 8.5 1.1.2.1 -->
+    <offering id="com.ibm.tivoli.tacct.psc.install.was85.extension" features="main.feature" version="1.1.2001.20191018-0333" profile="IBM WebSphere Application Server V8.5"/>
   </install>
   <profile id='Core services in Jazz for Service Management' installLocation='$(PATH_INSTALL_JAZZSM)'>
     <data key='eclipseLocation' value='$(PATH_INSTALL_JAZZSM)'/>
@@ -243,8 +244,8 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
     <data key='user.WAS_CELL' value='$(WAS_JAZZSM_CELL)'/>
   </profile>
   <install modify='false'>
-    <!-- IBM Dashboard Application Services Hub 3.1.3.0 -->
-    <offering profile='Core services in Jazz for Service Management' id='com.ibm.tivoli.tacct.psc.tip.install' version='3.1.3000.20160606-1749' features='com.ibm.tivoli.tacct.psc.install.server.feature.tip.install,com.ibm.tivoli.tacct.psc.install.server.feature.tip.config'/>
+	<!-- IBM Dashboard Application Services Hub 3.1.3.5 -->
+	<offering id="com.ibm.tivoli.tacct.psc.tip.install" features="com.ibm.tivoli.tacct.psc.install.server.feature.tip.install,com.ibm.tivoli.tacct.psc.install.server.feature.tip.config" version="3.1.3100.20191018-0333" profile="Core services in Jazz for Service Management"/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
   <preference name='com.ibm.cic.common.core.preferences.connectTimeout' value='30'/>
@@ -749,11 +750,11 @@ install_jazzsm:		check_whoami \
 	@$(call func_mkdir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(PATH_INSTALL_WEBSPHERE))
 	@$(call func_mkdir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(PATH_INSTALL_JAZZSM))
 
-	@$(call func_prepare_installation_manager,$(JAZZSM_USER),$(JAZZSM_HOME),$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64)
-	@$(call func_command_check,$(JAZZSM_CMD_IMCL))
+	#@$(call func_prepare_installation_manager,$(JAZZSM_USER),$(JAZZSM_HOME),$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64)
+	#@$(call func_command_check,$(JAZZSM_CMD_IMCL))
 
 	@$(CMD_ECHO) "JazzSM Install:          #In progress... (could take a while, run 'top' to watch)"
-	@$(CMD_SU) - $(JAZZSM_USER) -c "$(JAZZSM_CMD_IMCL) input \
+	@$(CMD_SU) - $(JAZZSM_USER) -c "$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64) input \
 		$(JAZZSM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
 		{ $(CMD_ECHO) "JazzSM Install (FAIL):   $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(JAZZSM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 		exit 6; }
