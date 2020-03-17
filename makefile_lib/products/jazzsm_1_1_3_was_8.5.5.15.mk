@@ -200,13 +200,18 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
     <repository location='$(PATH_REPOSITORY_INSTALL)/JazzSMRepository/disk1'/>
     <repository location='$(PATH_REPOSITORY_INSTALL)/WASRepository/disk1'/>
   </server>
-  <profile kind="self" installLocation="/home/netcool/IBM/InstallationManager/eclipse" id="IBM Installation Manager">
+  <profile kind="self" installLocation="$(PATH_HOME)/$(PATH_IM_RELATIVE_PATH)" id="IBM Installation Manager">
 	<data value="x86_64" key="cic.selector.arch"/>
   </profile>
   <install>
 	<!-- IBM® Installation Manager 1.8.9.3 -->
       <offering id="com.ibm.cic.agent" features="agent_core,agent_jre,agent_web" version="1.8.9003.20190204_1751" profile="IBM Installation Manager"/>
   </install>
+  <profile installLocation="$(PATH_INSTALL_WEBSPHERE)" id="IBM WebSphere Application Server V8.5">
+	<data value="x86" key="cic.selector.arch"/>
+	<data value="java8" key="user.wasjava"/>
+	<data value="java8" key="user.internal.use.only.prev.wasjava"/>
+  </profile>
   <install>
 	<!-- IBM WebSphere Application Server 8.5.5.15 -->
     <offering id="com.ibm.websphere.BASE.v85" features="core.feature,ejbdeploy,thinclient,embeddablecontainer,com.ibm.sdk.6_64bit" version="8.5.5015.20190128_1828" profile="IBM WebSphere Application Server V8.5"/>
