@@ -200,7 +200,7 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
     <repository location='$(PATH_REPOSITORY_INSTALL)/JazzSMRepository/disk1'/>
     <repository location='$(PATH_REPOSITORY_INSTALL)/WASRepository/disk1'/>
   </server>
-  <profile kind="self" installLocation="$(PATH_HOME)/$(PATH_IM_RELATIVE_PATH)" id="IBM Installation Manager">
+  <profile kind="self" installLocation="$(JAZZSM_HOME)/$(PATH_IM_RELATIVE_PATH)" id="IBM Installation Manager">
 	<data value="x86_64" key="cic.selector.arch"/>
   </profile>
   <install>
