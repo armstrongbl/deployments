@@ -207,7 +207,7 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
 	<!-- IBM® Installation Manager 1.8.9.3 -->
       <offering id="com.ibm.cic.agent" features="agent_core,agent_jre,agent_web" version="1.8.9003.20190204_1751" profile="IBM Installation Manager"/>
   </install>
-  <profile installLocation="$(PATH_INSTALL_WEBSPHERE)" id="IBM WebSphere Application Server V8.5">
+  <profile installLocation="$(PATH_INSTALL_WEBSPHERE)/AppServer" id="IBM WebSphere Application Server V8.5">
 	<data value="x86" key="cic.selector.arch"/>
 	<data value="java8" key="user.wasjava"/>
 	<data value="java8" key="user.internal.use.only.prev.wasjava"/>
