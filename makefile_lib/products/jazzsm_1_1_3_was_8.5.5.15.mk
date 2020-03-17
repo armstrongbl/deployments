@@ -726,6 +726,10 @@ prepare_jazzsm_install_media:	check_whoami \
 		$(CMD_ECHO) "JazzSM Repo? (OK):       -d $(PATH_REPOSITORY_INSTALL) # non-existent" ; \
 		$(call func_tar_zxf_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP2a1_F),$(PATH_REPOSITORY_INSTALL)) ; \
 		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP2a2_F),$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(PATH_REPOSITORY_INSTALL)/IBM-was-8.5.5.9-linux64.zip,$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(PATH_REPOSITORY_INSTALL)/8.5.5-WS-WAS-FP015-part1.zip,$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(PATH_REPOSITORY_INSTALL)/8.5.5-WS-WAS-FP015-part2.zip,$(PATH_REPOSITORY_INSTALL)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(PATH_REPOSITORY_INSTALL)/8.5.5-WS-WAS-FP015-part3.zip,$(PATH_REPOSITORY_INSTALL)) ; \
 	fi ;
 	@$(CMD_ECHO)
 
