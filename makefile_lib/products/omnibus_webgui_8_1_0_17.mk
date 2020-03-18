@@ -373,7 +373,6 @@ check_media_checksums:	check_commands
 	@$(call func_print_caption,"CHECKING INSTALLATION MEDIA CHECKSUMS")
 	@$(call func_check_file_cksum,$(MEDIA_STEP1_F),$(MEDIA_STEP1_B))
 	@$(call func_check_file_cksum,$(MEDIA_STEP2_F),$(MEDIA_STEP2_B))
-	@$(call func_check_file_cksum,$(MEDIA_STEP3_F),$(MEDIA_STEP3_B))
 	@$(CMD_ECHO)
 
 ################################################################################
