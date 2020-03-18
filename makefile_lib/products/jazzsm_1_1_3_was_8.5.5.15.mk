@@ -91,6 +91,7 @@ JAZZSM_HOME			:= $(PATH_HOME)/$(JAZZSM_USER)
 JAZZSM_IMSHARED		:= $(JAZZSM_HOME)/$(PATH_IM_SHARED_PATH)
 JAZZSM_CMD_IMCL		:= $(JAZZSM_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
 JAZZSM_CMD_IMUTILSC	:= $(JAZZSM_HOME)/$(PATH_IM_IMUTILSC_RELATIVE_PATH)
+JAZZSM_USERINSTC        := $(PATH_REPOSITORY_INSTALL)/im.linux.x86_64/userinstc
 
 JAZZSM_SOAP_PROPS	:= $(PATH_INSTALL_JAZZSM)/profile/properties/soap.client.props
 JAZZSM_SOAP_SECURITY		:= com.ibm.SOAP.securityEnabled
@@ -858,15 +859,12 @@ install_jazzsm:		check_whoami \
 	@$(call func_mkdir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(PATH_INSTALL_WEBSPHERE))
 	@$(call func_mkdir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(PATH_INSTALL_JAZZSM))
 
-	#@$(call func_prepare_installation_manager,$(JAZZSM_USER),$(JAZZSM_HOME),$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64)
-	#@$(call func_command_check,$(JAZZSM_CMD_IMCL))
-
 	@$(CMD_ECHO) "JazzSM Install:          #In progress... (could take a while, run 'top' to watch)"
-	@$(CMD_SU) - $(JAZZSM_USER) -c "$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64) input \
+	@$(CMD_SU) - $(JAZZSM_USER) -c "$(JAZZSM_USERINSTC) input \
 		$(JAZZSM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
 		{ $(CMD_ECHO) "JazzSM Install (FAIL):   $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(JAZZSM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 		exit 6; }
-	@$(CMD_ECHO) "JazzSM Install (OK):     $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(JAZZSM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
+	@$(CMD_ECHO) "JazzSM Install (OK):     $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_USERINSTC) input $(JAZZSM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
 	@$(CMD_ECHO)
 
 ################################################################################
