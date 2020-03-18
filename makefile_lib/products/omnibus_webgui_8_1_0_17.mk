@@ -117,24 +117,19 @@ TIMESTAMP	= $(shell $(CMD_DATE) +'%Y%m%d_%H%M%S')
 # INSTALLATION MEDIA, DESCRIPTIONS, FILES, AND CHECKSUMS
 ################################################################################
 MEDIA_ALL_DESC	=	\t$(MEDIA_STEP1_D)\n \
-					\t$(MEDIA_STEP2_D)\n \
-					\t$(MEDIA_STEP3_D)\n
+					\t$(MEDIA_STEP2_D)\n 
 
 MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
-					$(MEDIA_STEP2_F) \
-					$(MEDIA_STEP3_F)
+					$(MEDIA_STEP2_F) 
 
 MEDIA_STEP1_D	:= IBM Prerequisite Scanner V1.2.0.17, Build 20150827
 MEDIA_STEP2_D	:= IBM Tivoli Netcool OMNIbus 8.1.0.4 WebGUI & Extensions for NOI Linux\n\t\t64bit English (CN8IKEN)
-MEDIA_STEP3_D	:= IBM Tivoli Netcool/OMNIbus_GUI 8.1.0 Fix Pack 5
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
-MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/OMNIbus-v8.1.0.4-WebGUI.Linux64.zip
-MEDIA_STEP3_F	:= $(PATH_MAKEFILE_MEDIA)/OMNIbus-v8.1.0-WebGUI-FP5-IM-linux64-UpdatePack.zip
+MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/TNOMN_V8.1.0.17_WBGEFOR_NOI_LNX_E.zip
 
 MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
-MEDIA_STEP2_B	:= 76251dae44c3c309cb6c2071e87edca6ee20f0684d46c235d46a97c67a030ac27ec31eeff41d2db6eb60584d214ca640284ae13d2ad8b9c38f4c987ae957789c
-MEDIA_STEP3_B	:= 4b5ae27c1c35cfb9ce0d794f471cb18799ecaa5866a60819d43045e9253cd22b1a256be2c085c0a0d0a8c29c850cd2cc601a9602d101289f604d39a24a7f9230
+MEDIA_STEP2_B	:= 9f015f8d7e51199f451ae42d4b8076e0f32e3d3443c7d3034fdd579d021e7fbdd5819d9434fd8a3b66be5781a574b6a8da2f616ae9ca8a713b1cc3273cf01c64
 
 ################################################################################
 # WEBGUI RESPONSE FILE TEMPLATE (INSTALL)
@@ -161,8 +156,8 @@ define WEBGUI_INSTALL_RESPONSE_FILE_CONTENT
     <data key='user.DashHomePwd' value='$(WAS_JAZZSM_PASSWD)'/>
   </profile>
   <install>
-    <!-- IBM Tivoli Netcool/OMNIbus Web GUI 8.1.0.4 -->
-    <offering profile='IBM Netcool GUI Components' id='$(PATH_REPOSITORY_WEBGUI_PACKAGE)' version='8.1.4.201512041013' features='VMM.feature,WebGUI.feature'/>
+    <!-- IBM Tivoli Netcool/OMNIbus Web GUI 8.1.0.17 -->
+    <offering profile='IBM Netcool GUI Components' id='com.ibm.tivoli.netcool.omnibus.webgui' version='8.1.17.201910101305' features='VMM.feature,WebGUI.feature'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
   <preference name='offering.service.repositories.areUsed' value='false'/>
@@ -294,7 +289,6 @@ preinstallchecks:	check_commands \
 preinstall:		
 
 theinstall:			install_webgui \
-					upgrade_webgui \
 					configure_webgui
 
 postinstall:		clean
