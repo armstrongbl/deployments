@@ -69,7 +69,8 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 # REPOSITORY PATHS
 ################################################################################
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_install
-PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_7_upgrade
+PATH_REPOSITORY_PROBES	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_probes
+PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_21_upgrade
 
 PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core_
 
@@ -255,23 +256,28 @@ TIMESTAMP	= $(shell $(CMD_DATE) +'%Y%m%d_%H%M%S')
 ################################################################################
 MEDIA_ALL_DESC	=	\t$(MEDIA_STEP1_D)\n \
 					\t$(MEDIA_STEP2_D)\n \
-					\t$(MEDIA_STEP3_D)\n
+					\t$(MEDIA_STEP3_D)\n \
+					\t$(MEDIA_STEP4_D)\n
 
 MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 					$(MEDIA_STEP2_F) \
-					$(MEDIA_STEP3_F)
+					$(MEDIA_STEP3_F) \
+					$(MEDIA_STEP4_F)
 
 MEDIA_STEP1_D	:= IBM Prerequisite Scanner V1.2.0.17, Build 20150827
-MEDIA_STEP2_D	:= IBM Tivoli Netcool OMNIbus 8.1.0.5 Core Linux 64bit Multilingual\n\t\t(CN8HFML) 
-MEDIA_STEP3_D	:= IBM Tivoli Netcool OMNIbus 8.1.0 Fix Pack 7 Core Linux 64bit\n\t\t Multilingual
+MEDIA_STEP2_D	:= IBM Tivoli Netcool OMNIbus 8.1.0.19 Core Linux 64bit Multilingual\n\t\t(CN8HFML) 
+MEDIA_STEP3_D	:= IBM Tivoli Netcool OMNIbus Syslog Probe 64bit\n\t\t Multilingual
+MEDIA_STEP4_D	:= IBM Tivoli Netcool OMNIbus MTTrapd Probe 64bit\n\t\t Multilingual
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
 MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/TVL_NTCL_OMN_V8.1.0.19_CORE_LNX_M.zip
-#MEDIA_STEP3_F	:= $(PATH_MAKEFILE_MEDIA)/8.1.0-TIV-OMNIbusCore-linux-x86_64-FP0007.zip
+MEDIA_STEP3_F	:= $(PATH_MAKEFILE_MEDIA)/CN4FYEN_SYSLOG.zip
+MEDIA_STEP4_F	:= $(PATH_MAKEFILE_MEDIA)/CN4FZEN_MTTRAPD_v20.zip
 
 MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
 MEDIA_STEP2_B	:= 36d779246309bb511489e0bfd90c01f38073a4feb45706e9e5185de1deca5cc33df0b7da35c06a8216f4d13cbf16cfab55fa3b253993fd34357763392b8e8cd2
-#MEDIA_STEP3_B	:= 5324ee5f3307ea719fd06642da0f0b2f1383cd96bc9827c52748b25c3e24c38c46da25c1fffcf6d22a9bffb0a6628bbf8daff556a3b5f4300f304ab4eedafcfa
+MEDIA_STEP3_B	:= b29473ee9dec4d28f48d57ac9e70ba9b0fe4d501b2c503e4fb764ceb69ebb2640131b3ea3e682ee203ccaefa267bb12d1c70abb292333313542439cb86214e1b
+MEDIA_STEP4_B	:= 25f5a068ed358a1f6b11af6d418af798405bd449adb16f6fa6c6a118e6b0051646992d55657b9d14e3200763986afe167102c3561bc5f0c2f3696b29c218c082
 
 ################################################################################
 # COMMAND TO BE INSTALLED BEFORE USE
@@ -528,7 +534,8 @@ check_media_checksums:	check_commands
 	@$(call func_print_caption,"CHECKING INSTALLATION MEDIA CHECKSUMS")
 	@$(call func_check_file_cksum,$(MEDIA_STEP1_F),$(MEDIA_STEP1_B))
 	@$(call func_check_file_cksum,$(MEDIA_STEP2_F),$(MEDIA_STEP2_B))
-	#@$(call func_check_file_cksum,$(MEDIA_STEP3_F),$(MEDIA_STEP3_B))
+	@$(call func_check_file_cksum,$(MEDIA_STEP3_F),$(MEDIA_STEP3_B))
+	@$(call func_check_file_cksum,$(MEDIA_STEP4_F),$(MEDIA_STEP4_B))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -706,10 +713,14 @@ remove_omnibus_user:	check_whoami \
 ################################################################################
 prepare_omnibus_install_media:	check_whoami \
 								check_commands \
+								check_media_exists \
+								check_media_checksums \
 								create_omnibus_user
 
 	@$(call func_print_caption,"PREPARING NETCOOL/OMNIBUS CORE MEDIA (INSTALLATION)")
 	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL))
+	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_PROBES))
+	@$(call func_unzip_to_existing_dir,$(OMNIBUS_USER),$(MEDIA_STEP4_F),$(PATH_REPOSITORY_PROBES))
 	@$(CMD_ECHO)
 
 ################################################################################
