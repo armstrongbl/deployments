@@ -69,7 +69,8 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 # REPOSITORY PATHS
 ################################################################################
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_install
-PATH_REPOSITORY_PROBES	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_probes
+PATH_REPOSITORY_SYSLOG	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_syslog
+PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_trap
 PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_21_upgrade
 
 PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core_
@@ -296,6 +297,8 @@ define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
   </variables>
   <server>
     <repository location='$(PATH_REPOSITORY_INSTALL)/OMNIbusRepository'/>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/PATH_REPOSITORY_SYSLOG'/>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/PATH_REPOSITORY_TRAP'/>
   </server>
   <profile id='IBM Netcool Core Components' installLocation='$(PATH_INSTALL_NETCOOL)'> 
     <data key='cic.selector.arch' value='x86_64'/>
@@ -719,8 +722,8 @@ prepare_omnibus_install_media:	check_whoami \
 
 	@$(call func_print_caption,"PREPARING NETCOOL/OMNIBUS CORE MEDIA (INSTALLATION)")
 	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL))
-	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_PROBES))
-	@$(call func_unzip_to_existing_dir,$(OMNIBUS_USER),$(MEDIA_STEP4_F),$(PATH_REPOSITORY_PROBES))
+	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP3_F),$(PATH_REPOSITORY_SYSLOG))
+	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP4_F),$(PATH_REPOSITORY_TRAP))
 	@$(CMD_ECHO)
 
 ################################################################################
