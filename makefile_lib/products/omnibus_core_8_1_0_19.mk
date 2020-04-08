@@ -307,6 +307,10 @@ define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
   <install>
 	<!-- IBM Tivoli Netcool/OMNIbus 8.1.0.19 -->
 	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.core' version='5.50.85.20190328_0606' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_tec_migration,nco_operator_gui_feature,nco_objserv_feature,nco_g_objserv_feature,nco_bridgeserv_feature,nco_proxyserv_feature,nco_pa_feature,nco_probes_support_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_extensions_feature'/>
+	<!-- Netcool/OMNIbus Probe nco-p-mttrapd 1.20.0.0 -->
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-p-mttrapd' version='1.20.0.2' features='nco-p-mttrapd'/>
+	<!-- Netcool/OMNIbus Probe nco-p-syslog 1.8.0.0 -->
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-p-syslog' version='1.8.0.6' features='nco-p-syslog'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
 </agent-input>
