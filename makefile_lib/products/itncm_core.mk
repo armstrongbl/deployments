@@ -44,7 +44,7 @@ include ${MAKE_DIR}../include/includes
 ################################################################################
 # INSTALLATION TUNABLES
 ################################################################################
-MAKE_PRODUCT			= OMNIbusJDBCGateway
+MAKE_PRODUCT			= NCM
 
 ################################################################################
 # INSTALLATION PATHS
@@ -55,16 +55,17 @@ PATH_INSTALL_NCM	= $(PATH_INSTALL)/netcool
 ################################################################################
 # REPOSITORY PATHS
 ################################################################################
-PATH_REPOSITORY_GATEWAY_PACKAGE=com.ibm.tivoli.omnibus.integrations.nco-g-jdbc_
+PATH_REPOSITORY_INSTALL := $(PATH_MAKEFILE_REPOSITORY)/ncm_core_6_4_2_install
 
 ################################################################################
 # INSTALLATION USERS
 ################################################################################
-OMNIBUS_USER		:= netcool
-OMNIBUS_HOME		:= $(PATH_HOME)/$(OMNIBUS_USER)
+NCM_USER		:= icosuser
+NCM_GROUP		:= icosgrp
+NCM_HOME		:= $(PATH_HOME)/$(NCM_USER)
 
-OMNIBUS_IMSHARED	= $(OMNIBUS_HOME)/$(PATH_IM_SHARED_PATH)
-OMNIBUS_CMD_IMCL	:= $(OMNIBUS_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
+NCM_IMSHARED	= $(NCM_HOME)/$(PATH_IM_SHARED_PATH)
+NCM_CMD_IMCL	:= $(NCM_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
 
 ################################################################################
 # INSTALLATION MEDIA, DESCRIPTIONS, FILES, AND CHECKSUMS
@@ -73,21 +74,22 @@ MEDIA_ALL_DESC	=	\t$(MEDIA_STEP1_D)\n
 
 MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F)
 
-MEDIA_STEP1_D	:= Netcool/OMNIbus 8 Plus Gateway for JDBC (nco-g-jdbc 6_0)\n\t\t Multi-Platform English (CN4FUEN)
+MEDIA_STEP1_D	:= Netcool Configuration Mangaer 6.4.2  \n\t\t 
 
-MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/NCOMNI_GTW_JDBC.zip
+MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/ITNCM_Base_Linux.tar
 
-MEDIA_STEP1_B	:= 9cbe8c59978d3f7900749f5363cddd37aaf36fbec6943ca6db034bf895e111560aa7ec92efa6c9571f5dc7554258e3225a17f9012861fa67d41b3e3629bf32b1
+MEDIA_STEP1_B	:= 089e399e2be5f5c0f744e2e9b3722d71ffaac2f059e6440dc146397cc16af256793ca08eeae21392feb7d67d1ea4d44c556ae6f32f3351e4f55c97ad0d2681d4
 
 ################################################################################
 # RESPONSE FILE TEMPLATE (INSTALL)
 ################################################################################
 NCM_INSTALL_RESPONSE_FILE=$(PATH_TMP)/ncm_install_response.xml
 define NCM_INSTALL_RESPONSE_FILE_CONTENT
+
 <?xml version='1.0' encoding='UTF-8'?>
 <agent-input>
   <variables>
-    <variable name='sharedLocation' value='$(OMNIBUS_IMSHARED)'/>
+    <variable name='sharedLocation' value='$(NCM_IMSHARED)'/>
   </variables>
   <server>
     <repository location='$(MEDIA_STEP1_F)'/>
@@ -103,8 +105,45 @@ define NCM_INSTALL_RESPONSE_FILE_CONTENT
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
   <preference name='offering.service.repositories.areUsed' value='false'/>
 </agent-input>
+
 endef
 export NCM_INSTALL_RESPONSE_FILE_CONTENT
+
+
+################################################################################
+# PREPARE NETCOOL/OMNIBUS CORE MEDIA (INSTALLATION)
+################################################################################
+prepare_ncm_install_media:  check_whoami \
+		check_commands \
+		check_media_exists \
+		check_media_checksums \
+		create_ncm_user
+
+		@$(call func_print_caption,"PREPARING NETCOOL CONFIGURATION MEDIA (INSTALLATION)")
+		@$(call func_tar_xf_to_new_dir,$(NCM_USER),$(NCM_GROUP),755,$(MEDIA_STEP1_F),$(PATH_REPOSITORY_INSTALL))
+		@$(CMD_ECHO)
+
+################################################################################
+# CONFIRM OR CREATE GROUPS
+################################################################################
+create_ncm_group:   check_whoami \
+		check_commands
+
+		@$(call func_print_caption,"CONFIRMING/CREATING NCM GROUP")
+		@$(call func_create_group,$(OMNIBUS_GROUP),$(MAKE_PRODUCT))
+		@$(CMD_ECHO)
+
+
+################################################################################
+# CREATE NCM USER
+################################################################################
+create_ncm_user:    check_whoami \
+		check_commands \
+		create_ncm_group
+
+		@$(call func_print_caption,"CONFIRMING/CREATING NCM USER")
+		@$(call func_create_user,$(NC_USER),$(MAKE_PRODUCT),$(NCM_GROUP),$(NCM_HOME),$(NCM_SHELL),$(NCM_PASSWD))
+
 
 ################################################################################
 # MAIN BUILD TARGETS
@@ -118,7 +157,6 @@ all:				help \
 prerequisites:		install_packages
 
 install:			preinstallchecks \
-					preinstall \
 					theinstall \
 					postinstall
 
@@ -133,10 +171,8 @@ preinstallchecks:	check_commands \
 					check_media_exists \
 					check_media_checksums
 
-preinstall:			check_im_profile_id
 
-theinstall:			install_omnibus_g_jdbc \
-					confirm_shared_libraries
+theinstall:			install_ncm
 
 postinstall:		clean \
 					clean_tmp
@@ -151,7 +187,7 @@ theuninstall:		uninstall_omnibus_g_jdbc
 
 postuninstall:		clean
 
-clean:				remove_gateway_install_response_file
+clean:				remove_ncm_install_response_file
 
 scrub:				uninstall \
 					clean
@@ -220,7 +256,7 @@ check_media_checksums:	check_commands
 ################################################################################
 install_packages:		check_whoami
 	@$(call func_print_caption,"INSTALLING PREREQUISITE PACKAGES")
-	@$(call func_install_packages,$(OMNIBUS_PACKAGES))
+	@$(call func_install_packages,$(NCM_PACKAGES))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -228,8 +264,8 @@ install_packages:		check_whoami
 ################################################################################
 confirm_omnibus_user:	check_whoami \
 						check_commands
-	@$(call func_print_caption,"CONFIRMING NETCOOL/OMNIBUS USER")
-	@$(call func_user_must_exist,$(OMNIBUS_USER))
+	@$(call func_print_caption,"CONFIRMING NETCOOL/NCM USER")
+	@$(call func_user_must_exist,$(NCM_USER))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -239,7 +275,7 @@ confirm_ncm_dir:	check_whoami \
 						check_commands \
 						confirm_omnibus_user
 	@$(call func_print_caption,"CONFIRMING NETCOOL CONFIGURatION DIRECTORY")
-	@$(call func_dir_must_exist,$(OMNIBUS_USER),$(PATH_INSTALL_NCM))
+	@$(call func_dir_must_exist,$(NCM_USER),$(PATH_INSTALL_NCM))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -263,13 +299,13 @@ remove_ncm_install_response_file:	check_whoami \
 	@$(CMD_ECHO)
 
 ################################################################################
-# INSTALL NETCOOL/OMNIBUS JDBC GATEWAY AS $(OMNIBUS_USER)
+# INSTALL NETCOOL/NCM JDBC GATEWAY AS $(NCM_USER)
 ################################################################################
 install_ncm:	check_whoami \
 						check_commands \
-						confirm_omnibus_user \
-						confirm_gateway_dir \
-						create_gateway_install_response_file
+						confirm_ncm_user \
+						confirm_ncm_dir \
+						create_ncm_install_response_file
 
 	@$(call func_print_caption,"INSTALLING NETCOOL CONFIGURATION MANAGER")
 	@if [ -d "$(PATH_INSTALL_G_JDBC)" ] ; \
@@ -277,12 +313,12 @@ install_ncm:	check_whoami \
 		$(CMD_ECHO) "NCM Exists? (WARN):  -d $(PATH_INSTALL_NCM) # already exists" ; \
 	else \
 		$(CMD_ECHO) "NCM Exists? (OK):    -d $(PATH_INSTALL_NCM) # non-existent" ; \
-		$(call func_command_check,$(OMNIBUS_CMD_IMCL)) ; \
+		$(call func_command_check,$(NCM_CMD_IMCL)) ; \
 		\
 		$(CMD_ECHO) "NCM Install:         #In progress..." ; \
-		$(CMD_SU) - $(NCM_USER) -c "$(OMNIBUS_CMD_IMCL) input \
+		$(CMD_SU) - $(NCM_USER) -c "$(NCM_CMD_IMCL) input \
 			$(NCM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
-			{ $(CMD_ECHO) "NCM Install: (FAIL): $(CMD_SU) - $(OMNIBUS_USER) -c \"$(OMNIBUS_CMD_IMCL) input $(GATEWAY_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+			{ $(CMD_ECHO) "NCM Install: (FAIL): $(CMD_SU) - $(NCM_USER) -c \"$(NCM_CMD_IMCL) input $(GATEWAY_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 			exit 3; } ; \
 		$(CMD_ECHO) "NCM Install (OK):    $(CMD_SU) - $(NCM_USER) -c \"$(NCM_CMD_IMCL) input $(GATEWAY_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 	fi ;
@@ -298,7 +334,7 @@ uninstall_ncm:	check_whoami \
 	@if [ -d "$(PATH_INSTALL_NCM)" ] ; \
 	then \
 		$(CMD_ECHO) "NCM Exists? (OK):    -d $(PATH_INSTALL_G_JDBC) # exists" ; \
-		$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_GATEWAY_PACKAGE),JDBC Gateway) ; \
+		$(call func_uninstall_im_package,$(NCM_CMD_IMCL),$(NCM_USER),$(PATH_REPOSITORY_GATEWAY_PACKAGE),JDBC Gateway) ; \
 	else \
 		$(CMD_ECHO) "NCM Exists? (OK):    -d $(PATH_INSTALL_G_JDBC) # non-existent" ; \
 	fi ;
