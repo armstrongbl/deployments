@@ -49,7 +49,7 @@ MAKE_PRODUCT			= NCM
 ################################################################################
 # INSTALLATION PATHS
 ################################################################################
-PATH_INSTAL		:= /opt/IBM
+PATH_INSTALL		:= /opt/IBM
 PATH_INSTALL_NCM	= $(PATH_INSTALL)/netcool
 
 ################################################################################
@@ -85,27 +85,80 @@ MEDIA_STEP1_B	:= 089e399e2be5f5c0f744e2e9b3722d71ffaac2f059e6440dc146397cc16af25
 ################################################################################
 NCM_INSTALL_RESPONSE_FILE=$(PATH_TMP)/ncm_install_response.xml
 define NCM_INSTALL_RESPONSE_FILE_CONTENT
-
 <?xml version='1.0' encoding='UTF-8'?>
 <agent-input>
   <variables>
     <variable name='sharedLocation' value='$(NCM_IMSHARED)'/>
   </variables>
   <server>
-    <repository location='$(MEDIA_STEP1_F)'/>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/ITNCM-6.4.2-IM_Local_Repository'/>
   </server>
-  <profile id='$(GATEWAY_PROFILE_ID)' installLocation='$(PATH_INSTALL_NETCOOL)'>
+  <profile id='Netcool Configuration Manager' installLocation='$(PATH_INSTALL_NCM)'>
     <data key='cic.selector.arch' value='x86_64'/>
-    <data key='user.migratedata,com.ibm.tivoli.omnibus.core' value='false'/>
+    <data key='user.itncm.jdbc.type' value='oracle12'/>
+    <data key='user.itncm.jdbc.driver' value='oracle.jdbc.driver.OracleDriver'/>
+    <data key='user.itncm.jdbc.url' value='jdbc:oracle:thin:@nmsdb01:1521/VSAT1'/>
+    <data key='user.itncm.jdbc.credentials.password' value='N3tC001'/>
+    <data key='user.itncm.jdbc.schema.name' value='VSAT1'/>
+    <data key='user.itncm.jdbc.credentials.user' value='$(NCM_USER)'/>
+    <data key='user.itncm.jdbc.host' value='nmsdb01'/>
+    <data key='user.itncm.jdbc.port' value='1521'/>
+    <data key='user.itncm.jdbc.type.prop' value='oracle'/>
+    <data key='user.itncm.jdbc.schema.initialload' value='true'/>
+    <data key='user.itncm.jdbc.schema.autoload' value='false'/>
+    <data key='user.itncm.user.operator.password' value='operator'/>
+    <data key='user.itncm.gui.active' value='true'/>
+    <data key='user.itncm.ftp.credentials.password' value='icosftp'/>
+    <data key='user.itncm.ftp.host' value='nmscms01'/>
+    <data key='user.itncm.pbcm.log.error.port' value='8112'/>
+    <data key='user.itncm.log.port' value='8102'/>
+    <data key='user.itncm.ftp.dir' value='/home/icosftp'/>
+    <data key='user.itncm.pbcm.log.listen.port' value='8114'/>
+    <data key='user.itncm.pbcm.admin.port' value='8110'/>
+    <data key='user.itncm.nmentitymapping.port' value='16311'/>
+    <data key='user.temp.confirm.ftp.pass' value='icosftp'/>
+    <data key='user.itncm.server.platform.config' value='PRESENTATION,FALSE,FALSE,BASE'/>
+    <data key='user.itncm.root.realm' value='ITNCM'/>
+    <data key='user.itncm.log.listen.port' value='8103'/>
+    <data key='user.itncm.pbcm.active' value='false'/>
+    <data key='user.itncm.user.observer.password' value='observer'/>
+    <data key='user.itncm.user.administrator.password' value='administrator'/>
+    <data key='user.itncm.admin.port' value='8101'/>
+    <data key='user.itncm.idt.main.server' value='true'/>
+    <data key='user.core.smtp.server' value='localhost'/>
+    <data key='user.itncm.job.type' value='update'/>
+    <data key='user.itncm.nmentitymapping.hostname' value='localhost'/>
+    <data key='user.itncm.ftp.credentials.user' value='icosftp'/>
+    <data key='user.itncm.pbcm.log.test.port' value='8115'/>
+    <data key='user.itncm.main.install.dir' value='/opt/IBM/tivoli/netcool/ncm'/>
+    <data key='user.itncm.pbcm.log.debug.port' value='8111'/>
+    <data key='user.itncm.nmentitymapping.nm.importrealm' value='ITNCM/@DOMAINNAME'/>
+    <data key='user.itncm.worker.linked.rg' value='false'/>
+    <data key='user.itncm.admin.manager.server.name' value='Worker1'/>
+    <data key='user.itncm.pbcm.log.info.port' value='8113'/>
+    <data key='user.itncm.worker.active' value='true'/>
+    <data key='user.itncm.integrated' value='false'/>
+    <data key='user.itncm.idt.port' value='8104'/>
+    <data key='user.itncm.nmentitymapping.nm.user' value='itnmadmin'/>
+    <data key='user.itncm.server.was.node' value='JazzSMNode01'/>
+    <data key='user.was.server.name' value='server1'/>
+    <data key='user.was.profile.path' value='/opt/IBM/JazzSM/profile'/>
+    <data key='user.was.appserver.dir' value='/opt/IBM/WebSphere/AppServer'/>
+    <data key='user.itncm.server.ssl.port' value='16311'/>
+    <data key='user.itncm.server.was.cell' value='JazzSMNode01Cell'/>
+    <data key='user.was.user.password' value='netcool'/>
+    <data key='user.was.user.name' value='smadmin'/>
+    <data key='user.tmp.was.password' value='netcool'/>
+    <data key='user.itncm.server.http.port' value='16310'/>
+    <data key='user.jazz.home' value='/opt/IBM/JazzSM'/>
+    <data key='user.was.profile.name' value='JazzSMProfile'/>
   </profile>
   <install>
-    <!-- Netcool/OMNIbus Gateway nco-g-jdbc 1.6.0.0 -->
-    <offering profile='$(GATEWAY_PROFILE_ID)' id='com.ibm.tivoli.omnibus.integrations.nco-g-jdbc' version='1.6.0.4' features='nco-g-jdbc'/>
+    <!-- Netcool Configuration Manager 6.4.2.0 -->
+    <offering profile='Netcool Configuration Manager' id='com.ibm.tivoli.itncm.configurationmanager.server' version='6.4.2.20160202_1049' features='liberty'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
-  <preference name='offering.service.repositories.areUsed' value='false'/>
 </agent-input>
-
 endef
 export NCM_INSTALL_RESPONSE_FILE_CONTENT
 
@@ -303,7 +356,6 @@ remove_ncm_install_response_file:	check_whoami \
 ################################################################################
 install_ncm:	check_whoami \
 						check_commands \
-						confirm_ncm_user \
 						confirm_ncm_dir \
 						create_ncm_install_response_file
 
@@ -320,7 +372,7 @@ install_ncm:	check_whoami \
 			$(NCM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
 			{ $(CMD_ECHO) "NCM Install: (FAIL): $(CMD_SU) - $(NCM_USER) -c \"$(NCM_CMD_IMCL) input $(GATEWAY_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 			exit 3; } ; \
-		$(CMD_ECHO) "NCM Install (OK):    $(CMD_SU) - $(NCM_USER) -c \"$(NCM_CMD_IMCL) input $(GATEWAY_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+		$(CMD_ECHO) "NCM Install (OK):    $(CMD_SU) - $(NCM_USER) -c \"$(NCM_CMD_IMCL) input $(NCM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 	fi ;
 	@$(CMD_ECHO)
 
