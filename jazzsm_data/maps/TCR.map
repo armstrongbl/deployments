@@ -1,0 +1,2 @@
+map(name="TCR",bgColor="white",w=656,h=444,numCols=4,acl="*")
+icon(name="TCR_Logo",label="",x=0,y=0,translucency=0,show shadow=false,action="Open URL",url="https://nmstcr/ibm/console/",bidi="true",target="_blank",filter="",filtertype="",datasource="",flash="true",w=656,h=444,type="rectangle",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p",image="TCR_Logo.PNG",entity status indicator="Highlight Bar")

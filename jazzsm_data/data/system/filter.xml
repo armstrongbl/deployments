@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8'?>
+  <filterbox name="system">
+
+        <filter
+         name="_Clear"
+         description=""
+         os="CBIL_PRI"
+         mode="basic"
+         metriclabel="Metric:"
+         metricshow="Average"
+         metricof="Severity"
+         view="Alert_View"
+         viewtype="global"
+         sql="Severity = 0">
+    </filter>
+    
+    <filter
+         name="_Critical"
+         description=""
+         os="CBIL_PRI"
+         mode="basic"
+         metriclabel="Metric:"
+         metricshow="Average"
+         metricof="Severity"
+         view="Alert_View"
+         viewtype="global"
+         sql="Severity = 5">
+    </filter>
+    
+    <filter
+         name="_Indeterminate"
+         description=""
+         os="CBIL_PRI"
+         mode="basic"
+         metriclabel="Metric:"
+         metricshow="Average"
+         metricof="Severity"
+         view="Alert_View"
+         viewtype="global"
+         sql="Severity = 1">
+    </filter>
+    
+    <filter
+         name="_Major"
+         description=""
+         os="CBIL_PRI"
+         mode="basic"
+         metriclabel="Metric:"
+         metricshow="Average"
+         metricof="Severity"
+         view="Alert_View"
+         viewtype="global"
+         sql="Severity = 4">
+    </filter>
+    
+    <filter
+         name="_Minor"
+         description=""
+         os="CBIL_PRI"
+         mode="basic"
+         metriclabel="Metric:"
+         metricshow="Average"
+         metricof="Severity"
+         view="Alert_View"
+         viewtype="global"
+         sql="Severity = 3">
+    </filter>
+    
+    <filter
+         name="_Warning"
+         description=""
+         os="CBIL_PRI"
+         mode="basic"
+         metriclabel="Metric:"
+         metricshow="Average"
+         metricof="Severity"
+         view="Alert_View"
+         viewtype="global"
+         sql="Severity = 2">
+    </filter>
+  
+</filterbox>

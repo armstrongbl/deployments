@@ -1,0 +1,2 @@
+map(name="MelVmware",bgColor="white",w=871,h=461,numCols=4,acl="*")
+icon(name="VMware_Logo",label="",x=0,y=0,translucency=0,show shadow=false,action="Open URL",url="https://d02-vc01:9443/vsphere-client/#",bidi="false",target="_blank",filter="",filtertype="",datasource="",flash="true",w=871,h=461,type="rectangle",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p",image="VMware_Logo.png",entity status indicator="Highlight Bar")

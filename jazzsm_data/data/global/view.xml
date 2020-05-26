@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<viewbox name="global">
+
+<view viewName="Alert_View" os="CBIL_PRI">
+<columns>
+<visualEntry fieldName="Serial" fieldTitle="Serial" dataJustify="left" titleJustify="left" columnWidth="25" columnLocked="true" sequenceNumber="0" fieldType="5" os="VSFMS_P" />
+<visualEntry fieldName="LastOccurrence" fieldTitle="LastOccurrence" dataJustify="left" titleJustify="left" columnWidth="25" columnLocked="false" sequenceNumber="1" fieldType="1" os="VSFMS_P" />
+<visualEntry fieldName="Node" fieldTitle="Node" dataJustify="left" titleJustify="left" columnWidth="25" columnLocked="false" sequenceNumber="2" fieldType="2" os="VSFMS_P" />
+<visualEntry fieldName="Summary" fieldTitle="Summary" dataJustify="left" titleJustify="left" columnWidth="40" columnLocked="false" sequenceNumber="3" fieldType="2" os="VSFMS_P" />
+<visualEntry fieldName="Tally" fieldTitle="Tally" dataJustify="left" titleJustify="left" columnWidth="25" columnLocked="false" sequenceNumber="4" fieldType="0" os="VSFMS_P" />
+</columns>
+<sorting>
+<sortColumn fieldName="Severity" order="desc" sequenceNumber="0" fieldType="0" os="VSFMS_P" />
+</sorting>
+</view>
+
+<view viewName="Default" os="">
+<columns>
+<visualEntry columnLocked="false" columnWidth="25" os="CBIL_PRI" fieldType="2" fieldName="Node" dataJustify="left" titleJustify="left" sequenceNumber="0" fieldTitle="Node"/>
+<visualEntry columnLocked="false" columnWidth="25" os="CBIL_PRI" fieldType="0" fieldName="Tally" dataJustify="left" titleJustify="left" sequenceNumber="1" fieldTitle="Count"/>
+<visualEntry columnLocked="false" columnWidth="25" os="CBIL_PRI" fieldType="2" fieldName="NodeAlias" dataJustify="left" titleJustify="left" sequenceNumber="2" fieldTitle="NodeAlias"/>
+<visualEntry columnLocked="false" columnWidth="10" os="CBIL_PRI" fieldType="2" fieldName="Location" dataJustify="left" titleJustify="left" sequenceNumber="3" fieldTitle="Location"/>
+<visualEntry columnLocked="false" columnWidth="10" os="CBIL_PRI" fieldType="2" fieldName="Manager" dataJustify="left" titleJustify="left" sequenceNumber="4" fieldTitle="Sub-System"/>
+<visualEntry columnLocked="false" columnWidth="40" os="CBIL_PRI" fieldType="2" fieldName="Summary" dataJustify="left" titleJustify="left" sequenceNumber="5" fieldTitle="Description"/>
+<visualEntry columnLocked="false" columnWidth="14" os="CBIL_PRI" fieldType="1" fieldName="LastOccurrence" dataJustify="left" titleJustify="left" sequenceNumber="6" fieldTitle="Last Occurrence"/>
+<visualEntry columnLocked="false" columnWidth="4" os="CBIL_PRI" fieldType="0" fieldName="Severity" dataJustify="centre" titleJustify="centre" sequenceNumber="7" fieldTitle="Sev"/>
+<visualEntry columnLocked="false" columnWidth="3" os="CBIL_PRI" fieldType="0" fieldName="Acknowledged" dataJustify="centre" titleJustify="centre" sequenceNumber="8" fieldTitle="Ack"/>
+<visualEntry columnLocked="false" columnWidth="10" os="CBIL_PRI" fieldType="0" fieldName="OwnerUID" dataJustify="left" titleJustify="left" sequenceNumber="9" fieldTitle="Owner"/>
+<visualEntry columnLocked="false" columnWidth="14" os="CBIL_PRI" fieldType="0" fieldName="ExpireTime" dataJustify="left" titleJustify="left" sequenceNumber="10" fieldTitle="Timed Event"/>
+<visualEntry columnLocked="false" columnWidth="25" os="CBIL_PRI" fieldType="2" fieldName="URL" dataJustify="left" titleJustify="left" sequenceNumber="11" fieldTitle="Work Instructions"/>
+</columns>
+<sorting>
+<sortColumn os="CBIL_PRI" fieldType="0" fieldName="Severity" sequenceNumber="0" order="desc"/>
+</sorting>
+</view>
+
+<view viewName="FullView" os="">
+<columns>
+<visualEntry columnLocked="true" columnWidth="5" os="NBN_AGGV" fieldType="5" fieldName="Serial" dataJustify="left" titleJustify="left" sequenceNumber="0" fieldTitle="Serial"/>
+<visualEntry columnLocked="false" columnWidth="15" os="NBN_AGGV" fieldType="2" fieldName="Node" dataJustify="left" titleJustify="left" sequenceNumber="1" fieldTitle="Node"/>
+<visualEntry columnLocked="false" columnWidth="35" os="NBN_AGGV" fieldType="2" fieldName="Summary" dataJustify="left" titleJustify="left" sequenceNumber="2" fieldTitle="Summary"/>
+<visualEntry columnLocked="false" columnWidth="4" os="NBN_AGGV" fieldType="0" fieldName="Tally" dataJustify="left" titleJustify="left" sequenceNumber="3" fieldTitle="Tally"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="LastOccurrence" dataJustify="left" titleJustify="left" sequenceNumber="4" fieldTitle="LastOccurrence"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="FirstOccurrence" dataJustify="left" titleJustify="left" sequenceNumber="5" fieldTitle="FirstOccurrence"/>
+<visualEntry columnLocked="false" columnWidth="11" os="NBN_AGGV" fieldType="2" fieldName="Location" dataJustify="left" titleJustify="left" sequenceNumber="6" fieldTitle="Location"/>
+<visualEntry columnLocked="false" columnWidth="8" os="NBN_AGGV" fieldType="2" fieldName="Manager" dataJustify="left" titleJustify="left" sequenceNumber="7" fieldTitle="Manager"/>
+<visualEntry columnLocked="false" columnWidth="2" os="NBN_AGGV" fieldType="0" fieldName="NMSBiGWFlag" dataJustify="left" titleJustify="left" sequenceNumber="8" fieldTitle="NMSBiGWFlag"/>
+<visualEntry columnLocked="false" columnWidth="4" os="NBN_AGGV" fieldType="0" fieldName="Severity" dataJustify="left" titleJustify="left" sequenceNumber="9" fieldTitle="Severity"/>
+<visualEntry columnLocked="false" columnWidth="17" os="NBN_AGGV" fieldType="2" fieldName="NMSMandP" dataJustify="left" titleJustify="left" sequenceNumber="10" fieldTitle="NMSMandP"/>
+<visualEntry columnLocked="false" columnWidth="7" os="NBN_AGGV" fieldType="0" fieldName="NMSImpactFlag" dataJustify="left" titleJustify="left" sequenceNumber="11" fieldTitle="NMSImpactFlag"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="2" fieldName="Agent" dataJustify="left" titleJustify="left" sequenceNumber="12" fieldTitle="Agent"/>
+<visualEntry columnLocked="false" columnWidth="13" os="NBN_AGGV" fieldType="2" fieldName="AlertGroup" dataJustify="left" titleJustify="left" sequenceNumber="13" fieldTitle="AlertGroup"/>
+<visualEntry columnLocked="false" columnWidth="13" os="NBN_AGGV" fieldType="2" fieldName="AlertKey" dataJustify="left" titleJustify="left" sequenceNumber="14" fieldTitle="AlertKey"/>
+<visualEntry columnLocked="false" columnWidth="18" os="NBN_AGGV" fieldType="2" fieldName="NMSAlarmID" dataJustify="left" titleJustify="left" sequenceNumber="15" fieldTitle="NMSAlarmID"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="2" fieldName="Identifier" dataJustify="left" titleJustify="left" sequenceNumber="16" fieldTitle="Identifier"/>
+<visualEntry columnLocked="false" columnWidth="11" os="NBN_AGGV" fieldType="0" fieldName="Class" dataJustify="left" titleJustify="left" sequenceNumber="17" fieldTitle="Class"/>
+<visualEntry columnLocked="false" columnWidth="7" os="NBN_AGGV" fieldType="2" fieldName="DeviceClass" dataJustify="left" titleJustify="left" sequenceNumber="18" fieldTitle="DeviceClass"/>
+<visualEntry columnLocked="false" columnWidth="7" os="NBN_AGGV" fieldType="2" fieldName="DeviceType" dataJustify="left" titleJustify="left" sequenceNumber="19" fieldTitle="DeviceType"/>
+<visualEntry columnLocked="false" columnWidth="4" os="NBN_AGGV" fieldType="0" fieldName="Acknowledged" dataJustify="left" titleJustify="left" sequenceNumber="20" fieldTitle="Acknowledged"/>
+<visualEntry columnLocked="false" columnWidth="18" os="NBN_AGGV" fieldType="2" fieldName="BSM_Identity" dataJustify="left" titleJustify="left" sequenceNumber="21" fieldTitle="BSM_Identity"/>
+<visualEntry columnLocked="false" columnWidth="7" os="NBN_AGGV" fieldType="0" fieldName="CauseType" dataJustify="left" titleJustify="left" sequenceNumber="22" fieldTitle="CauseType"/>
+<visualEntry columnLocked="false" columnWidth="7" os="NBN_AGGV" fieldType="0" fieldName="CorrScore" dataJustify="left" titleJustify="left" sequenceNumber="23" fieldTitle="CorrScore"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="2" fieldName="EventId" dataJustify="left" titleJustify="left" sequenceNumber="24" fieldTitle="EventId"/>
+<visualEntry columnLocked="false" columnWidth="5" os="NBN_AGGV" fieldType="0" fieldName="ExpireTime" dataJustify="left" titleJustify="left" sequenceNumber="25" fieldTitle="ExpireTime"/>
+<visualEntry columnLocked="false" columnWidth="5" os="NBN_AGGV" fieldType="0" fieldName="Grade" dataJustify="left" titleJustify="left" sequenceNumber="26" fieldTitle="Grade"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="InternalLast" dataJustify="left" titleJustify="left" sequenceNumber="27" fieldTitle="InternalLast"/>
+<visualEntry columnLocked="false" columnWidth="15" os="NBN_AGGV" fieldType="2" fieldName="LocalNodeAlias" dataJustify="left" titleJustify="left" sequenceNumber="28" fieldTitle="LocalNodeAlias"/>
+<visualEntry columnLocked="false" columnWidth="11" os="NBN_AGGV" fieldType="0" fieldName="NMSAckPeriod" dataJustify="left" titleJustify="left" sequenceNumber="29" fieldTitle="NMSAckPeriod"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="NMSAckTime" dataJustify="left" titleJustify="left" sequenceNumber="30" fieldTitle="NMSAckTime"/>
+<visualEntry columnLocked="false" columnWidth="25" os="NBN_AGGV" fieldType="2" fieldName="NMSAdditionalInfo" dataJustify="left" titleJustify="left" sequenceNumber="31" fieldTitle="NMSAdditionalInfo"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="NMSAggInsertTime" dataJustify="left" titleJustify="left" sequenceNumber="32" fieldTitle="NMSAggInsertTime"/>
+<visualEntry columnLocked="false" columnWidth="11" os="NBN_AGGV" fieldType="1" fieldName="NMSClearTime" dataJustify="left" titleJustify="left" sequenceNumber="33" fieldTitle="NMSClearTime"/>
+<visualEntry columnLocked="false" columnWidth="14" os="NBN_AGGV" fieldType="2" fieldName="NMSClearedBy" dataJustify="left" titleJustify="left" sequenceNumber="34" fieldTitle="NMSClearedBy"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="NMSColInserTime" dataJustify="left" titleJustify="left" sequenceNumber="35" fieldTitle="NMSColInserTime"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="NMSDisInsertTime" dataJustify="left" titleJustify="left" sequenceNumber="36" fieldTitle="NMSDisInsertTime"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="0" fieldName="NMSInitialSeverity" dataJustify="left" titleJustify="left" sequenceNumber="37" fieldTitle="NMSInitialSeverity"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="2" fieldName="NMSLoc1" dataJustify="left" titleJustify="left" sequenceNumber="38" fieldTitle="NMSLoc1"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="2" fieldName="NMSLoc2" dataJustify="left" titleJustify="left" sequenceNumber="39" fieldTitle="NMSLoc2"/>
+<visualEntry columnLocked="false" columnWidth="6" os="NBN_AGGV" fieldType="0" fieldName="NMSgwFlag" dataJustify="left" titleJustify="left" sequenceNumber="40" fieldTitle="NMSgwFlag"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="0" fieldName="NmosCauseType" dataJustify="left" titleJustify="left" sequenceNumber="41" fieldTitle="NmosCauseType"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="2" fieldName="NmosDomainName" dataJustify="left" titleJustify="left" sequenceNumber="42" fieldTitle="NmosDomainName"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="0" fieldName="NmosEntityId" dataJustify="left" titleJustify="left" sequenceNumber="43" fieldTitle="NmosEntityId"/>
+<visualEntry columnLocked="false" columnWidth="17" os="NBN_AGGV" fieldType="2" fieldName="NmosEventMap" dataJustify="left" titleJustify="left" sequenceNumber="44" fieldTitle="NmosEventMap"/>
+<visualEntry columnLocked="false" columnWidth="11" os="NBN_AGGV" fieldType="0" fieldName="NmosManagedStatus" dataJustify="left" titleJustify="left" sequenceNumber="45" fieldTitle="NmosManagedStatus"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="0" fieldName="NmosObjInst" dataJustify="left" titleJustify="left" sequenceNumber="46" fieldTitle="NmosObjInst"/>
+<visualEntry columnLocked="false" columnWidth="8" os="NBN_AGGV" fieldType="0" fieldName="NmosPrecedence" dataJustify="left" titleJustify="left" sequenceNumber="47" fieldTitle="NmosPrecedence"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="2" fieldName="NmosSerial" dataJustify="left" titleJustify="left" sequenceNumber="48" fieldTitle="NmosSerial"/>
+<visualEntry columnLocked="false" columnWidth="15" os="NBN_AGGV" fieldType="2" fieldName="NodeAlias" dataJustify="left" titleJustify="left" sequenceNumber="49" fieldTitle="NodeAlias"/>
+<visualEntry columnLocked="false" columnWidth="8" os="NBN_AGGV" fieldType="0" fieldName="OwnerGID" dataJustify="left" titleJustify="left" sequenceNumber="50" fieldTitle="OwnerGID"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="0" fieldName="OwnerUID" dataJustify="left" titleJustify="left" sequenceNumber="51" fieldTitle="OwnerUID"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="0" fieldName="Poll" dataJustify="left" titleJustify="left" sequenceNumber="52" fieldTitle="Poll"/>
+<visualEntry columnLocked="false" columnWidth="8" os="NBN_AGGV" fieldType="0" fieldName="ProbeSubSecondId" dataJustify="left" titleJustify="left" sequenceNumber="53" fieldTitle="ProbeSubSecondId"/>
+<visualEntry columnLocked="false" columnWidth="14" os="NBN_AGGV" fieldType="2" fieldName="RemoteNodeAlias" dataJustify="left" titleJustify="left" sequenceNumber="54" fieldTitle="RemoteNodeAlias"/>
+<visualEntry columnLocked="false" columnWidth="11" os="NBN_AGGV" fieldType="2" fieldName="ServerName" dataJustify="left" titleJustify="left" sequenceNumber="55" fieldTitle="ServerName"/>
+<visualEntry columnLocked="false" columnWidth="9" os="NBN_AGGV" fieldType="0" fieldName="ServerSerial" dataJustify="left" titleJustify="left" sequenceNumber="56" fieldTitle="ServerSerial"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="StateChange" dataJustify="left" titleJustify="left" sequenceNumber="57" fieldTitle="StateChange"/>
+<visualEntry columnLocked="false" columnWidth="5" os="NBN_AGGV" fieldType="0" fieldName="StateChangeOwnerUID" dataJustify="left" titleJustify="left" sequenceNumber="58" fieldTitle="StateChangeOwnerUID"/>
+<visualEntry columnLocked="false" columnWidth="8" os="NBN_AGGV" fieldType="0" fieldName="SuppressEscl" dataJustify="left" titleJustify="left" sequenceNumber="59" fieldTitle="SuppressEscl"/>
+<visualEntry columnLocked="false" columnWidth="8" os="NBN_AGGV" fieldType="0" fieldName="Type" dataJustify="left" titleJustify="left" sequenceNumber="60" fieldTitle="Type"/>
+<visualEntry columnLocked="false" columnWidth="5" os="NBN_AGGV" fieldType="0" fieldName="provisoSubElementGrpIndex" dataJustify="left" titleJustify="left" sequenceNumber="61" fieldTitle="provisoSubElementGrpIndex"/>
+<visualEntry columnLocked="false" columnWidth="5" os="NBN_AGGV" fieldType="0" fieldName="provisoSubElementIndex" dataJustify="left" titleJustify="left" sequenceNumber="62" fieldTitle="provisoSubElementIndex"/>
+<visualEntry columnLocked="false" columnWidth="5" os="NBN_AGGV" fieldType="0" fieldName="provisoThresholdType" dataJustify="left" titleJustify="left" sequenceNumber="63" fieldTitle="provisoThresholdType"/>
+<visualEntry columnLocked="false" columnWidth="12" os="NBN_AGGV" fieldType="1" fieldName="provisoViolationTime" dataJustify="left" titleJustify="left" sequenceNumber="64" fieldTitle="provisoViolationTime"/>
+<visualEntry columnLocked="false" columnWidth="8" os="NBN_AGGV" fieldType="0" fieldName="NMSTicketState" dataJustify="left" titleJustify="left" sequenceNumber="65" fieldTitle="NMSTicketState"/>
+<visualEntry columnLocked="false" columnWidth="25" os="NBN_AGGV" fieldType="0" fieldName="X733EventType" dataJustify="left" titleJustify="left" sequenceNumber="66" fieldTitle="X733EventType"/>
+<visualEntry columnLocked="false" columnWidth="25" os="NBN_AGGV" fieldType="0" fieldName="X733ProbableCause" dataJustify="left" titleJustify="left" sequenceNumber="67" fieldTitle="X733ProbableCause"/>
+<visualEntry columnLocked="false" columnWidth="25" os="NBN_AGGV" fieldType="2" fieldName="X733SpecificProb" dataJustify="left" titleJustify="left" sequenceNumber="68" fieldTitle="X733SpecificProb"/>
+</columns>
+<sorting>
+<sortColumn os="NBN_AGGV" fieldType="0" fieldName="Severity" sequenceNumber="0" order="asc"/>
+</sorting>
+</view>
+
+</viewbox>

@@ -1,0 +1,2 @@
+map(name="OracleEM",bgColor="white",w=427,h=157,numCols=4,acl="*")
+icon(name="visual_1",label="",x=0,y=0,translucency=0,show shadow=false,action="Open URL",url="https://oraoem01:7802/em",bidi="true",target="_blank",filter="",filtertype="",datasource="",flash="true",w=427,h=157,type="rectangle",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p",image="Oracle.png",entity status indicator="Highlight Bar")

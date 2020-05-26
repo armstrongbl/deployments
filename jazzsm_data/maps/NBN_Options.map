@@ -1,0 +1,4 @@
+map(name="NBN_Options",bgColor="#000066",w=386,h=800,numCols=4,acl="*")
+icon(name="visual_3",label="",x=88,y=3,translucency=0,show shadow=false,action="Open URL",url="http://www.nbnco.com.au",target="_blank",filter="",filtertype="",datasource="",flash="true",w=110,h=84,type="rectangle",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p",image="nbnco-larger-logo.png",entity status indicator="Highlight Bar")
+text(name="visual_2",label="RunBooks",x=176,y=130,translucency=0,show shadow=false,action="Open URL",url="http://www.wikipedia.org",target="_blank",filter="",filtertype="",datasource="",flash="true",font="Times New Roman",size=25,justify="center",style="p",color="white")
+text(name="visual_1",label="Wiki",x=44,y=129,translucency=0,show shadow=false,action="Open URL",url="http://www.wikipedia.org",target="_blank",filter="",filtertype="",datasource="",flash="true",font="Times New Roman",size=25,justify="center",style="p",color="white")

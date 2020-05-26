@@ -1,0 +1,1 @@
+map(name="VSAT_Config",bgImage="VSAT_Config.png",bgColor="white",w=1027,h=800,numCols=4,acl="*")

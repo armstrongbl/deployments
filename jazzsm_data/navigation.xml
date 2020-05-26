@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<navigation:navigation-tree xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:base="http://www.ibm.com/tivoli/tip/schemas/2.1/ibm-portal-base.xsd" xmlns:navigation="http://www.ibm.com/tivoli/tip/schemas/2.1/ibm-portal-navigation.xsd" xsi:schemaLocation="http://www.ibm.com/tivoli/tip/schemas/2.1/ibm-portal-base.xsd ibm-portal-base.xsd http://www.ibm.com/tivoli/tip/schemas/2.1/ibm-portal-navigation.xsd ibm-portal-navigation.xsd">
+  <navigation:nav-element iconClass="defaultIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.default.0442c67681123" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.1442c67681123">
+      <base:nls-ref key="text.1442c67681123" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="20.0" parentTreeRef="root"/>
+    <navigation:nav-element formPersistence="false" hidden="true" isWscNode="false" layout-element-ref="layout.ccw" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.tip.utilportlets" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="com.ibm.tivoli.tip.utilportlets-SPSVS-com.ibm.isclite.portlet.hidden.ccw.page" wscRole="all authenticated portal users" wscRoleType="User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.hidden.ccw.page.title">
+        <base:nls-ref key="text.16a1b3d3324" locationName="classes/isc/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.default.0442c67681123"/>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value>
+          <base:string>Page</base:string>
+        </base:value>
+      </navigation:parameter>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="false" hidden="true" isWscNode="false" layout-element-ref="layout.webwidget" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.tip.TIPWebWidgetPortlet.e5bd988b51" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="com.ibm.tivoli.tip.TIPWebWidgetPortlet.e5bd988b51-SPSVS-com.ibm.isclite.portlet.hidden.webwidget.page" wscRole="all authenticated portal users" wscRoleType="User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.hidden.webwidget.page.title">
+        <base:nls-ref key="text.16a1b3d332" locationName="classes/isc/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.default.0442c67681123"/>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value>
+          <base:string>Page</base:string>
+        </base:value>
+      </navigation:parameter>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="administrationIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.administration.a6c7805711" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.b6c7805711">
+      <base:nls-ref key="text.b6c7805711" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="2000.0" parentTreeRef="root"/>
+    <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement" wscRole="ncw_admin" wscRoleType="Privileged User">
+      <navigation:title>
+        <base:nls-ref key="item.admin.main.title" locationName="classes/ncw/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="0.0" parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.administration.a6c7805711"/>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.FilterBuilder" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.FilterBuilder" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.FilterBuilder.title">
+          <base:nls-ref key="item.admin.filterBuilder.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.ViewBuilder" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.ViewBuilder" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.ViewBuilder.title">
+          <base:nls-ref key="item.admin.viewBuilder.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.RelationshipEditor" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.RelationshipEditor" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.RelationshipEditor.title">
+          <base:nls-ref key="item.admin.relationshipEditor.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.ToolEditor" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.ToolEditor" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.ToolEditor.title">
+          <base:nls-ref key="item.admin.toolEditor.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.PromptEditor" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.PromptEditor" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.PromptEditor.title">
+          <base:nls-ref key="item.admin.promptEditor.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.MenuEditor" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.MenuEditor" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.MenuEditor.title">
+          <base:nls-ref key="item.admin.menuEditor.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.MetricsEditor" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.MetricsEditor" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.MetricsEditor.title">
+          <base:nls-ref key="item.admin.metricsEditor.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.CgiRegistry" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.CgiRegistry" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.CgiRegistry.title">
+          <base:nls-ref key="item.admin.cgiRegistry.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.Maps" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.Maps.title">
+          <base:nls-ref key="item.admin.maps.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+        <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="item.layoutElement.MapBrowser" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.MapBrowser" wscRole="ncw_admin" wscRoleType="Privileged User">
+          <navigation:title uniqueName="item.admin.navigationElement.MapBrowser.title">
+            <base:nls-ref key="item.admin.mapBrowser.title" locationName="classes/ncw/nl/IscResource"/>
+          </navigation:title>
+        </navigation:nav-element>
+        <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.MapResources" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.MapResources" wscRole="ncw_admin" wscRoleType="Privileged User">
+          <navigation:title uniqueName="item.admin.navigationElement.MapResources.title">
+            <base:nls-ref key="item.admin.mapResources.title" locationName="classes/ncw/nl/IscResource"/>
+          </navigation:title>
+        </navigation:nav-element>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.DataSourceEditor" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.DataSourceEditor" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.DataSourceEditor.title">
+          <base:nls-ref key="item.admin.dataSourceEditor.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.SqlWorkbench" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.SqlWorkbench" wscRole="ncw_admin" wscRoleType="Privileged User">
+        <navigation:title uniqueName="item.admin.navigationElement.SqlWorkbench.title">
+          <base:nls-ref key="item.admin.sqlWorkbench.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+      </navigation:nav-element>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="assetsIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.assets.0788805711" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.1788805711">
+      <base:nls-ref key="text.1788805711" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="3000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="discoveryIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.discovery.3a3b867681" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.4a3b867681">
+      <base:nls-ref key="text.4a3b867681" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="7000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="incidentIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.incident.788c805711" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.888c805711">
+      <base:nls-ref key="text.888c805711" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="11000.0" parentTreeRef="root"/>
+    <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.EventLists" wscRole="ncw_admin,ncw_user" wscRoleType="Privileged User,User">
+      <navigation:title>
+        <base:nls-ref key="item.desktop.eventLists.title" locationName="classes/ncw/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="10.0" parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.incident.788c805711"/>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.Dashboard" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.Dashboard" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+        <navigation:title uniqueName="item.desktop.navigationElement.Dashboard.title">
+          <base:nls-ref key="javax.portlet.title" locationName="classes/ncw/nl/portlet/DashboardPortlet"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.EventViewer" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.EventViewer" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+        <navigation:title uniqueName="item.desktop.navigationElement.EventViewer.title">
+          <base:nls-ref key="javax.portlet.title" locationName="classes/ncw/nl/portlet/EventViewerPortlet"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.AEL" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.AEL" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+        <navigation:title uniqueName="item.desktop.navigationElement.AEL.title">
+          <base:nls-ref key="javax.portlet.title" locationName="classes/ncw/nl/portlet/AELPortlet"/>
+        </navigation:title>
+      </navigation:nav-element>
+      <navigation:nav-element layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.KPIs">
+        <navigation:title uniqueName="item.desktop.navigationElement.KPIs.title">
+          <base:nls-ref key="item.desktop.KPIs.title" locationName="classes/ncw/nl/IscResource"/>
+        </navigation:title>
+        <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.OperationalGauges" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.OperationalGauges" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+          <navigation:title uniqueName="item.desktop.navigationElement.OperationalGauges.title">
+            <base:nls-ref key="item.desktop.OperationalGauges.title" locationName="classes/ncw/nl/IscResource"/>
+          </navigation:title>
+        </navigation:nav-element>
+        <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.EventGauges" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.EventGauges" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+          <navigation:title uniqueName="item.desktop.navigationElement.EventGauges.title">
+            <base:nls-ref key="item.desktop.EventGauges.title" locationName="classes/ncw/nl/IscResource"/>
+          </navigation:title>
+        </navigation:nav-element>
+        <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.PerformanceGauges" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.PerformanceGauges" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+          <navigation:title uniqueName="item.desktop.navigationElement.PerformanceGauges.title">
+            <base:nls-ref key="item.desktop.PerformanceGauges.title" locationName="classes/ncw/nl/IscResource"/>
+          </navigation:title>
+        </navigation:nav-element>
+        <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.NetcoolHealthDashboard" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.NetcoolHealthDashboard" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+          <navigation:title uniqueName="item.desktop.navigationElement.NetcoolHealthDashboard.title">
+            <base:nls-ref key="item.desktop.NetcoolHealthDashboard.title" locationName="classes/ncw/nl/IscResource"/>
+          </navigation:title>
+          <navigation:parentTree parentTreeRef="item.desktop.navigationElement.KPIs"/>
+        </navigation:nav-element>
+        <navigation:nav-element formPersistence="false" hidden="true" isWscNode="false" layout-element-ref="item.layoutElement.LaunchWebGUIURL" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.LaunchWebGUIURL" wscRole="ncw_admin,ncw_user" wscRoleType="Editor,User">
+          <navigation:title uniqueName="item.desktop.navigationElement.LaunchWebGUIURL.title">
+            <base:nls-ref key="item.desktop.LaunchWebGUIURL.title" locationName="classes/ncw/nl/IscResource"/>
+          </navigation:title>
+        </navigation:nav-element>
+      </navigation:nav-element>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="globeIcon" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.Insights">
+    <navigation:title>
+      <base:nls-ref key="item.desktop.insights.title" locationName="classes/ncw/nl/IscResource"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="12500.0" parentTreeRef="root"/>
+    <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.ScopeBasedGrouping" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.desktop.navigationElement.ScopeBasedGrouping" wscRole="ncw_admin" wscRoleType="Editor">
+      <navigation:title uniqueName="item.desktop.navigationElement.ScopeBasedGrouping.title">
+        <base:nls-ref key="item.desktop.insights.scopeBasedGrouping.title" locationName="classes/ncw/nl/IscResource"/>
+      </navigation:title>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="perfIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.performance.365119b242" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.465119b242">
+      <base:nls-ref key="text.465119b242" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="14000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="planningIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.planning.4511d05711" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.5511d05711">
+      <base:nls-ref key="text.5511d05711" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="14000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="reportingIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.reporting.5d16d05711" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.6d16d05711">
+      <base:nls-ref key="text.6d16d05711" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="16000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="samplesIcon" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.samples.0442c67681123">
+    <navigation:title uniqueName="text.1442c67681457">
+      <base:nls-ref key="text.1442c67681457" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="16050.0" parentTreeRef="root"/>
+    <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="com.ibm.dash.sample__1346344878489" layoutUpdatedAtRuntime="false" moduleID="development.export.sample.1346858222067.unique" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="development.export.sample.1346858222067.unique-SPSVS-com.ibm.dash.sample.mIfjZGCbSgjHgtQ1Qi9mXxN1346344878488" wscRole="iscadmins,administrator" wscRoleType="Manager,Manager">
+      <navigation:title>
+        <base:nls-ref key="text.10001" locationName="classes/com/ibm/nls/NLSResource"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.samples.0442c67681123"/>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value>
+          <base:string>Page</base:string>
+        </base:value>
+      </navigation:parameter>
+      <navigation:page-params>
+        <navigation:render-param name="TIP.Page.Orientation" value="LTR"/>
+        <navigation:render-param name="TIP.Page.Text.Direction" value="LTR"/>
+      </navigation:page-params>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="com.ibm.dash.sample__1346801967786" layoutUpdatedAtRuntime="false" moduleID="development.export.sample.1346858222067.unique" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="development.export.sample.1346858222067.unique-SPSVS-com.ibm.dash.sample.vwc3vbHBSBHaNTNaVpqNZNE1346801967786" wscRole="iscadmins,administrator" wscRoleType="Manager,Manager">
+      <navigation:title>
+        <base:nls-ref key="text.10002" locationName="classes/com/ibm/nls/NLSResource"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.samples.0442c67681123"/>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value>
+          <base:string>Page</base:string>
+        </base:value>
+      </navigation:parameter>
+      <navigation:page-params>
+        <navigation:render-param name="TIP.Page.Orientation" value="LTR"/>
+        <navigation:render-param name="TIP.Page.Text.Direction" value="LTR"/>
+      </navigation:page-params>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="com.ibm.isclite.admin.Freeform.layoutElement.A__1348249958715" layoutUpdatedAtRuntime="false" moduleID="development.export.sample.1346858222067.unique" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="development.export.sample.1346858222067.unique-SPSVS-com.ibm.isclite.admin.Freeform.navigationElement.pagelayoutA.modified.kw85glOhHtDODpaofTPizXX1348249958715" wscRole="iscadmins,administrator" wscRoleType="Manager,Manager">
+      <navigation:title>
+        <base:nls-ref key="text.10003" locationName="classes/com/ibm/nls/NLSResource"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.samples.0442c67681123"/>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value>
+          <base:string>Page</base:string>
+        </base:value>
+      </navigation:parameter>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="com.ibm.isclite.admin.Freeform.layoutElement.A__1348249886911" layoutUpdatedAtRuntime="false" moduleID="development.export.sample.1346858222067.unique" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="development.export.sample.1346858222067.unique-SPSVS-com.ibm.isclite.admin.Freeform.navigationElement.pagelayoutA.modified.kw85glOhHtDODpaofTPizXX1348249886911" wscRole="iscadmins,administrator" wscRoleType="Manager,Manager">
+      <navigation:title>
+        <base:nls-ref key="text.10004" locationName="classes/com/ibm/nls/NLSResource"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.samples.0442c67681123"/>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value>
+          <base:string>Page</base:string>
+        </base:value>
+      </navigation:parameter>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="secIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.securitymgmt.9837d05711" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.a837d05711">
+      <base:nls-ref key="text.a837d05711" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="17000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="configureIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.systemconfiguration.c96c015711" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.d96c015711">
+      <base:nls-ref key="text.d96c015711" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="21000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="healthIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.systemstatusandhealth.5807517e11" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.6807517e11">
+      <base:nls-ref key="text.6807517e11" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="22000.0" parentTreeRef="root"/>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="troubleShootingToolIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.sysmgmt.common.task.groups.node.troubleshootingandsupport.0442c67681" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+    <navigation:title uniqueName="text.1442c67681">
+      <base:nls-ref key="text.1442c67681" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="23000.0" parentTreeRef="root"/>
+    <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.SystemInformation" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.SystemInformation" wscRole="ncw_admin" wscRoleType="Privileged User">
+      <navigation:title uniqueName="item.admin.navigationElement.SystemInformation.title">
+        <base:nls-ref key="item.systemInformation.title" locationName="classes/ncw/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="20.0" parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.troubleshootingandsupport.0442c67681"/>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.Diagnostics" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.Diagnostics" wscRole="ncw_admin" wscRoleType="Privileged User">
+      <navigation:title uniqueName="item.admin.navigationElement.Diagnostics.title">
+        <base:nls-ref key="item.admin.diagnostics.title" locationName="classes/ncw/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="21.0" parentTreeRef="com.ibm.sysmgmt.common.task.groups.node.troubleshootingandsupport.0442c67681"/>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isc.common.admin.settings" wscRole="all authenticated portal users,suppressmonitor" wscRoleType="Privileged User,Privileged User">
+    <navigation:title uniqueName="com.ibm.isc.common.admin.settings.title">
+      <base:nls-ref key="isc.common.admin.settings.title" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="25000.0" parentTreeRef="root"/>
+    <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="item.layoutElement.UserPreferences" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.em.iscmodule" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.em.iscmodule-SPSVS-item.admin.navigationElement.UserPreferences" wscRole="ncw_admin" wscRoleType="Privileged User">
+      <navigation:title uniqueName="item.admin.navigationElement.UserPreferences.title">
+        <base:nls-ref key="item.admin.userPreferences.title" locationName="classes/ncw/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="0.0" parentTreeRef="com.ibm.isc.common.admin.settings"/>
+    </navigation:nav-element>
+    <navigation:nav-element layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isc.common.admin.settings.general">
+      <navigation:title uniqueName="isc.common.admin.settings.general.title">
+        <base:nls-ref key="isc.common.admin.settings.general.title" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="10.0" parentTreeRef="com.ibm.isc.common.admin.settings"/>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.managecatalogs.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.managecatalogs.page" wscRole="iscadmins" wscRoleType="Manager">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.managecatalogs.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageCatalogsPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="10.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element isWscNode="false" layout-element-ref="conmgr.conmgr.layoutElement.A" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="singleTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-conmgr.conmgr.navigationElement.A" wscRole="iscadmins" wscRoleType="Privileged User">
+        <navigation:title>
+          <base:nls-ref key="conmgr.LongProjectName" locationName="classes/com/ibm/isclite/portlet/nl/ConnectionManager"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="20.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.preferenceprofiles.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.preferenceprofiles.page" wscRole="iscadmins,administrator" wscRoleType="Manager,Privileged User">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.preferenceprofiles.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/PreferenceProfilesPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="30.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="layout.1ef29af632" layoutUpdatedAtRuntime="false" moduleID="export_import_portlet" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="export_import_portlet-SPSVS-com.ibm.isclite.portlet.exportWizard.page" wscRole="iscadmins,chartAdministrator" wscRoleType="Privileged User,Privileged User">
+        <navigation:title uniqueName="text.6ef29af632">
+          <base:nls-ref key="text.6ef29af632" locationName="classes/isc/nl/IscResource"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="50.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="layout.importUI" layoutUpdatedAtRuntime="false" moduleID="export_import_portlet" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="export_import_portlet-SPSVS-com.ibm.isclite.portlet.import.page" wscRole="iscadmins" wscRoleType="Privileged User">
+        <navigation:title uniqueName="title.navigation.importUI">
+          <base:nls-ref key="title.navigation.importUI" locationName="classes/isc/nl/IscResource"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="50.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.managepages.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.managepages.page" wscRole="iscadmins,administrator" wscRoleType="Manager,Privileged User">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.managepages.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManagePagesPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="80.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.manageportlets.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.manageportlets.page" wscRole="iscadmins,administrator" wscRoleType="Manager,Privileged User">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.manageportlets.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManagePortletsPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="90.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.manageviews.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.manageviews.page" wscRole="iscadmins,administrator" wscRoleType="Manager,Privileged User">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.manageviews.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageViewsPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="100.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.adminConsole.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="singleTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.adminConsole.page" wscRole="iscadmins,administrator" wscRoleType="Manager,User">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.adminConsole.page.title">
+          <base:nls-ref key="com.ibm.isclite.portlet.adminConsole.page.title" locationName="classes/com/ibm/isclite/portlet/nl/AdminConsolePortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="200.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.managefederations.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.managefederations.page" wscRole="iscadmins" wscRoleType="Manager">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.managefederations.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageFederationsPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="210.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.manageconsoleproperties.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.manageconsoleproperties.page" wscRole="iscadmins" wscRoleType="Manager">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.manageconsoleproperties.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageConsolePropertiesPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="210.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="com.ibm.isclite.admin.Freeform.consoleanalytics.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.admin.Freeform.navigationElement.consoleanalytics" wscRole="iscadmins" wscRoleType="Editor">
+        <navigation:title uniqueName="isc.consoleanalytics.title">
+          <base:nls-ref key="isc.consoleanalytics.title" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="220.0" parentTreeRef="com.ibm.isc.common.admin.settings.general"/>
+      </navigation:nav-element>
+    </navigation:nav-element>
+    <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.wim.management.navigationElement.WIM" wscRole="iscadmins" wscRoleType="Manager">
+      <navigation:title>
+        <base:nls-ref key="com.ibm.wim.management.navigationElement.WIM.title" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="20.0" parentTreeRef="com.ibm.isc.common.admin.settings"/>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.managegroups.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.managegroups.page" wscRole="iscadmins" wscRoleType="Manager">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.managegroups.page.title">
+          <base:nls-ref key="isc.page.group.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageUsersGroupsPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="40.0" parentTreeRef="com.ibm.wim.management.navigationElement.WIM"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.manageroles.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.manageroles.page" wscRole="iscadmins,administrator" wscRoleType="Manager,Privileged User">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.manageroles.page.title">
+          <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageRolesPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="50.0" parentTreeRef="com.ibm.wim.management.navigationElement.WIM"/>
+      </navigation:nav-element>
+      <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.manageusers.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.manageusers.page" wscRole="iscadmins" wscRoleType="Manager">
+        <navigation:title uniqueName="com.ibm.isclite.portlet.manageusers.page.title">
+          <base:nls-ref key="isc.page.user.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageUsersGroupsPortlet"/>
+        </navigation:title>
+        <navigation:parentTree ordinal="60.0" parentTreeRef="com.ibm.wim.management.navigationElement.WIM"/>
+      </navigation:nav-element>
+    </navigation:nav-element>
+    <navigation:nav-element hidden="true" isWscNode="false" layout-element-ref="com.ibm.isclite.admin.Freeform.layoutElement.A" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="multiTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.admin.Freeform.navigationElement.pagelayoutA" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+      <navigation:title>
+        <base:nls-ref key="isc.freeform.page.title" locationName="classes/com/ibm/isclite/portlet/nl/PortletPickerPortlet"/>
+      </navigation:title>
+    </navigation:nav-element>
+    <navigation:nav-element hidden="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.manageopenpages.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.manageopenpages.page" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.manageopenpages.page.title">
+        <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/ManageOpenPages"/>
+      </navigation:title>
+    </navigation:nav-element>
+    <navigation:nav-element hidden="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.addstartuppage.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.addstartuppage.page" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.addstartuppage.page.title">
+        <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/AddStartupPage"/>
+      </navigation:title>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="true" hidden="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.manageconsoleresources.savepage.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="modalTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.manageconsoleresources.savepage.page" wscRole="iscadmins,administrator" wscRoleType="User,User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.manageconsoleresources.savepage.page.title">
+        <base:nls-ref key="isc.modalpage.title" locationName="classes/com/ibm/isclite/portlet/nl/ManagePagesPortlet"/>
+      </navigation:title>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="true" hidden="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.message.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="modalTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.message.page" wscRole="all authenticated portal users" wscRoleType="User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.manageconsoleresources.savepage.page.title">
+        <base:nls-ref key="isc.messagepage.title" locationName="classes/com/ibm/isclite/portlet/nl/MessagePortlet"/>
+      </navigation:title>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="userIcon" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isc.common.user">
+    <navigation:title uniqueName="text.1442c67681456">
+      <base:nls-ref key="text.1442c67681456" locationName="classes/com/ibm/isclite/portlet/nl/ISCAdminPortlets"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="27000.0" parentTreeRef="root"/>
+    <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.credentialstore.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="singleTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.credentialstore.page" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.credentialstore.page.title">
+        <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/CredentialStore"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="40.0" parentTreeRef="com.ibm.isc.common.user"/>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portlet.startuppages.layout" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlets" nodeType="page" securityUpdatedAtRuntime="false" taskType="singleTask" uniqueName="com.ibm.isclite.ISCAdminPortlets-SPSVS-com.ibm.isclite.portlet.startuppages.page" wscRole="all authenticated portal users" wscRoleType="Privileged User">
+      <navigation:title uniqueName="com.ibm.isclite.portlet.startuppages.page.title">
+        <base:nls-ref key="isc.page.title" locationName="classes/com/ibm/isclite/portlet/nl/StartupPages"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="70.0" parentTreeRef="com.ibm.isc.common.user"/>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.portletpref.layoutElement.A" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlet" nodeType="page" securityUpdatedAtRuntime="false" taskType="singleTask" uniqueName="com.ibm.isclite.ISCAdminPortlet-SPSVS-com.ibm.isclite.ISCAdminPortlet_banner.isc.portletpref" wscRole="all authenticated portal users,iscadmins" wscRoleType="Privileged User,Privileged User">
+      <navigation:title>
+        <base:nls-ref key="mytask.xml.layout" locationName="classes/nls/PortletResources"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.isc.common.user"/>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="false" isWscNode="false" layout-element-ref="com.ibm.tivoli.tip.changepasswd.TIPChangePasswd.layoutElement.A" layoutUpdatedAtRuntime="false" moduleID="com.ibm.tivoli.tip.changepasswd.TIPChangePasswd" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="singleTask" uniqueName="com.ibm.tivoli.tip.changepasswd.TIPChangePasswd-SPSVS-com.ibm.tivoli.tip.changepasswd.TIPChangePasswd.navigationElement.A" wscRole="all authenticated portal users" wscRoleType="User">
+      <navigation:title>
+        <base:nls-ref key="CHANGE_YOUR_PASSWORD" locationName="classes/isc/nl/IscResource"/>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="com.ibm.isc.common.user"/>
+      <navigation:parameter name="ProductFilter">
+        <base:value>
+          <base:string>com.ibm.tivoli.tip.PageLayout</base:string>
+        </base:value>
+      </navigation:parameter>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element iconClass="helpIcon" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlet" nodeType="label" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlet-SPSVS-com.ibm.isc.common.help">
+    <navigation:title>
+      <base:nls-ref key="help.xml.layout" locationName="classes/nls/PortletResources"/>
+    </navigation:title>
+    <navigation:parentTree ordinal="29000.0" parentTreeRef="root"/>
+    <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlet" nodeType="url" securityUpdatedAtRuntime="false" separator="&amp;" uniqueName="com.ibm.isclite.infocenter.URL" url="/ibm/help/index.jsp" wscRole="all authenticated portal users,iscadmins" wscRoleType="User,Manager">
+      <navigation:title>
+        <base:nls-ref key="infocenter.URL.text" locationName="classes/nls/PortletResources"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="0.0" parentTreeRef="com.ibm.isc.common.help"/>
+    </navigation:nav-element>
+    <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlet" nodeType="url" securityUpdatedAtRuntime="false" separator="&amp;" uniqueName="com.ibm.isclite.communities.URL" url="https://www.ibm.com/developerworks/community/groups/service/html/communityview?communityUuid=b8caedd7-3aca-41c1-a9c1-7be87a51c50e" wscRole="all authenticated portal users,iscadmins" wscRoleType="User,Manager">
+      <navigation:title>
+        <base:nls-ref key="communities.URL.text" locationName="classes/nls/PortletResources"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="0.0" parentTreeRef="com.ibm.isc.common.help"/>
+    </navigation:nav-element>
+    <navigation:nav-element isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlet" nodeType="url" securityUpdatedAtRuntime="false" separator="&amp;" uniqueName="com.ibm.isclite.smc.URL" url="https://www.ibm.com/developerworks/servicemanagement/" wscRole="all authenticated portal users,iscadmins" wscRoleType="User,Manager">
+      <navigation:title>
+        <base:nls-ref key="smc.URL.text" locationName="classes/nls/PortletResources"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="0.0" parentTreeRef="com.ibm.isc.common.help"/>
+    </navigation:nav-element>
+    <navigation:nav-element isWscNode="false" layout-element-ref="com.ibm.isclite.welcomeportlet.layoutElement.A" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlet" nodeType="page" securityUpdatedAtRuntime="false" uniqueName="com.ibm.isclite.ISCAdminPortlet-SPSVS-com.ibm.isclite.ISCAdminPortlet_banner.isc.welcome" wscRole="all authenticated portal users,iscadmins" wscRoleType="Privileged User,Privileged User">
+      <navigation:title>
+        <base:nls-ref key="welcome.xml.layout" locationName="classes/nls/PortletResources"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="0.0" parentTreeRef="com.ibm.isc.common.help"/>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="true" isWscNode="false" layout-element-ref="com.ibm.isclite.aboutportlet.layoutElement.A" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.ISCAdminPortlet" nodeType="page" securityUpdatedAtRuntime="false" taskType="singleTask" uniqueName="com.ibm.isclite.ISCAdminPortlet-SPSVS-com.ibm.isclite.ISCAdminPortlet_banner.isc.about" wscRole="all authenticated portal users,iscadmins" wscRoleType="User,User">
+      <navigation:title>
+        <base:nls-ref key="about.xml.layout" locationName="classes/nls/PortletResources"/>
+      </navigation:title>
+      <navigation:parentTree ordinal="0.0" parentTreeRef="com.ibm.isc.common.help"/>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element formPersistence="false" hidden="false" iconClass="cIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.global.custom.module" moduleIDOrig="com.ibm.isclite.global.custom.module" nodeType="label" securityUpdatedAtRuntime="false" stateMaintained="false" taskType="hiddenTask" uniqueName="com.ibm.isclite.global.custom.module-SPSVS-label.lNX5XcZqElymnJpY8hnSClw1590516567093" wscRole="all authenticated portal users" wscRoleType="User">
+    <navigation:title>
+      <base:nls-string lang="en">DPCs</base:nls-string>
+    </navigation:title>
+    <navigation:parentTree parentTreeRef="root"/>
+    <navigation:parameter name="com.ibm.console.resource.previewImage">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.description">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.federate">
+      <base:value>
+        <base:string>None</base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.author">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.version">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.tags">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:page-params/>
+    <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="com.ibm.isclite.admin.Freeform.layoutElement.A__1590516986979" layoutUpdatedAtRuntime="true" moduleID="com.ibm.isclite.global.custom.module" moduleIDOrig="com.ibm.isclite.global.custom.module" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="com.ibm.isclite.global.custom.module-SPSVS-com.ibm.isclite.admin.Freeform.navigationElement.pagelayoutA.modified.7pIgwU0MxYRVhbMEjqNhr921590516986978" url="navigation.do?pageID=com.ibm.isclite.admin.Freeform.navigationElement.pagelayoutA&amp;moduleRef=com.ibm.isclite.ISCAdminPortlets&amp;ISC.TASKTYPE=1" wscRole="iscadmins" wscRoleType="Editor">
+      <navigation:title>
+        <base:nls-string lang="US">MEL</base:nls-string>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="label.lNX5XcZqElymnJpY8hnSClw1590516567093"/>
+      <navigation:parameter name="com.ibm.console.resource.previewImage">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.description">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.author">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.version">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.tags">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:page-params/>
+    </navigation:nav-element>
+    <navigation:nav-element formPersistence="false" hidden="false" isWscNode="false" layout-element-ref="com.ibm.isclite.admin.Freeform.layoutElement.A__1590517292615" layoutUpdatedAtRuntime="true" moduleID="com.ibm.isclite.global.custom.module" moduleIDOrig="com.ibm.isclite.global.custom.module" nodeType="page" securityUpdatedAtRuntime="false" stateMaintained="true" taskType="multiTask" uniqueName="com.ibm.isclite.global.custom.module-SPSVS-com.ibm.isclite.admin.Freeform.navigationElement.pagelayoutA.modified.7pIgwU0MxYRVhbMEjqNhr921590517292615" url="navigation.do?pageID=com.ibm.isclite.admin.Freeform.navigationElement.pagelayoutA&amp;moduleRef=com.ibm.isclite.ISCAdminPortlets&amp;ISC.TASKTYPE=1" wscRole="iscadmins" wscRoleType="Editor">
+      <navigation:title>
+        <base:nls-string lang="US">SYN</base:nls-string>
+      </navigation:title>
+      <navigation:parentTree parentTreeRef="label.lNX5XcZqElymnJpY8hnSClw1590516567093"/>
+      <navigation:parameter name="com.ibm.console.resource.previewImage">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.description">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.federate">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.author">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.version">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:parameter name="com.ibm.console.resource.tags">
+        <base:value/>
+      </navigation:parameter>
+      <navigation:page-params/>
+    </navigation:nav-element>
+  </navigation:nav-element>
+  <navigation:nav-element formPersistence="false" hidden="false" iconClass="cloudIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.global.custom.module" moduleIDOrig="com.ibm.isclite.global.custom.module" nodeType="label" securityUpdatedAtRuntime="false" stateMaintained="false" taskType="hiddenTask" uniqueName="com.ibm.isclite.global.custom.module-SPSVS-label.lNX5XcZqElymnJpY8hnSClw1590516607277" wscRole="all authenticated portal users" wscRoleType="User">
+    <navigation:title>
+      <base:nls-string lang="en">Gateways</base:nls-string>
+    </navigation:title>
+    <navigation:parentTree parentTreeRef="root"/>
+    <navigation:parameter name="com.ibm.console.resource.previewImage">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.description">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.federate">
+      <base:value>
+        <base:string>None</base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.author">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.version">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.tags">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:page-params/>
+  </navigation:nav-element>
+  <navigation:nav-element formPersistence="false" hidden="false" iconClass="cameraIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.global.custom.module" moduleIDOrig="com.ibm.isclite.global.custom.module" nodeType="label" securityUpdatedAtRuntime="false" stateMaintained="false" taskType="hiddenTask" uniqueName="com.ibm.isclite.global.custom.module-SPSVS-label.lNX5XcZqElymnJpY8hnSClw1590516642190" wscRole="all authenticated portal users" wscRoleType="User">
+    <navigation:title>
+      <base:nls-string lang="en">ASNGW's</base:nls-string>
+    </navigation:title>
+    <navigation:parentTree parentTreeRef="root"/>
+    <navigation:parameter name="com.ibm.console.resource.previewImage">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.description">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.federate">
+      <base:value>
+        <base:string>None</base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.author">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.version">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.tags">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:page-params/>
+  </navigation:nav-element>
+  <navigation:nav-element formPersistence="false" hidden="false" iconClass="aIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.global.custom.module" moduleIDOrig="com.ibm.isclite.global.custom.module" nodeType="label" securityUpdatedAtRuntime="false" stateMaintained="false" taskType="hiddenTask" uniqueName="com.ibm.isclite.global.custom.module-SPSVS-label.lNX5XcZqElymnJpY8hnSClw1590516659167" wscRole="all authenticated portal users" wscRoleType="User">
+    <navigation:title>
+      <base:nls-string lang="en">TPEP</base:nls-string>
+    </navigation:title>
+    <navigation:parentTree parentTreeRef="root"/>
+    <navigation:parameter name="com.ibm.console.resource.previewImage">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.description">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.federate">
+      <base:value>
+        <base:string>None</base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.author">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.version">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.tags">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:page-params/>
+  </navigation:nav-element>
+  <navigation:nav-element formPersistence="false" hidden="false" iconClass="bIcon" isWscNode="false" layoutUpdatedAtRuntime="false" moduleID="com.ibm.isclite.global.custom.module" moduleIDOrig="com.ibm.isclite.global.custom.module" nodeType="label" securityUpdatedAtRuntime="false" stateMaintained="false" taskType="hiddenTask" uniqueName="com.ibm.isclite.global.custom.module-SPSVS-label.lNX5XcZqElymnJpY8hnSClw1590516690088" wscRole="all authenticated portal users" wscRoleType="User">
+    <navigation:title>
+      <base:nls-string lang="en">VSATs</base:nls-string>
+    </navigation:title>
+    <navigation:parentTree parentTreeRef="root"/>
+    <navigation:parameter name="com.ibm.console.resource.previewImage">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.description">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.federate">
+      <base:value>
+        <base:string>None</base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.author">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.version">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:parameter name="com.ibm.console.resource.tags">
+      <base:value>
+        <base:string></base:string>
+      </base:value>
+    </navigation:parameter>
+    <navigation:page-params/>
+  </navigation:nav-element>
+</navigation:navigation-tree>

@@ -1,0 +1,2 @@
+map(name="smw",bgImage="LTSS_A10-Mgmt-01.gif",bgColor="white",w=1534,h=1085,numCols=0,acl="*")
+button(name="visual_1",label="untitled",x=481,y=90,translucency=0,show shadow=false,action="Open URL",url="https://nmstip01:16311/ibm/console/omnibus_webgui/cgi-bin/nco_ping_linux.cgi",bidi="true",target="_blank",filter="",filtertype="",datasource="NBN_AGGV",flash="false",w=25,h=25,type="ellipse",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p")

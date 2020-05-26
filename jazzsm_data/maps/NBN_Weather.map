@@ -1,0 +1,2 @@
+map(name="NBN_Weather",numCols="0",bgImage="WeatherAus.png",bgColor="white",w="781",h="666",acl="*")
+text(filtertype="",url="",translucency="0",datasource="",label="Weather Updated: 2019-01-30 16:03:11 UTC",y="806",x="374",filter="",bidi="true",font="Dialog",size="26",show shadow="false",flash="true",color="#ecec85",action="Open URL",rotate="0",style="",target="_self",name="Weather_Updated",justify="center")

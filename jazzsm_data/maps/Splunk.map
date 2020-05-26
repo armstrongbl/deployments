@@ -1,0 +1,2 @@
+map(name="Splunk",bgColor="white",w=256,h=256,numCols=0,acl="*")
+icon(name="SplunkLogo",label="",x=0,y=0,translucency=0,show shadow=false,action="Open URL",url="https://splunk",bidi="true",target="_blank",filter="",filtertype="",datasource="",flash="true",w=674,h=368,type="rectangle",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p",image="SplunkLogo.png",entity status indicator="Highlight Bar")

@@ -1,0 +1,2 @@
+map(name="ActivitySchedulerAndDutyLog",bgColor="white",w=250,h=250,numCols=4,acl="*")
+icon(name="ActivitySchedulerAndDutyLog",label="",x=1,y=0,translucency=0,show shadow=false,action="Open URL",url="https://nmsrttool/rt",bidi="true",target="_blank",filter="",filtertype="",datasource="",flash="true",w=815,h=340,type="rectangle",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p",image="ActivitySchedulerAndDutyLog_Logo.png",entity status indicator="Highlight Bar")

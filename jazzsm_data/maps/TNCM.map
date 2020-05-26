@@ -1,0 +1,2 @@
+map(name="TNCM",bgColor="white",w=950,h=480,numCols=4,acl="*")
+icon(name="TNCM_Logo",label="",x=0,y=0,translucency=0,show shadow=false,action="Open URL",url="https://nmscms/security/login.jsp",bidi="true",target="_blank",filter="",filtertype="",datasource="",flash="true",w=941,h=456,type="rectangle",arc diameter=20,legend=None,font="Dialog",size=11,font color="black",style="p",image="TNCM_Logo.png",entity status indicator="Highlight Bar")
