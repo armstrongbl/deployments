@@ -29,9 +29,9 @@
 ## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
 ## DEALINGS IN THE SOFTWARE.                                                  ##
 ################################################################################
-# IBM Tivoli Netcool/OMNIbus 8.1.0.19
+# IBM Tivoli Netcool/ITNM 4.2.0.5 
 # Accuoss 
-# February 17, 2020
+# June 17, 2020
 ################################################################################
 MAKE_FILE	:= $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 MAKE_DIR	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -47,8 +47,8 @@ REDHAT6_CHECK	:=$(shell $(CMD_GREP) -i "release 6" /etc/redhat-release)
 ################################################################################
 # INSTALLATION TUNABLES
 ################################################################################
-MAKE_PRODUCT		= OMNIbus
-MAKE_PRODUCT_PREREQS	= NOC
+MAKE_PRODUCT		= ITNM
+MAKE_PRODUCT_PREREQS	= TNM
 MAKE_FORCE		= FALSE
 
 ################################################################################
@@ -56,7 +56,7 @@ MAKE_FORCE		= FALSE
 ################################################################################
 PATH_INSTALL		:= /opt/IBM
 PATH_INSTALL_NETCOOL	= $(PATH_INSTALL)/netcool
-PATH_INSTALL_OMNIBUS	= $(PATH_INSTALL_NETCOOL)/omnibus
+PATH_INSTALL_ITNM	= $(PATH_INSTALL_NETCOOL)/itnm
 
 ################################################################################
 # TEMPORARY MAKE DIRECTORY
@@ -68,32 +68,32 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 # REPOSITORY PATHS
 ################################################################################
-PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_install
-PATH_REPOSITORY_SYSLOG	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_syslog
-PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_trap
-PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_21_upgrade
+PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_19_install
+PATH_REPOSITORY_SYSLOG	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_19_syslog
+PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_19_trap
+PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_21_upgrade
 
-PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core_
+PATH_REPOSITORY_ITNM_PACKAGE=com.ibm.tivoli.itnm.core_
 
 ################################################################################
 # INSTALLATION USERS
 ################################################################################
-OMNIBUS_USER		:= netcool
-OMNIBUS_PASSWD		:= $(OMNIBUS_USER)
-OMNIBUS_GROUP		:= ncoadmin
-OMNIBUS_SHELL		:= /bin/bash
-OMNIBUS_HOME		:= $(PATH_HOME)/$(OMNIBUS_USER)
+ITNM_USER		:= netcool
+ITNM_PASSWD		:= $(ITNM_USER)
+ITNM_GROUP		:= ncoadmin
+ITNM_SHELL		:= /bin/bash
+ITNM_HOME		:= $(PATH_HOME)/$(ITNM_USER)
 
-OMNIBUS_BASHRC		:= $(OMNIBUS_HOME)/.bashrc
-OMNIBUS_BASHPROFILE	:= $(OMNIBUS_HOME)/.bash_profile
+ITNM_BASHRC		:= $(ITNM_HOME)/.bashrc
+ITNM_BASHPROFILE	:= $(ITNM_HOME)/.bash_profile
 
-OMNIBUS_IMSHARED	= $(OMNIBUS_HOME)/$(PATH_IM_SHARED_PATH)
-OMNIBUS_CMD_IMCL	:= $(OMNIBUS_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
+ITNM_IMSHARED	= $(ITNM_HOME)/$(PATH_IM_SHARED_PATH)
+ITNM_CMD_IMCL	:= $(ITNM_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
 
-OMNIBUS_LDD_CHECKS	= $(shell $(CMD_LS) $(PATH_INSTALL_OMNIBUS)/platform/linux2x86/bin*/nco* | $(CMD_GREP) -v env$)
+ITNM_LDD_CHECKS	= $(shell $(CMD_LS) $(PATH_INSTALL_ITNM)/platform/linux2x86/bin*/nco* | $(CMD_GREP) -v env$)
 
 ifdef REDHAT6_CHECK
-OMNIBUS_PACKAGES	=	$(PACKAGES_COMMON) \
+ITNM_PACKAGES	=	$(PACKAGES_COMMON) \
 						audit-libs.x86_64 \
 						expat.x86_64 \
 						fontconfig.x86_64 \
@@ -131,7 +131,7 @@ OMNIBUS_PACKAGES	=	$(PACKAGES_COMMON) \
 						libstdc++.i686 \
 						libX11.i686
 else
-OMNIBUS_PACKAGES	=	$(PACKAGES_COMMON) \
+ITNM_PACKAGES	=	$(PACKAGES_COMMON) \
 						audit-libs.x86_64 \
 						expat.x86_64 \
 						fontconfig.x86_64 \
@@ -178,12 +178,12 @@ endif
 NETCOOL_PA_NAME=NCO_PA
 
 ################################################################################
-# OMNIBUS CONFIGURATION
+# ITNM CONFIGURATION
 ################################################################################
 NETCOOL_SERVICE=nco
 
 ETC_INITD_NCO=/etc/init.d/$(NETCOOL_SERVICE)
-ETC_INITD_NCO_TEMPLATE=$(PATH_INSTALL_OMNIBUS)/install/startup/linux2x86/etc/rc.d/init.d/$(NETCOOL_SERVICE)
+ETC_INITD_NCO_TEMPLATE=$(PATH_INSTALL_ITNM)/install/startup/linux2x86/etc/rc.d/init.d/$(NETCOOL_SERVICE)
 
 ETC_SYSTEMD_NCO_SCRIPT=$(PATH_INSTALL_NETCOOL)/bin/nco_init.sh
 ETC_SYSTEMD_NCO_SERVICE=/etc/systemd/system/$(NETCOOL_SERVICE).service
@@ -215,13 +215,13 @@ NETCOOL_ETC_INTERFACES_LINUX=$(PATH_INSTALL_NETCOOL)/etc/interfaces.linux2x86
 NETCOOL_ETC_INTERFACES=$(PATH_INSTALL_NETCOOL)/etc/interfaces
 NETCOOL_ETC_OMNIDAT=$(PATH_INSTALL_NETCOOL)/etc/omni.dat
 
-OMNIBUS_OS_SERVER=NCOMS
+ITNM_OS_SERVER=NCOMS
 
-OMNIBUS_BIN_DBINIT=$(PATH_INSTALL_OMNIBUS)/bin/nco_dbinit
-OMNIBUS_BIN_PASTATUS=$(PATH_INSTALL_OMNIBUS)/bin/nco_pa_status
+ITNM_BIN_DBINIT=$(PATH_INSTALL_ITNM)/bin/nco_dbinit
+ITNM_BIN_PASTATUS=$(PATH_INSTALL_ITNM)/bin/nco_pa_status
 
-OMNIBUS_ETC_DEFAULT_PACONF=$(PATH_INSTALL_OMNIBUS)/etc/default/nco_pa.conf
-OMNIBUS_ETC_PACONF=$(PATH_INSTALL_OMNIBUS)/etc/nco_pa.conf
+ITNM_ETC_DEFAULT_PACONF=$(PATH_INSTALL_ITNM)/etc/default/nco_pa.conf
+ITNM_ETC_PACONF=$(PATH_INSTALL_ITNM)/etc/nco_pa.conf
 
 ################################################################################
 # COMPUTED BASELINE CHECKSUMS
@@ -229,19 +229,19 @@ OMNIBUS_ETC_PACONF=$(PATH_INSTALL_OMNIBUS)/etc/nco_pa.conf
 NETCOOL_ETC_DEFAULT_OMNIDAT_B	:= `$(CMD_SHA512SUM) $(NETCOOL_ETC_DEFAULT_OMNIDAT) | $(CMD_CUT) -d" " -f1`
 NETCOOL_ETC_OMNIDAT_B			:= `$(CMD_SHA512SUM) $(NETCOOL_ETC_OMNIDAT) | $(CMD_CUT) -d" " -f1`
 
-OMNIBUS_ETC_DEFAULT_PACONF_B	:= `$(CMD_SHA512SUM) $(OMNIBUS_ETC_DEFAULT_PACONF) | $(CMD_CUT) -d" " -f1`
-OMNIBUS_ETC_PACONF_B			:= `$(CMD_SHA512SUM) $(OMNIBUS_ETC_PACONF) | $(CMD_CUT) -d" " -f1`
+ITNM_ETC_DEFAULT_PACONF_B	:= `$(CMD_SHA512SUM) $(ITNM_ETC_DEFAULT_PACONF) | $(CMD_CUT) -d" " -f1`
+ITNM_ETC_PACONF_B			:= `$(CMD_SHA512SUM) $(ITNM_ETC_PACONF) | $(CMD_CUT) -d" " -f1`
 
 ################################################################################
 # ULIMIT FILES / VALUES
 ################################################################################
-OMNIBUS_NOFILE_FILE		:= $(PATH_LIMITS)/91-nofile.conf
-OMNIBUS_NOFILE_FILE_CONTENT	:= "\
+ITNM_NOFILE_FILE		:= $(PATH_LIMITS)/91-nofile.conf
+ITNM_NOFILE_FILE_CONTENT	:= "\
 *          soft    nofile     131073\n\
 *          hard    nofile     131073\n"
 
-OMNIBUS_NPROC_FILE		:= $(PATH_LIMITS)/90-nproc.conf
-OMNIBUS_NPROC_FILE_CONTENT	:= "\
+ITNM_NPROC_FILE		:= $(PATH_LIMITS)/90-nproc.conf
+ITNM_NPROC_FILE_CONTENT	:= "\
 *          soft    nproc     131073\n\
 *          hard    nproc     131073\n\
 root       soft    nproc     unlimited\n"
@@ -255,30 +255,20 @@ TIMESTAMP	= $(shell $(CMD_DATE) +'%Y%m%d_%H%M%S')
 ################################################################################
 # INSTALLATION MEDIA, DESCRIPTIONS, FILES, AND CHECKSUMS
 ################################################################################
+
 MEDIA_ALL_DESC	=	\t$(MEDIA_STEP1_D)\n \
-					\t$(MEDIA_STEP2_D)\n \
-					\t$(MEDIA_STEP3_D)\n \
-					\t$(MEDIA_STEP4_D)\n
+				\t$(MEDIA_STEP2_D)\n
 
-MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
-					$(MEDIA_STEP2_F) \
-					$(MEDIA_STEP3_F) \
-					$(MEDIA_STEP4_F)
+MEDIA_ALL_FILES	=	$(MEDIA_STEP2_F)
 
-MEDIA_STEP1_D	:= IBM Prerequisite Scanner V1.2.0.17, Build 20150827
-MEDIA_STEP2_D	:= IBM Tivoli Netcool OMNIbus 8.1.0.19 Core Linux 64bit Multilingual\n\t\t(CN8HFML) 
-MEDIA_STEP3_D	:= IBM Tivoli Netcool OMNIbus Syslog Probe 64bit\n\t\t Multilingual
-MEDIA_STEP4_D	:= IBM Tivoli Netcool OMNIbus MTTrapd Probe 64bit\n\t\t Multilingual
+MEDIA_STEP1_D	:=	IBM Prerequisite Scanner V1.2.0.17, Build 20150827
+MEDIA_STEP2_D	:=	IBM Tivoli Network Manager V4.2
 
-MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
-MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/TVL_NTCL_OMN_V8.1.0.19_CORE_LNX_M.zip
-MEDIA_STEP3_F	:= $(PATH_MAKEFILE_MEDIA)/CN4FYEN_SYSLOG.zip
-MEDIA_STEP4_F	:= $(PATH_MAKEFILE_MEDIA)/CN4FZEN_MTTRAPD_v20.zip
+MEDIA_STEP1_F	:=	$(PATH_MAKEFILE_MEDIA)/1.2.0.18-Tivoli-PRS-Unix-fp0001.tar
+MEDIA_STEP2_F	:=	$(PATH_MAKEFILE_MEDIA)/ITNMIPEV4.2.0.5LNXML.zip
 
-MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
-MEDIA_STEP2_B	:= 36d779246309bb511489e0bfd90c01f38073a4feb45706e9e5185de1deca5cc33df0b7da35c06a8216f4d13cbf16cfab55fa3b253993fd34357763392b8e8cd2
-MEDIA_STEP3_B	:= b29473ee9dec4d28f48d57ac9e70ba9b0fe4d501b2c503e4fb764ceb69ebb2640131b3ea3e682ee203ccaefa267bb12d1c70abb292333313542439cb86214e1b
-MEDIA_STEP4_B	:= 25f5a068ed358a1f6b11af6d418af798405bd449adb16f6fa6c6a118e6b0051646992d55657b9d14e3200763986afe167102c3561bc5f0c2f3696b29c218c082
+MEDIA_STEP1_B	:=	fe17ed5d7ca2d6df7e139e0d7fe5ce1b615a078bc12831556dd24b0b4515690121d317d9c5a13909573a0dec21532c218ac9db21731e93cddb19424e241b09b4
+MEDIA_STEP2_B	:=	bac7203e08a5374eb86e3836a86f1e5a7a4512e09c202fdbfa4106a3e936f402e85b04e690320f2ed6f96d7e355db85b2821063cb44dfa8b23cedd1d791fc838
 
 ################################################################################
 # COMMAND TO BE INSTALLED BEFORE USE
@@ -286,14 +276,14 @@ MEDIA_STEP4_B	:= 25f5a068ed358a1f6b11af6d418af798405bd449adb16f6fa6c6a118e6b0051
 #CMD_IBM_IMUTILSC	:= $(PATH_REPOSITORY_INSTALL)/im.linux.x86_64/tools/imutilsc
 
 ################################################################################
-# OMNIBUS RESPONSE FILE TEMPLATE (INSTALL)
+# ITNM RESPONSE FILE TEMPLATE (INSTALL)
 ################################################################################
-OMNIBUS_INSTALL_RESPONSE_FILE=$(PATH_TMP)/omnibus_install_response.xml
-define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
+ITNM_INSTALL_RESPONSE_FILE=$(PATH_TMP)/itnm_install_response.xml
+define ITNM_INSTALL_RESPONSE_FILE_CONTENT
 <?xml version='1.0' encoding='UTF-8'?>
 <agent-input>
   <variables>
-    <variable name='sharedLocation' value='$(OMNIBUS_IMSHARED)'/>
+    <variable name='sharedLocation' value='$(ITNM_IMSHARED)'/>
   </variables>
   <server>
     <repository location='$(PATH_REPOSITORY_INSTALL)/OMNIbusRepository'/>
@@ -302,52 +292,52 @@ define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
   </server>
   <profile id='IBM Netcool Core Components' installLocation='$(PATH_INSTALL_NETCOOL)'> 
     <data key='cic.selector.arch' value='x86_64'/>
-    <data key='user.migratedata,com.ibm.tivoli.omnibus.core' value='false'/>
+    <data key='user.migratedata,com.ibm.tivoli.itnm.core' value='false'/>
   </profile>
   <install>
 	<!-- IBM Tivoli Netcool/OMNIbus 8.1.0.19 -->
-	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.core' version='5.50.85.20190328_0606' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_tec_migration,nco_operator_gui_feature,nco_objserv_feature,nco_g_objserv_feature,nco_bridgeserv_feature,nco_proxyserv_feature,nco_pa_feature,nco_probes_support_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_extensions_feature'/>
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.itnm.core' version='5.50.85.20190328_0606' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_tec_migration,nco_operator_gui_feature,nco_objserv_feature,nco_g_objserv_feature,nco_bridgeserv_feature,nco_proxyserv_feature,nco_pa_feature,nco_probes_support_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_extensions_feature'/>
 	<!-- Netcool/OMNIbus Probe nco-p-mttrapd 1.20.0.0 -->
-	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-p-mttrapd' version='1.20.0.2' features='nco-p-mttrapd'/>
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.itnm.integrations.nco-p-mttrapd' version='1.20.0.2' features='nco-p-mttrapd'/>
 	<!-- Netcool/OMNIbus Probe nco-p-syslog 1.8.0.0 -->
-	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-p-syslog' version='1.8.0.6' features='nco-p-syslog'/>
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.itnm.integrations.nco-p-syslog' version='1.8.0.6' features='nco-p-syslog'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
 </agent-input>
 endef
-export OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
+export ITNM_INSTALL_RESPONSE_FILE_CONTENT
 
 ################################################################################
-# OMNIBUS RESPONSE FILE TEMPLATE (UPGRADE)
+# ITNM RESPONSE FILE TEMPLATE (UPGRADE)
 ################################################################################
-OMNIBUS_UPGRADE_RESPONSE_FILE=$(PATH_TMP)/omnibus_upgrade_response.xml
-define OMNIBUS_UPGRADE_RESPONSE_FILE_CONTENT
+ITNM_UPGRADE_RESPONSE_FILE=$(PATH_TMP)/itnm_upgrade_response.xml
+define ITNM_UPGRADE_RESPONSE_FILE_CONTENT
 <?xml version='1.0' encoding='UTF-8'?>
 <agent-input>
   <variables>
-    <variable name='sharedLocation' value='$(OMNIBUS_IMSHARED)'/>
+    <variable name='sharedLocation' value='$(ITNM_IMSHARED)'/>
   </variables>
   <server>
     <repository location='$(PATH_REPOSITORY_UPGRADE)/OMNIbusRepository/composite'/>
   </server>
   <profile id='IBM Netcool Core Components' installLocation='$(PATH_INSTALL_NETCOOL)'>
     <data key='cic.selector.arch' value='x86_64'/>
-    <data key='user.migratedata,com.ibm.tivoli.omnibus.core' value='false'/>
+    <data key='user.migratedata,com.ibm.tivoli.itnm.core' value='false'/>
   </profile>
   <install>
     <!-- IBM Tivoli Netcool/OMNIbus 8.1.0.7 -->
-    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.core' version='5.50.54.20160311_1427' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_bridgeserv_feature,nco_extensions_feature,nco_g_objserv_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_objserv_feature,nco_operator_gui_feature,nco_pa_feature,nco_probes_support_feature,nco_proxyserv_feature,nco_tec_migration'/>
+    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.itnm.core' version='5.50.54.20160311_1427' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_bridgeserv_feature,nco_extensions_feature,nco_g_objserv_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_objserv_feature,nco_operator_gui_feature,nco_pa_feature,nco_probes_support_feature,nco_proxyserv_feature,nco_tec_migration'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
   <preference name='offering.service.repositories.areUsed' value='false'/>
 </agent-input>
 endef
-export OMNIBUS_UPGRADE_RESPONSE_FILE_CONTENT
+export ITNM_UPGRADE_RESPONSE_FILE_CONTENT
 
 ################################################################################
-# OMNIBUS PROCESS AGENT CONFIGURATION FILE
+# ITNM PROCESS AGENT CONFIGURATION FILE
 ################################################################################
-define OMNIBUS_PA_CONF_CONTENT
+define ITNM_PA_CONF_CONTENT
 #
 # Process Agent Daemon Configuration File for Standalone Predictive Insights
 #
@@ -357,7 +347,7 @@ define OMNIBUS_PA_CONF_CONTENT
 #
 nco_process 'MasterObjectServer'
 {
-	Command '$$OMNIHOME/bin/nco_objserv -name $(OMNIBUS_OS_SERVER) -pa $(NETCOOL_PA_NAME)' run as '$(OMNIBUS_USER)'
+	Command '$$OMNIHOME/bin/nco_objserv -name $(ITNM_OS_SERVER) -pa $(NETCOOL_PA_NAME)' run as '$(ITNM_USER)'
 	Host		=	'$(HOST_FQDN)'
 	Managed		=	True
 	RestartMsg	=	'$${NAME} running as $${EUID} has been restored on $${HOST}.'
@@ -402,7 +392,7 @@ nco_routing
 	host '$(HOST_FQDN)' '$(NETCOOL_PA_NAME)'
 }
 endef
-export OMNIBUS_PA_CONF_CONTENT
+export ITNM_PA_CONF_CONTENT
 
 ################################################################################
 # SYSTEMD SERVICE CONFIGURATION FILE
@@ -454,9 +444,9 @@ preinstallchecks:	check_commands \
 
 preinstall:			set_limits
 
-theinstall:			install_omnibus \
+theinstall:			install_itnm \
 					confirm_shared_libraries \
-					autostarton_omnibus
+					autostarton_itnm
 
 postinstall:		clean
 
@@ -466,16 +456,16 @@ preuninstallchecks:	check_commands \
 
 preuninstall:
 
-theuninstall:		autostartoff_omnibus \
-					uninstall_omnibus
+theuninstall:		autostartoff_itnm \
+					uninstall_itnm
 
 postuninstall:		remove_netcool_path \
 					remove_root_path \
 					clean
 
 clean:				remove_temp_dir \
-					remove_omnibus_install_response_file \
-					remove_omnibus_upgrade_response_file \
+					remove_itnm_install_response_file \
+					remove_itnm_upgrade_response_file \
 					clean_tmp
 
 scrub:				uninstall \
@@ -486,7 +476,7 @@ scrub:				uninstall \
 # CONTENT AND ANY INSTALL MANAGERS IN SAME.  IF THE SAME USERNAME IS USED
 # FOR MORE THAN ONE PRODUCT INSTALL, THEN THIS SHOULD BE DONE WITH EXTREME
 # CAUTION
-scrub_users:		remove_omnibus_group \
+scrub_users:		remove_itnm_group \
 					clean
 
 ################################################################################
@@ -541,8 +531,6 @@ check_media_checksums:	check_commands
 	@$(call func_print_caption,"CHECKING INSTALLATION MEDIA CHECKSUMS")
 	@$(call func_check_file_cksum,$(MEDIA_STEP1_F),$(MEDIA_STEP1_B))
 	@$(call func_check_file_cksum,$(MEDIA_STEP2_F),$(MEDIA_STEP2_B))
-	@$(call func_check_file_cksum,$(MEDIA_STEP3_F),$(MEDIA_STEP3_B))
-	@$(call func_check_file_cksum,$(MEDIA_STEP4_F),$(MEDIA_STEP4_B))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -550,7 +538,7 @@ check_media_checksums:	check_commands
 ################################################################################
 install_packages:	check_whoami
 	@$(call func_print_caption,"INSTALLING PREREQUISITE PACKAGES")
-	@$(call func_install_packages,$(OMNIBUS_PACKAGES))
+	@$(call func_install_packages,$(ITNM_PACKAGES))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -580,7 +568,7 @@ remove_temp_dir:	check_whoami \
 ################################################################################
 check_prerequisites:	check_commands \
 						create_temp_dir
-	@$(call func_print_caption,"CHECKING PREREQUISITES FOR OMNIBUS")
+	@$(call func_print_caption,"CHECKING PREREQUISITES FOR ITNM")
 	@$(call func_tar_xf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_TEMP_DIR)/$(MAKE_PRODUCT))
 	@$(CMD_ECHO) "Prereq Check:            $(PATH_TEMP_DIR)/$(MAKE_PRODUCT)/prereq_checker.sh $(MAKE_PRODUCT_PREREQS) outputDir=$(PATH_TEMP_DIR)/$(MAKE_PRODUCT) detail -s"
 	@$(CMD_ECHO)
@@ -606,8 +594,8 @@ check_prerequisites:	check_commands \
 set_limits:		check_whoami \
 				check_commands
 	@$(call func_print_caption,"SETTING LIMITS")
-	@$(call func_set_limits,$(OMNIBUS_NPROC_FILE),$(OMNIBUS_NPROC_FILE_CONTENT))
-	@$(call func_set_limits,$(OMNIBUS_NOFILE_FILE),$(OMNIBUS_NOFILE_FILE_CONTENT))
+	@$(call func_set_limits,$(ITNM_NPROC_FILE),$(ITNM_NPROC_FILE_CONTENT))
+	@$(call func_set_limits,$(ITNM_NOFILE_FILE),$(ITNM_NOFILE_FILE_CONTENT))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -616,8 +604,8 @@ set_limits:		check_whoami \
 remove_limits:		check_whoami \
 					check_commands
 	@$(call func_print_caption,"REMOVING LIMITS")
-	@$(CMD_RM) -f $(OMNIBUS_NPROC_FILE)
-	@$(CMD_RM) -f $(OMNIBUS_NOFILE_FILE)
+	@$(CMD_RM) -f $(ITNM_NPROC_FILE)
+	@$(CMD_RM) -f $(ITNM_NOFILE_FILE)
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -641,9 +629,9 @@ remove_root_path:	check_whoami \
 ################################################################################
 create_netcool_path:	check_whoami \
 						check_commands \
-						create_omnibus_user
+						create_itnm_user
 	@$(call func_print_caption,"CREATING NETCOOL INSTALL DIRECTORY IF NEEDED")
-	@$(call func_mkdir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(PATH_INSTALL_NETCOOL))
+	@$(call func_mkdir,$(ITNM_USER),$(ITNM_GROUP),755,$(PATH_INSTALL_NETCOOL))
 	@$(CMD_ECHO)
 
 # if empty remove path, else backup with timestamp to preserve custom artifacts
@@ -657,124 +645,124 @@ remove_netcool_path:	check_whoami \
 ################################################################################
 # CONFIRM OR CREATE GROUPS
 ################################################################################
-create_omnibus_group:	check_whoami \
+create_itnm_group:	check_whoami \
 						check_commands
-	@$(call func_print_caption,"CONFIRMING/CREATING OMNIBUS GROUP")
-	@$(call func_create_group,$(OMNIBUS_GROUP),$(MAKE_PRODUCT))
+	@$(call func_print_caption,"CONFIRMING/CREATING ITNM GROUP")
+	@$(call func_create_group,$(ITNM_GROUP),$(MAKE_PRODUCT))
 	@$(CMD_ECHO)
 
 ################################################################################
 # REMOVE GROUPS
 ################################################################################
-remove_omnibus_group:	check_whoami \
+remove_itnm_group:	check_whoami \
 						check_commands \
-						remove_omnibus_user
-	@$(call func_print_caption,"REMOVING OMNIBUS GROUP")
-	@$(call func_remove_group,$(OMNIBUS_GROUP),$(MAKE_PRODUCT))
+						remove_itnm_user
+	@$(call func_print_caption,"REMOVING ITNM GROUP")
+	@$(call func_remove_group,$(ITNM_GROUP),$(MAKE_PRODUCT))
 	@$(CMD_ECHO)
 
 ################################################################################
 # CONFIRM OR CREATE USERS
 ################################################################################
-create_omnibus_user:	check_whoami \
+create_itnm_user:	check_whoami \
 						check_commands \
-						create_omnibus_group
-	@$(call func_print_caption,"CONFIRMING/CREATING OMNIBUS USER")
-	@$(call func_create_user,$(OMNIBUS_USER),$(MAKE_PRODUCT),$(OMNIBUS_GROUP),$(OMNIBUS_HOME),$(OMNIBUS_SHELL),$(OMNIBUS_PASSWD))
+						create_itnm_group
+	@$(call func_print_caption,"CONFIRMING/CREATING ITNM USER")
+	@$(call func_create_user,$(ITNM_USER),$(MAKE_PRODUCT),$(ITNM_GROUP),$(ITNM_HOME),$(ITNM_SHELL),$(ITNM_PASSWD))
 
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),PATH,$(PATH_INSTALL_OMNIBUS)/bin)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHPROFILE),PATH,$(PATH_INSTALL_OMNIBUS)/bin)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),PATH,$(PATH_INSTALL_ITNM)/bin)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHPROFILE),PATH,$(PATH_INSTALL_ITNM)/bin)
 
 ################################################################################
 # As instructed by PI Installation Guide, do not set NCHOME if OMNIbus
 # and PI are on the same server owned by same user.  "Setting NCHOME may cause
 # the probe to point to the wrong location and not run."
 ################################################################################
-#	@$(call func_setenv_set_and_export_in_file,$(OMNIBUS_USER),$(OMNIBUS_BASHRC),NCHOME,$(PATH_INSTALL_NETCOOL),644)
-#	@$(call func_setenv_set_and_export_in_file,$(OMNIBUS_USER),$(OMNIBUS_BASHPROFILE),NCHOME,$(PATH_INSTALL_NETCOOL),644)
+#	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),NCHOME,$(PATH_INSTALL_NETCOOL),644)
+#	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),NCHOME,$(PATH_INSTALL_NETCOOL),644)
 
-	@$(call func_setenv_set_and_export_in_file,$(OMNIBUS_USER),$(OMNIBUS_BASHRC),OMNIHOME,$(PATH_INSTALL_OMNIBUS),644)
-	@$(call func_setenv_set_and_export_in_file,$(OMNIBUS_USER),$(OMNIBUS_BASHPROFILE),OMNIHOME,$(PATH_INSTALL_OMNIBUS),644)
+	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),OMNIHOME,$(PATH_INSTALL_ITNM),644)
+	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),OMNIHOME,$(PATH_INSTALL_ITNM),644)
 
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,/usr/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,/usr/lib)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_OMNIBUS)/platform/linux2x86/lib)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_OMNIBUS)/platform/linux2x86/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre_1.7.0/jre/bin/j9vm)
-	@$(call func_setenv_append_and_export_in_file,$(OMNIBUS_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre64_1.7.0/jre/bin/j9vm)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib64)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib64)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib64)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre_1.7.0/jre/bin/j9vm)
+	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre64_1.7.0/jre/bin/j9vm)
 	@$(CMD_ECHO)
 
 ################################################################################
 # REMOVE USERS
 ################################################################################
-remove_omnibus_user:	check_whoami \
+remove_itnm_user:	check_whoami \
 						check_commands
-	@$(call func_print_caption,"REMOVING OMNIBUS USER")
-	@$(call func_remove_user,$(OMNIBUS_USER),$(MAKE_PRODUCT))
+	@$(call func_print_caption,"REMOVING ITNM USER")
+	@$(call func_remove_user,$(ITNM_USER),$(MAKE_PRODUCT))
 	@$(CMD_ECHO)
 
 ################################################################################
-# PREPARE NETCOOL/OMNIBUS CORE MEDIA (INSTALLATION)
+# PREPARE NETCOOL/ITNM CORE MEDIA (INSTALLATION)
 ################################################################################
-prepare_omnibus_install_media:	check_whoami \
+prepare_itnm_install_media:	check_whoami \
 								check_commands \
 								check_media_exists \
 								check_media_checksums \
-								create_omnibus_user
+								create_itnm_user
 
-	@$(call func_print_caption,"PREPARING NETCOOL/OMNIBUS CORE MEDIA (INSTALLATION)")
-	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL))
-	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP3_F),$(PATH_REPOSITORY_SYSLOG))
-	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP4_F),$(PATH_REPOSITORY_TRAP))
+	@$(call func_print_caption,"PREPARING NETCOOL/ITNM CORE MEDIA (INSTALLATION)")
+	@$(call func_unzip_to_new_dir,$(ITNM_USER),$(ITNM_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL))
+	@$(call func_unzip_to_new_dir,$(ITNM_USER),$(ITNM_GROUP),755,$(MEDIA_STEP3_F),$(PATH_REPOSITORY_SYSLOG))
+	@$(call func_unzip_to_new_dir,$(ITNM_USER),$(ITNM_GROUP),755,$(MEDIA_STEP4_F),$(PATH_REPOSITORY_TRAP))
 	@$(CMD_ECHO)
 
 ################################################################################
-# CREATE OMNIBUS RESPONSE FILE (INSTALLATION)
+# CREATE ITNM RESPONSE FILE (INSTALLATION)
 ################################################################################
-create_omnibus_install_response_file:	check_whoami \
+create_itnm_install_response_file:	check_whoami \
 										check_commands
 
-	@$(call func_print_caption,"CREATING OMNIBUS INSTALLATION RESPONSE FILE")
-	@$(CMD_ECHO) "$$OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT" > $(OMNIBUS_INSTALL_RESPONSE_FILE) || { $(CMD_ECHO) ; \
-		 "OMNIbus Resp File (FAIL):#$(OMNIBUS_INSTALL_RESPONSE_FILE)" ; \
+	@$(call func_print_caption,"CREATING ITNM INSTALLATION RESPONSE FILE")
+	@$(CMD_ECHO) "$$ITNM_INSTALL_RESPONSE_FILE_CONTENT" > $(ITNM_INSTALL_RESPONSE_FILE) || { $(CMD_ECHO) ; \
+		 "OMNIbus Resp File (FAIL):#$(ITNM_INSTALL_RESPONSE_FILE)" ; \
 		exit 3; }
-	@$(CMD_ECHO) "OMNIbus Resp File (OK):  #$(OMNIBUS_INSTALL_RESPONSE_FILE)"
-	@$(call func_chmod,444,$(OMNIBUS_INSTALL_RESPONSE_FILE))
+	@$(CMD_ECHO) "OMNIbus Resp File (OK):  #$(ITNM_INSTALL_RESPONSE_FILE)"
+	@$(call func_chmod,444,$(ITNM_INSTALL_RESPONSE_FILE))
 	@$(CMD_ECHO)
 
-remove_omnibus_install_response_file:	check_commands
-	@$(call func_print_caption,"REMOVING OMNIBUS INSTALLATION RESPONSE FILE")
-	@$(CMD_RM) -f $(OMNIBUS_INSTALL_RESPONSE_FILE)
+remove_itnm_install_response_file:	check_commands
+	@$(call func_print_caption,"REMOVING ITNM INSTALLATION RESPONSE FILE")
+	@$(CMD_RM) -f $(ITNM_INSTALL_RESPONSE_FILE)
 	@$(CMD_ECHO)
 
 ################################################################################
-# INSTALL NETCOOL/OMNIBUS CORE AS $(OMNIBUS_USER)
+# INSTALL NETCOOL/ITNM CORE AS $(ITNM_USER)
 ################################################################################
-install_omnibus:		check_whoami \
+install_itnm:		check_whoami \
 						check_commands \
-						prepare_omnibus_install_media \
-						create_omnibus_install_response_file \
-						create_omnibus_user \
+						prepare_itnm_install_media \
+						create_itnm_install_response_file \
+						create_itnm_user \
 						create_root_path \
 						create_netcool_path
 
-	@$(call func_print_caption,"INSTALLING NETCOOL/OMNIBUS")
-	@if [ -d "$(PATH_INSTALL_OMNIBUS)" ] ; \
+	@$(call func_print_caption,"INSTALLING NETCOOL/ITNM")
+	@if [ -d "$(PATH_INSTALL_ITNM)" ] ; \
 	then \
-		$(CMD_ECHO) "OMNIbus Exists? (WARN):  -d $(PATH_INSTALL_OMNIBUS) # already exists" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (WARN):  -d $(PATH_INSTALL_ITNM) # already exists" ; \
 	else \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # non-existent" ; \
-		$(call func_prepare_installation_manager,$(OMNIBUS_USER),$(OMNIBUS_HOME),$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64) ; \
-		$(call func_command_check,$(OMNIBUS_CMD_IMCL)) ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # non-existent" ; \
+		$(call func_prepare_installation_manager,$(ITNM_USER),$(ITNM_HOME),$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64) ; \
+		$(call func_command_check,$(ITNM_CMD_IMCL)) ; \
 		\
 		$(CMD_ECHO) "OMNIbus Install:         #In progress..." ; \
-		$(CMD_SU) - $(OMNIBUS_USER) -c "$(OMNIBUS_CMD_IMCL) input \
-			$(OMNIBUS_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
-			{ $(CMD_ECHO) "OMNIbus Install: (FAIL): $(CMD_SU) - $(OMNIBUS_USER) -c \"$(OMNIBUS_CMD_IMCL) input $(OMNIBUS_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+		$(CMD_SU) - $(ITNM_USER) -c "$(ITNM_CMD_IMCL) input \
+			$(ITNM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
+			{ $(CMD_ECHO) "OMNIbus Install: (FAIL): $(CMD_SU) - $(ITNM_USER) -c \"$(ITNM_CMD_IMCL) input $(ITNM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 			exit 4; } ; \
-		$(CMD_ECHO) "OMNIbus Install (OK):    $(CMD_SU) - $(OMNIBUS_USER) -c \"$(OMNIBUS_CMD_IMCL) input $(OMNIBUS_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+		$(CMD_ECHO) "OMNIbus Install (OK):    $(CMD_SU) - $(ITNM_USER) -c \"$(ITNM_CMD_IMCL) input $(ITNM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 	fi ;
 
 ################################################################################
@@ -783,14 +771,14 @@ install_omnibus:		check_whoami \
 confirm_shared_libraries:	check_whoami \
 							check_commands
 
-	@$(call func_print_caption,"CONFIRMING SHARED LIBRARIES FOR NETCOOL/OMNIBUS")
-	@$(foreach itr_x,$(OMNIBUS_LDD_CHECKS),\
-		$(CMD_PRINTF) "Shared Lib Check:        $(CMD_SU) - $(OMNIBUS_USER) -c \"$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found\"\n" ; \
-		$(CMD_SU) - $(OMNIBUS_USER) -c "$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found"; $(CMD_TEST) $$? -lt 2; \
+	@$(call func_print_caption,"CONFIRMING SHARED LIBRARIES FOR NETCOOL/ITNM")
+	@$(foreach itr_x,$(ITNM_LDD_CHECKS),\
+		$(CMD_PRINTF) "Shared Lib Check:        $(CMD_SU) - $(ITNM_USER) -c \"$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found\"\n" ; \
+		$(CMD_SU) - $(ITNM_USER) -c "$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found"; $(CMD_TEST) $$? -lt 2; \
 	)
 
-	@$(foreach itr_x,$(OMNIBUS_LDD_CHECKS),\
-		$(CMD_SU) - $(OMNIBUS_USER) -c "$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found 1> /dev/null 2>&1"; $(CMD_TEST) $$? -eq 1 || { \
+	@$(foreach itr_x,$(ITNM_LDD_CHECKS),\
+		$(CMD_SU) - $(ITNM_USER) -c "$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found 1> /dev/null 2>&1"; $(CMD_TEST) $$? -eq 1 || { \
 			$(CMD_ECHO) "Shared Lib Check (FAIL): #Missing shared library dependencies"; \
 			exit 5; \
 		} ; \
@@ -800,94 +788,94 @@ confirm_shared_libraries:	check_whoami \
 	@$(CMD_ECHO)
 
 ################################################################################
-# PREPARE NETCOOL/OMNIBUS CORE MEDIA (UPGRADE)
+# PREPARE NETCOOL/ITNM CORE MEDIA (UPGRADE)
 ################################################################################
-prepare_omnibus_upgrade_media:	check_whoami \
+prepare_itnm_upgrade_media:	check_whoami \
 								check_commands \
-								create_omnibus_user
+								create_itnm_user
 
-	@$(call func_print_caption,"PREPARING NETCOOL/OMNIBUS CORE MEDIA (UPGRADE)")
-	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP3_F),$(PATH_REPOSITORY_UPGRADE))
+	@$(call func_print_caption,"PREPARING NETCOOL/ITNM CORE MEDIA (UPGRADE)")
+	@$(call func_unzip_to_new_dir,$(ITNM_USER),$(ITNM_GROUP),755,$(MEDIA_STEP3_F),$(PATH_REPOSITORY_UPGRADE))
 	@$(CMD_ECHO)
 
 ################################################################################
-# CREATE OMNIBUS RESPONSE FILE (UPGRADE)
+# CREATE ITNM RESPONSE FILE (UPGRADE)
 ################################################################################
-create_omnibus_upgrade_response_file:	check_whoami \
+create_itnm_upgrade_response_file:	check_whoami \
 										check_commands
 
-	@$(call func_print_caption,"CREATING OMNIBUS UPGRADE RESPONSE FILE")
-	@$(CMD_ECHO) "$$OMNIBUS_UPGRADE_RESPONSE_FILE_CONTENT" > $(OMNIBUS_UPGRADE_RESPONSE_FILE) || { $(CMD_ECHO) ; \
-		 "OMNIbus Resp File (FAIL):#$(OMNIBUS_UPGRADE_RESPONSE_FILE)" ; \
+	@$(call func_print_caption,"CREATING ITNM UPGRADE RESPONSE FILE")
+	@$(CMD_ECHO) "$$ITNM_UPGRADE_RESPONSE_FILE_CONTENT" > $(ITNM_UPGRADE_RESPONSE_FILE) || { $(CMD_ECHO) ; \
+		 "OMNIbus Resp File (FAIL):#$(ITNM_UPGRADE_RESPONSE_FILE)" ; \
 		exit 6; }
-	@$(CMD_ECHO) "OMNIbus Resp File (OK):  #$(OMNIBUS_UPGRADE_RESPONSE_FILE)"
-	@$(call func_chmod,444,$(OMNIBUS_UPGRADE_RESPONSE_FILE))
+	@$(CMD_ECHO) "OMNIbus Resp File (OK):  #$(ITNM_UPGRADE_RESPONSE_FILE)"
+	@$(call func_chmod,444,$(ITNM_UPGRADE_RESPONSE_FILE))
 	@$(CMD_ECHO)
 
-remove_omnibus_upgrade_response_file:   check_commands
-	@$(call func_print_caption,"REMOVING OMNIBUS UPGRADE RESPONSE FILE")
-	@$(CMD_RM) -f $(OMNIBUS_UPGRADE_RESPONSE_FILE)
+remove_itnm_upgrade_response_file:   check_commands
+	@$(call func_print_caption,"REMOVING ITNM UPGRADE RESPONSE FILE")
+	@$(CMD_RM) -f $(ITNM_UPGRADE_RESPONSE_FILE)
 	@$(CMD_ECHO)
 
 ################################################################################
-# UPGRADE NETCOOL/OMNIBUS CORE AS $(OMNIBUS_USER)
+# UPGRADE NETCOOL/ITNM CORE AS $(ITNM_USER)
 ################################################################################
-upgrade_omnibus:		check_whoami \
+upgrade_itnm:		check_whoami \
 						check_commands \
-						prepare_omnibus_upgrade_media \
-						create_omnibus_upgrade_response_file
+						prepare_itnm_upgrade_media \
+						create_itnm_upgrade_response_file
 
-	@$(call func_print_caption,"UPGRADING OMNIBUS")
-	@if [ -d "$(PATH_INSTALL_OMNIBUS)" ] ; \
+	@$(call func_print_caption,"UPGRADING ITNM")
+	@if [ -d "$(PATH_INSTALL_ITNM)" ] ; \
 	then \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # already exists" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # already exists" ; \
 	else \
-		$(CMD_ECHO) "OMNIbus Exists? (FAIL):  -d $(PATH_INSTALL_OMNIBUS) # non-existent" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (FAIL):  -d $(PATH_INSTALL_ITNM) # non-existent" ; \
 		exit 7; \
 	fi ;
 
-	@$(call func_command_check,$(OMNIBUS_CMD_IMCL))
+	@$(call func_command_check,$(ITNM_CMD_IMCL))
 
 	@$(CMD_ECHO) "OMNIbus Upgrade:         #In progress..."
-	@$(CMD_SU) - $(OMNIBUS_USER) -c "$(OMNIBUS_CMD_IMCL) input \
-		$(OMNIBUS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
-		{ $(CMD_ECHO) "OMNIbus Upgrade (FAIL):  $(CMD_SU) - $(OMNIBUS_USER) -c \"$(OMNIBUS_CMD_IMCL) input $(OMNIBUS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+	@$(CMD_SU) - $(ITNM_USER) -c "$(ITNM_CMD_IMCL) input \
+		$(ITNM_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
+		{ $(CMD_ECHO) "OMNIbus Upgrade (FAIL):  $(CMD_SU) - $(ITNM_USER) -c \"$(ITNM_CMD_IMCL) input $(ITNM_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 		exit 8; }
-	@$(CMD_ECHO) "OMNIbus Upgrade (OK):    $(CMD_SU) - $(OMNIBUS_USER) -c \"$(OMNIBUS_CMD_IMCL) input $(OMNIBUS_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
+	@$(CMD_ECHO) "OMNIbus Upgrade (OK):    $(CMD_SU) - $(ITNM_USER) -c \"$(ITNM_CMD_IMCL) input $(ITNM_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
 	@$(CMD_ECHO)
 
 ################################################################################
-# CONFIGURE OMNIBUS
+# CONFIGURE ITNM
 ################################################################################
-configure_omnibus:	check_whoami \
+configure_itnm:	check_whoami \
 					check_commands \
-					create_omnibus_user
+					create_itnm_user
 
-	@$(call func_print_caption,"CONFIGURING OMNIBUS")
+	@$(call func_print_caption,"CONFIGURING ITNM")
 	@$(CMD_ECHO) "omni.dat Check:          #In progress..."
-	@$(call func_file_must_exist,$(OMNIBUS_USER),$(NETCOOL_ETC_DEFAULT_OMNIDAT))
-	@$(call func_file_must_exist,$(OMNIBUS_USER),$(NETCOOL_ETC_OMNIDAT))
+	@$(call func_file_must_exist,$(ITNM_USER),$(NETCOOL_ETC_DEFAULT_OMNIDAT))
+	@$(call func_file_must_exist,$(ITNM_USER),$(NETCOOL_ETC_OMNIDAT))
 	@if [ $(NETCOOL_ETC_OMNIDAT_B) == $(NETCOOL_ETC_DEFAULT_OMNIDAT_B) ] ; \
 	then \
 		$(CMD_ECHO) "omni.dat Check (OK):     #$(NETCOOL_ETC_OMNIDAT) not yet configured" ; \
-		$(call func_mv_must_exist,$(OMNIBUS_USER),$(NETCOOL_ETC_OMNIDAT),$(NETCOOL_ETC_OMNIDAT).$(TIMESTAMP)) ; \
-		$(call func_replace_token_in_file,$(OMNIBUS_USER),[[:space:]]omnihost[[:space:]], $(HOST_FQDN) ,$(NETCOOL_ETC_OMNIDAT).$(TIMESTAMP),$(NETCOOL_ETC_OMNIDAT),664) ; \
+		$(call func_mv_must_exist,$(ITNM_USER),$(NETCOOL_ETC_OMNIDAT),$(NETCOOL_ETC_OMNIDAT).$(TIMESTAMP)) ; \
+		$(call func_replace_token_in_file,$(ITNM_USER),[[:space:]]omnihost[[:space:]], $(HOST_FQDN) ,$(NETCOOL_ETC_OMNIDAT).$(TIMESTAMP),$(NETCOOL_ETC_OMNIDAT),664) ; \
 		\
-		$(CMD_SU) - $(OMNIBUS_USER) -c "export NCHOME=$(PATH_INSTALL_NETCOOL); $(NETCOOL_BIN_IGEN)" || { $(CMD_ECHO) ; \
-			 "Netcool igen (FAIL):     $(CMD_SU) - $(OMNIBUS_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(NETCOOL_BIN_IGEN)\"" ; \
+		$(CMD_SU) - $(ITNM_USER) -c "export NCHOME=$(PATH_INSTALL_NETCOOL); $(NETCOOL_BIN_IGEN)" || { $(CMD_ECHO) ; \
+			 "Netcool igen (FAIL):     $(CMD_SU) - $(ITNM_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(NETCOOL_BIN_IGEN)\"" ; \
 			exit 9; } ; \
-		$(CMD_ECHO) "Netcool igen (OK):       $(CMD_SU) - $(OMNIBUS_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(NETCOOL_BIN_IGEN)\"" ; \
+		$(CMD_ECHO) "Netcool igen (OK):       $(CMD_SU) - $(ITNM_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(NETCOOL_BIN_IGEN)\"" ; \
 		\
-		$(call func_ln_s,$(OMNIBUS_USER),$(NETCOOL_ETC_INTERFACES_LINUX),$(NETCOOL_ETC_INTERFACES)) ; \
+		$(call func_ln_s,$(ITNM_USER),$(NETCOOL_ETC_INTERFACES_LINUX),$(NETCOOL_ETC_INTERFACES)) ; \
 		\
-		$(CMD_ECHO) "OMNIBUS dbinit:          #In progress..." ; \
-		$(CMD_SU) - $(OMNIBUS_USER) -c "export NCHOME=$(PATH_INSTALL_NETCOOL); $(OMNIBUS_BIN_DBINIT) -server $(OMNIBUS_OS_SERVER) 2>/dev/null" || { $(CMD_ECHO) ; \
-			 "OMNIbus dbinit (FAIL):   $(CMD_SU) - $(OMNIBUS_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(OMNIBUS_BIN_DBINIT) -server $(OMNIBUS_OS_SERVER) 2>/dev/null\"" ; \
+		$(CMD_ECHO) "ITNM dbinit:          #In progress..." ; \
+		$(CMD_SU) - $(ITNM_USER) -c "export NCHOME=$(PATH_INSTALL_NETCOOL); $(ITNM_BIN_DBINIT) -server $(ITNM_OS_SERVER) 2>/dev/null" || { $(CMD_ECHO) ; \
+			 "OMNIbus dbinit (FAIL):   $(CMD_SU) - $(ITNM_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(ITNM_BIN_DBINIT) -server $(ITNM_OS_SERVER) 2>/dev/null\"" ; \
 			exit 10; } ; \
-		$(CMD_ECHO) "OMNIbus dbinit (OK):     $(CMD_SU) - $(OMNIBUS_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(OMNIBUS_BIN_DBINIT) -server $(OMNIBUS_OS_SERVER) 2>/dev/null\"" ; \
+		$(CMD_ECHO) "OMNIbus dbinit (OK):     $(CMD_SU) - $(ITNM_USER) -c \"export NCHOME=$(PATH_INSTALL_NETCOOL); $(ITNM_BIN_DBINIT) -server $(ITNM_OS_SERVER) 2>/dev/null\"" ; \
 		\
 	else \
-		if [ `$(CMD_SU) - $(OMNIBUS_USER) -c "$(CMD_GREP) [[:space:]]$(HOST_FQDN)[[:space:]] $(NETCOOL_ETC_OMNIDAT) | $(CMD_GREP) -v ^\# | $(CMD_WC) -l"` -ge 4 ] ; \
+		if [ `$(CMD_SU) - $(ITNM_USER) -c "$(CMD_GREP) [[:space:]]$(HOST_FQDN)[[:space:]] $(NETCOOL_ETC_OMNIDAT) | $(CMD_GREP) -v ^\# | $(CMD_WC) -l"` -ge 4 ] ; \
 		then \
 			$(CMD_ECHO) "omni.dat Check (OK):     #$(NETCOOL_ETC_OMNIDAT) has $(HOST_FQDN)" ; \
 		else \
@@ -914,40 +902,40 @@ configure_omnibus:	check_whoami \
 	fi ; \
 
 	@$(CMD_ECHO) "nco_pa.conf Check:       #In progress..."
-	@$(call func_file_must_exist,$(OMNIBUS_USER),$(OMNIBUS_ETC_DEFAULT_PACONF))
-	@$(call func_file_must_exist,$(OMNIBUS_USER),$(OMNIBUS_ETC_PACONF))
-	@if [ $(OMNIBUS_ETC_PACONF_B) = $(OMNIBUS_ETC_DEFAULT_PACONF_B) ] ; \
+	@$(call func_file_must_exist,$(ITNM_USER),$(ITNM_ETC_DEFAULT_PACONF))
+	@$(call func_file_must_exist,$(ITNM_USER),$(ITNM_ETC_PACONF))
+	@if [ $(ITNM_ETC_PACONF_B) = $(ITNM_ETC_DEFAULT_PACONF_B) ] ; \
 	then \
-		$(CMD_ECHO) "nco_pa.conf Check (OK):  #$(OMNIBUS_ETC_PACONF) not yet configured" ; \
-		$(call func_mv_must_exist,$(OMNIBUS_USER),$(OMNIBUS_ETC_PACONF),$(OMNIBUS_ETC_PACONF).$(TIMESTAMP)) ; \
+		$(CMD_ECHO) "nco_pa.conf Check (OK):  #$(ITNM_ETC_PACONF) not yet configured" ; \
+		$(call func_mv_must_exist,$(ITNM_USER),$(ITNM_ETC_PACONF),$(ITNM_ETC_PACONF).$(TIMESTAMP)) ; \
 		\
-		$(CMD_ECHO) "$$OMNIBUS_PA_CONF_CONTENT" > $(OMNIBUS_ETC_PACONF) || { $(CMD_ECHO) ; \
-			 "nco_pa.conf File (FAIL): #$(OMNIBUS_ETC_PACONF) failed to configure" ; \
+		$(CMD_ECHO) "$$ITNM_PA_CONF_CONTENT" > $(ITNM_ETC_PACONF) || { $(CMD_ECHO) ; \
+			 "nco_pa.conf File (FAIL): #$(ITNM_ETC_PACONF) failed to configure" ; \
 			exit 12; } ; \
-		$(CMD_ECHO) "nco_pa.conf File (OK):   #$(OMNIBUS_ETC_PACONF) configured" ; \
-		$(call func_chmod,644,$(OMNIBUS_ETC_PACONF)) ; \
-		$(call func_chown,$(OMNIBUS_USER),$(OMNIBUS_GROUP),$(OMNIBUS_ETC_PACONF)) ; \
+		$(CMD_ECHO) "nco_pa.conf File (OK):   #$(ITNM_ETC_PACONF) configured" ; \
+		$(call func_chmod,644,$(ITNM_ETC_PACONF)) ; \
+		$(call func_chown,$(ITNM_USER),$(ITNM_GROUP),$(ITNM_ETC_PACONF)) ; \
 	else \
-		if [ `$(CMD_SU) - $(OMNIBUS_USER) -c "$(CMD_GREP) '$(HOST_FQDN)' $(OMNIBUS_ETC_PACONF) | $(CMD_GREP) -v ^\# | $(CMD_WC) -l"` -ge 2 ] ; \
+		if [ `$(CMD_SU) - $(ITNM_USER) -c "$(CMD_GREP) '$(HOST_FQDN)' $(ITNM_ETC_PACONF) | $(CMD_GREP) -v ^\# | $(CMD_WC) -l"` -ge 2 ] ; \
 		then \
-			$(CMD_ECHO) "nco_pa.conf Check (OK):  #$(OMNIBUS_ETC_PACONF) has $(HOST_FQDN)" ; \
+			$(CMD_ECHO) "nco_pa.conf Check (OK):  #$(ITNM_ETC_PACONF) has $(HOST_FQDN)" ; \
 		else \
-			$(CMD_ECHO) "nco_pa.conf Check (FAIL):#Expected to find $(HOST_FQDN) two or more times in $(OMNIBUS_ETC_PACONF)" ; \
+			$(CMD_ECHO) "nco_pa.conf Check (FAIL):#Expected to find $(HOST_FQDN) two or more times in $(ITNM_ETC_PACONF)" ; \
 			exit 13; \
 		fi ; \
 	fi ;
 	@$(CMD_ECHO)
 
 ################################################################################
-# CONFIGURE OMNIBUS TO AUTOSTART
+# CONFIGURE ITNM TO AUTOSTART
 ################################################################################
-autostarton_omnibus:	check_whoami \
+autostarton_itnm:	check_whoami \
 						check_commands
 
-	@$(call func_print_caption,"CONFIGURING OMNIBUS TO AUTOMATICALLY START")
-	@if [ -d "$(PATH_INSTALL_OMNIBUS)" ] ; \
+	@$(call func_print_caption,"CONFIGURING ITNM TO AUTOMATICALLY START")
+	@if [ -d "$(PATH_INSTALL_ITNM)" ] ; \
 	then \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # exists" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # exists" ; \
 		\
 		$(CMD_GREP) " 6" /etc/redhat-release 1> /dev/null; rc=$$? ; \
 		if [ $$rc -eq 0 ] ; \
@@ -960,7 +948,7 @@ autostarton_omnibus:	check_whoami \
 			else \
 				$(CMD_ECHO) "/etc/init.d Script (OK): #$(ETC_INITD_NCO) non-existent so creating..." ; \
 				$(call func_file_must_exist,$(ETC_PAM_USER),$(ETC_INITD_NCO_TEMPLATE)) ; \
-				$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e "/###[       ]*$(NETCOOL_STARTUP_REMOVE) ONLY/,/###[   ]*END $(NETCOOL_STARTUP_REMOVE) ONLY/d" -e "/###[         ]*$(NETCOOL_STARTUP_KEEP) ONLY/d" -e "/###[       ]*END $(NETCOOL_STARTUP_KEEP) ONLY/d" -e "s#__NCHOME__#$(PATH_INSTALL_NETCOOL)#" -e "s#__OMNIHOME__#$(PATH_INSTALL_OMNIBUS)#" -e "s#__PROCESSAGENT__#$(NETCOOL_PA_NAME)#" -e "s#__SECURE__#$(NETCOOL_PA_SECURE)#" -e "s#__NETCOOL_LICENSE_FILE__#$(NETCOOL_LEGACY_LICENSE_FILE)#" > $(ETC_INITD_NCO) || { $(CMD_ECHO) \
+				$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e "/###[       ]*$(NETCOOL_STARTUP_REMOVE) ONLY/,/###[   ]*END $(NETCOOL_STARTUP_REMOVE) ONLY/d" -e "/###[         ]*$(NETCOOL_STARTUP_KEEP) ONLY/d" -e "/###[       ]*END $(NETCOOL_STARTUP_KEEP) ONLY/d" -e "s#__NCHOME__#$(PATH_INSTALL_NETCOOL)#" -e "s#__OMNIHOME__#$(PATH_INSTALL_ITNM)#" -e "s#__PROCESSAGENT__#$(NETCOOL_PA_NAME)#" -e "s#__SECURE__#$(NETCOOL_PA_SECURE)#" -e "s#__NETCOOL_LICENSE_FILE__#$(NETCOOL_LEGACY_LICENSE_FILE)#" > $(ETC_INITD_NCO) || { $(CMD_ECHO) \
 					"Start/Stop Script (FAIL):#$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
 					exit 14; } ; \
 				$(CMD_ECHO) "Start/Stop Script (OK):  #$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
@@ -982,16 +970,16 @@ autostarton_omnibus:	check_whoami \
 				$(CMD_SLEEP) 5 ; \
 				$(CMD_ECHO) "nco Start Check:         $(CMD_SLEEP) 5 # to check for pending..." ; \
 				$(CMD_SLEEP) 5 ; \
-				$(eval TEMP_PA_PENDING_COUNT=`$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
+				$(eval TEMP_PA_PENDING_COUNT=`$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
 				if [ $(TEMP_PA_PENDING_COUNT) -eq 0 ] ; \
 				then \
 					$(CMD_ECHO) "nco Start (OK):          #No pending detected" ; \
 					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
+					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
 				else \
 					$(CMD_ECHO) "nco Start (PENDING):     #Seems to be pending, possible configuration problem" ; \
 					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
+					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
 					$(CMD_ECHO) "nco Stopping:            $(CMD_SERVICE) $(NETCOOL_SERVICE) stop" ; \
 					$(CMD_SERVICE) $(NETCOOL_SERVICE) stop ; \
 					$(CMD_ECHO) ; \
@@ -1009,12 +997,12 @@ autostarton_omnibus:	check_whoami \
 			else \
 				$(CMD_ECHO) "systemd Script (OK):     #$(ETC_SYSTEMD_NCO_SCRIPT) non-existent so creating..." ; \
 				$(call func_file_must_exist,$(ETC_PAM_USER),$(ETC_INITD_NCO_TEMPLATE)) ; \
-				$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e "/###[       ]*$(NETCOOL_STARTUP_REMOVE) ONLY/,/###[   ]*END $(NETCOOL_STARTUP_REMOVE) ONLY/d" -e "/###[         ]*$(NETCOOL_STARTUP_KEEP) ONLY/d" -e "/###[       ]*END $(NETCOOL_STARTUP_KEEP) ONLY/d" -e "s#__NCHOME__#$(PATH_INSTALL_NETCOOL)#" -e "s#__OMNIHOME__#$(PATH_INSTALL_OMNIBUS)#" -e "s#__PROCESSAGENT__#$(NETCOOL_PA_NAME)#" -e "s#__SECURE__#$(NETCOOL_PA_SECURE)#" -e "s#__NETCOOL_LICENSE_FILE__#$(NETCOOL_LEGACY_LICENSE_FILE)#" > $(ETC_SYSTEMD_NCO_SCRIPT) || { $(CMD_ECHO) \
+				$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e "/###[       ]*$(NETCOOL_STARTUP_REMOVE) ONLY/,/###[   ]*END $(NETCOOL_STARTUP_REMOVE) ONLY/d" -e "/###[         ]*$(NETCOOL_STARTUP_KEEP) ONLY/d" -e "/###[       ]*END $(NETCOOL_STARTUP_KEEP) ONLY/d" -e "s#__NCHOME__#$(PATH_INSTALL_NETCOOL)#" -e "s#__OMNIHOME__#$(PATH_INSTALL_ITNM)#" -e "s#__PROCESSAGENT__#$(NETCOOL_PA_NAME)#" -e "s#__SECURE__#$(NETCOOL_PA_SECURE)#" -e "s#__NETCOOL_LICENSE_FILE__#$(NETCOOL_LEGACY_LICENSE_FILE)#" > $(ETC_SYSTEMD_NCO_SCRIPT) || { $(CMD_ECHO) \
 					"Start/Stop Script (FAIL):#$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
 					exit 18; } ; \
 				$(CMD_ECHO) "Start/Stop Script (OK):  #$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
 				\
-				$(call func_chown,$(OMNIBUS_USER),$(OMNIBUS_GROUP),$(ETC_SYSTEMD_NCO_SCRIPT)) ; \
+				$(call func_chown,$(ITNM_USER),$(ITNM_GROUP),$(ETC_SYSTEMD_NCO_SCRIPT)) ; \
 				$(call func_chmod,755,$(ETC_SYSTEMD_NCO_SCRIPT)) ; \
 			fi ; \
 			if [ -f "$(ETC_SYSTEMD_NCO_SERVICE)" ] ; \
@@ -1042,16 +1030,16 @@ autostarton_omnibus:	check_whoami \
 				$(CMD_SLEEP) 5 ; \
 				$(CMD_ECHO) "nco Start Check:         $(CMD_SLEEP) 5 # to check for pending..." ; \
 				$(CMD_SLEEP) 5 ; \
-				$(eval TEMP_PA_PENDING_COUNT=`$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
+				$(eval TEMP_PA_PENDING_COUNT=`$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
 				if [ $(TEMP_PA_PENDING_COUNT) -eq 0 ] ; \
 				then \
 					$(CMD_ECHO) "nco Start (OK):          #No pending detected" ; \
 					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
+					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
 				else \
 					$(CMD_ECHO) "nco Start (PENDING):     #Seems to be pending, possible configuration problem" ; \
 					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
+					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
 					$(CMD_ECHO) "nco Stopping:            $(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE)" ; \
 					$(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE) ; \
 					$(CMD_ECHO) ; \
@@ -1062,20 +1050,20 @@ autostarton_omnibus:	check_whoami \
 			fi ; \
 		fi ; \
 	else \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # non-existent" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # non-existent" ; \
 	fi ;
 	@$(CMD_ECHO)
 
 ################################################################################
-# CONFIGURE OMNIBUS TO NOT AUTOSTART
+# CONFIGURE ITNM TO NOT AUTOSTART
 ################################################################################
-autostartoff_omnibus:	check_whoami \
+autostartoff_itnm:	check_whoami \
 						check_commands
 
-	@$(call func_print_caption,"CONFIGURING OMNIBUS TO NOT AUTOMATICALLY START")
-	@if [ -d "$(PATH_INSTALL_OMNIBUS)" ] ; \
+	@$(call func_print_caption,"CONFIGURING ITNM TO NOT AUTOMATICALLY START")
+	@if [ -d "$(PATH_INSTALL_ITNM)" ] ; \
 	then \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # exists" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # exists" ; \
 		\
 		$(CMD_GREP) " 6" /etc/redhat-release 1> /dev/null; rc=$$? ; \
 		if [ $$rc -eq 0 ] ; \
@@ -1108,31 +1096,31 @@ autostartoff_omnibus:	check_whoami \
 			$(CMD_RM) -f $(ETC_SYSTEMD_NCO_SCRIPT); \
 		fi ; \
 	else \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # non-existent" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # non-existent" ; \
 	fi ;
 	@$(CMD_ECHO)
 
 ################################################################################
-# UNINSTALL NETCOOL/OMNIBUS CORE
+# UNINSTALL NETCOOL/ITNM CORE
 ################################################################################
-uninstall_omnibus:	check_whoami \
+uninstall_itnm:	check_whoami \
 					check_commands
 
-	@$(call func_print_caption,"UNINSTALLING NETCOOL/OMNIBUS CORE")
-	@if [ -d "$(PATH_INSTALL_OMNIBUS)" ] ; \
+	@$(call func_print_caption,"UNINSTALLING NETCOOL/ITNM CORE")
+	@if [ -d "$(PATH_INSTALL_ITNM)" ] ; \
 	then \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # exists" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # exists" ; \
 		\
 		$(CMD_ECHO) "nco_objserv PAM Remove:  $(CMD_RM) -f $(ETC_PAMD_NCO_OBJSERV)" ; \
 		$(CMD_RM) -f $(ETC_PAMD_NCO_OBJSERV) ; \
 		$(CMD_ECHO) "netcool PAM Remove:      $(CMD_RM) -f $(ETC_PAMD_NETCOOL)" ; \
 		$(CMD_RM) -f $(ETC_PAMD_NETCOOL) ; \
 		\
-		$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_OMNIBUS_PACKAGE),OMNIbus Core) ; \
+		$(call func_uninstall_im_package,$(ITNM_CMD_IMCL),$(ITNM_USER),$(PATH_REPOSITORY_ITNM_PACKAGE),OMNIbus Core) ; \
 		\
-		$(call func_mv_if_exists,$(OMNIBUS_USER),$(PATH_INSTALL_OMNIBUS),$(PATH_INSTALL_OMNIBUS).$(TIMESTAMP)) ; \
+		$(call func_mv_if_exists,$(ITNM_USER),$(PATH_INSTALL_ITNM),$(PATH_INSTALL_ITNM).$(TIMESTAMP)) ; \
 	else \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # non-existent" ; \
+		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # non-existent" ; \
 	fi ;
 	@$(CMD_ECHO)
 
@@ -1143,6 +1131,6 @@ clean_tmp:	check_commands
 	@$(call func_print_caption,"REMOVING /TMP FILES")
 	@$(CMD_ECHO)
 	@$(call func_print_caption,"REMOVING /TMP DIRECTORIES")
-	@$(CMD_RM) -rf /tmp/ciclogs_$(OMNIBUS_USER)
+	@$(CMD_RM) -rf /tmp/ciclogs_$(ITNM_USER)
 	@$(CMD_ECHO)
 
