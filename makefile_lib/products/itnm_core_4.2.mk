@@ -68,10 +68,7 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 # REPOSITORY PATHS
 ################################################################################
-PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_19_install
-PATH_REPOSITORY_SYSLOG	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_19_syslog
-PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_19_trap
-PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_8_1_0_21_upgrade
+PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_4_2_install
 
 PATH_REPOSITORY_ITNM_PACKAGE=com.ibm.tivoli.itnm.core_
 
@@ -173,57 +170,6 @@ ITNM_PACKAGES	=	$(PACKAGES_COMMON) \
 endif
 
 ################################################################################
-# NETCOOL CONFIGURATION
-################################################################################
-NETCOOL_PA_NAME=NCO_PA
-
-################################################################################
-# ITNM CONFIGURATION
-################################################################################
-NETCOOL_SERVICE=nco
-
-ETC_INITD_NCO=/etc/init.d/$(NETCOOL_SERVICE)
-ETC_INITD_NCO_TEMPLATE=$(PATH_INSTALL_ITNM)/install/startup/linux2x86/etc/rc.d/init.d/$(NETCOOL_SERVICE)
-
-ETC_SYSTEMD_NCO_SCRIPT=$(PATH_INSTALL_NETCOOL)/bin/nco_init.sh
-ETC_SYSTEMD_NCO_SERVICE=/etc/systemd/system/$(NETCOOL_SERVICE).service
-
-ETC_PAM_USER=root
-ETC_PAM_GROUP=root
-
-ETC_PAMD_SYSAUTH=/etc/pam.d/system-auth
-ETC_PAMD_NCO_OBJSERV=/etc/pam.d/nco_objserv
-ETC_PAMD_NETCOOL=/etc/pam.d/netcool
-
-NETCOOL_PA_NAME=NCO_PA
-NETCOOL_PA_SECURE=N
-
-ifneq ("$(wildcard /etc/SuSE-release)","")
-	NETCOOL_STARTUP_KEEP=SUSE
-	NETCOOL_STARTUP_REMOVE=REDHAT
-else
-	NETCOOL_STARTUP_KEEP=REDHAT
-	NETCOOL_STARTUP_REMOVE=SUSE
-endif
-
-NETCOOL_LEGACY_LICENSE_FILE=27000@localhost
-
-NETCOOL_BIN_IGEN=$(PATH_INSTALL_NETCOOL)/bin/nco_igen
-
-NETCOOL_ETC_DEFAULT_OMNIDAT=$(PATH_INSTALL_NETCOOL)/etc/default/omni.dat
-NETCOOL_ETC_INTERFACES_LINUX=$(PATH_INSTALL_NETCOOL)/etc/interfaces.linux2x86
-NETCOOL_ETC_INTERFACES=$(PATH_INSTALL_NETCOOL)/etc/interfaces
-NETCOOL_ETC_OMNIDAT=$(PATH_INSTALL_NETCOOL)/etc/omni.dat
-
-ITNM_OS_SERVER=NCOMS
-
-ITNM_BIN_DBINIT=$(PATH_INSTALL_ITNM)/bin/nco_dbinit
-ITNM_BIN_PASTATUS=$(PATH_INSTALL_ITNM)/bin/nco_pa_status
-
-ITNM_ETC_DEFAULT_PACONF=$(PATH_INSTALL_ITNM)/etc/default/nco_pa.conf
-ITNM_ETC_PACONF=$(PATH_INSTALL_ITNM)/etc/nco_pa.conf
-
-################################################################################
 # COMPUTED BASELINE CHECKSUMS
 ################################################################################
 NETCOOL_ETC_DEFAULT_OMNIDAT_B	:= `$(CMD_SHA512SUM) $(NETCOOL_ETC_DEFAULT_OMNIDAT) | $(CMD_CUT) -d" " -f1`
@@ -270,10 +216,6 @@ MEDIA_STEP2_F	:=	$(PATH_MAKEFILE_MEDIA)/ITNMIPEV4.2.0.5LNXML.zip
 MEDIA_STEP1_B	:=	fe17ed5d7ca2d6df7e139e0d7fe5ce1b615a078bc12831556dd24b0b4515690121d317d9c5a13909573a0dec21532c218ac9db21731e93cddb19424e241b09b4
 MEDIA_STEP2_B	:=	bac7203e08a5374eb86e3836a86f1e5a7a4512e09c202fdbfa4106a3e936f402e85b04e690320f2ed6f96d7e355db85b2821063cb44dfa8b23cedd1d791fc838
 
-################################################################################
-# COMMAND TO BE INSTALLED BEFORE USE
-################################################################################
-#CMD_IBM_IMUTILSC	:= $(PATH_REPOSITORY_INSTALL)/im.linux.x86_64/tools/imutilsc
 
 ################################################################################
 # ITNM RESPONSE FILE TEMPLATE (INSTALL)
@@ -308,111 +250,8 @@ endef
 export ITNM_INSTALL_RESPONSE_FILE_CONTENT
 
 ################################################################################
-# ITNM RESPONSE FILE TEMPLATE (UPGRADE)
-################################################################################
-ITNM_UPGRADE_RESPONSE_FILE=$(PATH_TMP)/itnm_upgrade_response.xml
-define ITNM_UPGRADE_RESPONSE_FILE_CONTENT
-<?xml version='1.0' encoding='UTF-8'?>
-<agent-input>
-  <variables>
-    <variable name='sharedLocation' value='$(ITNM_IMSHARED)'/>
-  </variables>
-  <server>
-    <repository location='$(PATH_REPOSITORY_UPGRADE)/OMNIbusRepository/composite'/>
-  </server>
-  <profile id='IBM Netcool Core Components' installLocation='$(PATH_INSTALL_NETCOOL)'>
-    <data key='cic.selector.arch' value='x86_64'/>
-    <data key='user.migratedata,com.ibm.tivoli.itnm.core' value='false'/>
-  </profile>
-  <install>
-    <!-- IBM Tivoli Netcool/OMNIbus 8.1.0.7 -->
-    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.itnm.core' version='5.50.54.20160311_1427' features='nco_core_feature,nco_admin_gui_feature,nco_admin_tools_feature,nco_bridgeserv_feature,nco_extensions_feature,nco_g_objserv_feature,nco_gateways_support_feature,nco_mib_manager_feature,nco_objserv_feature,nco_operator_gui_feature,nco_pa_feature,nco_probes_support_feature,nco_proxyserv_feature,nco_tec_migration'/>
-  </install>
-  <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
-  <preference name='offering.service.repositories.areUsed' value='false'/>
-</agent-input>
-endef
-export ITNM_UPGRADE_RESPONSE_FILE_CONTENT
-
-################################################################################
-# ITNM PROCESS AGENT CONFIGURATION FILE
-################################################################################
-define ITNM_PA_CONF_CONTENT
-#
-# Process Agent Daemon Configuration File for Standalone Predictive Insights
-#
-
-#
-# List of processes
-#
-nco_process 'MasterObjectServer'
-{
-	Command '$$OMNIHOME/bin/nco_objserv -name $(ITNM_OS_SERVER) -pa $(NETCOOL_PA_NAME)' run as '$(ITNM_USER)'
-	Host		=	'$(HOST_FQDN)'
-	Managed		=	True
-	RestartMsg	=	'$${NAME} running as $${EUID} has been restored on $${HOST}.'
-	AlertMsg	=	'$${NAME} running as $${EUID} has died on $${HOST}.'
-	RetryCount	=	0
-	ProcessType	=	PaPA_AWARE
-}
-
-#
-# List of Services
-#
-# NOTE:	To ensure that the service is started automatically, change the
-# 	"ServiceStart" attribute to "Auto".
-#
-nco_service 'Core'
-{
-	ServiceType	=	Master
-	ServiceStart	=	Auto
-	process 'MasterObjectServer' NONE
-}
-
-#
-# This service should be used to store processs that you want to temporarily
-# disable. Do not change the ServiceType or ServiceStart settings of this
-# process.
-#
-nco_service 'InactiveProcesses'
-{
-	ServiceType	=	Non-Master
-	ServiceStart	=	Non-Auto
-}
-
-#
-# ROUTING TABLE
-#
-# 'user'       -   (optional) only required for secure mode PAD on target host
-#                  'user' must be member of UNIX group 'ncoadmin'
-# 'password'   -   (optional) only required for secure mode PAD on target host
-#                  use nco_pa_crypt to encrypt.
-nco_routing
-{
-	host '$(HOST_FQDN)' '$(NETCOOL_PA_NAME)'
-}
-endef
-export ITNM_PA_CONF_CONTENT
-
-################################################################################
 # SYSTEMD SERVICE CONFIGURATION FILE
 ################################################################################
-define ETC_SYSTEMD_NCO_SERVICE_CONTENT
-[Unit]
-Description=Netcool OMNIbus Services
-After=network.target
-
-[Service]
-ExecStart=$(ETC_SYSTEMD_NCO_SCRIPT) start
-ExecStop=$(ETC_SYSTEMD_NCO_SCRIPT) stop
-ExecReload=$(ETC_SYSTEMD_NCO_SCRIPT) reload
-Restart=always
-Type=forking
-
-[Install]
-WantedBy=default.target
-endef
-export ETC_SYSTEMD_NCO_SERVICE_CONTENT
 
 ################################################################################
 # MAIN BUILD TARGETS
@@ -445,8 +284,7 @@ preinstallchecks:	check_commands \
 preinstall:			set_limits
 
 theinstall:			install_itnm \
-					confirm_shared_libraries \
-					autostarton_itnm
+					confirm_shared_libraries 
 
 postinstall:		clean
 
@@ -923,180 +761,6 @@ configure_itnm:	check_whoami \
 			$(CMD_ECHO) "nco_pa.conf Check (FAIL):#Expected to find $(HOST_FQDN) two or more times in $(ITNM_ETC_PACONF)" ; \
 			exit 13; \
 		fi ; \
-	fi ;
-	@$(CMD_ECHO)
-
-################################################################################
-# CONFIGURE ITNM TO AUTOSTART
-################################################################################
-autostarton_itnm:	check_whoami \
-						check_commands
-
-	@$(call func_print_caption,"CONFIGURING ITNM TO AUTOMATICALLY START")
-	@if [ -d "$(PATH_INSTALL_ITNM)" ] ; \
-	then \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # exists" ; \
-		\
-		$(CMD_GREP) " 6" /etc/redhat-release 1> /dev/null; rc=$$? ; \
-		if [ $$rc -eq 0 ] ; \
-		then \
-			$(CMD_ECHO) "systemd init Check:      $(CMD_GREP) \" 6\" /etc/redhat-release # Red Hat 6 / Not systemd" ; \
-			\
-			if [ -f "$(ETC_INITD_NCO)" ] ; \
-			then \
-				$(CMD_ECHO) "/etc/init.d Script (OK): #$(ETC_INITD_NCO) exists" ; \
-			else \
-				$(CMD_ECHO) "/etc/init.d Script (OK): #$(ETC_INITD_NCO) non-existent so creating..." ; \
-				$(call func_file_must_exist,$(ETC_PAM_USER),$(ETC_INITD_NCO_TEMPLATE)) ; \
-				$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e "/###[       ]*$(NETCOOL_STARTUP_REMOVE) ONLY/,/###[   ]*END $(NETCOOL_STARTUP_REMOVE) ONLY/d" -e "/###[         ]*$(NETCOOL_STARTUP_KEEP) ONLY/d" -e "/###[       ]*END $(NETCOOL_STARTUP_KEEP) ONLY/d" -e "s#__NCHOME__#$(PATH_INSTALL_NETCOOL)#" -e "s#__OMNIHOME__#$(PATH_INSTALL_ITNM)#" -e "s#__PROCESSAGENT__#$(NETCOOL_PA_NAME)#" -e "s#__SECURE__#$(NETCOOL_PA_SECURE)#" -e "s#__NETCOOL_LICENSE_FILE__#$(NETCOOL_LEGACY_LICENSE_FILE)#" > $(ETC_INITD_NCO) || { $(CMD_ECHO) \
-					"Start/Stop Script (FAIL):#$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
-					exit 14; } ; \
-				$(CMD_ECHO) "Start/Stop Script (OK):  #$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
-				\
-				$(call func_chown,$(ETC_PAM_USER),$(ETC_PAM_GROUP),$(ETC_INITD_NCO)) ; \
-				$(call func_chmod,755,$(ETC_INITD_NCO)) ; \
-				\
-				$(CMD_CHKCONFIG) --add $(NETCOOL_SERVICE) > /dev/null || { $(CMD_ECHO) \
-					"Service chkconfig (FAIL):$(CMD_CHKCONFIG) --add $(NETCOOL_SERVICE)" ; \
-					exit 15; } ; \
-				$(CMD_ECHO) "Service chkconfig (OK):  $(CMD_CHKCONFIG) --add $(NETCOOL_SERVICE)" ; \
-				\
-				$(CMD_SERVICE) $(NETCOOL_SERVICE) start || { $(CMD_ECHO) \
-					"nco Start (FAIL):        $(CMD_SERVICE) $(NETCOOL_SERVICE) start" ; \
-					exit 16; } ; \
-				$(CMD_ECHO) "nco Start (OK):          $(CMD_SERVICE) $(NETCOOL_SERVICE) start" ; \
-				\
-				$(CMD_ECHO) "nco Starting:            $(CMD_SLEEP) 5 # to give time to start..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(CMD_ECHO) "nco Start Check:         $(CMD_SLEEP) 5 # to check for pending..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(eval TEMP_PA_PENDING_COUNT=`$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
-				if [ $(TEMP_PA_PENDING_COUNT) -eq 0 ] ; \
-				then \
-					$(CMD_ECHO) "nco Start (OK):          #No pending detected" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
-				else \
-					$(CMD_ECHO) "nco Start (PENDING):     #Seems to be pending, possible configuration problem" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
-					$(CMD_ECHO) "nco Stopping:            $(CMD_SERVICE) $(NETCOOL_SERVICE) stop" ; \
-					$(CMD_SERVICE) $(NETCOOL_SERVICE) stop ; \
-					$(CMD_ECHO) ; \
-					$(CMD_ECHO) "nco Configuration (FAIL):#Please review Process Agent and OMNIbus logs." ; \
-					$(CMD_ECHO) ; \
-					exit 17; \
-				fi ; \
-			fi ; \
-		else \
-			$(CMD_ECHO) "systemd init Check:      $(CMD_GREP) \" 6\" /etc/redhat-release # Red Hat 7+ / systemd" ; \
-			\
-			if [ -f "$(ETC_SYSTEMD_NCO_SCRIPT)" ] ; \
-			then \
-				$(CMD_ECHO) "systemd Script (OK):     #$(ETC_SYSTEMD_NCO_SCRIPT) exists" ; \
-			else \
-				$(CMD_ECHO) "systemd Script (OK):     #$(ETC_SYSTEMD_NCO_SCRIPT) non-existent so creating..." ; \
-				$(call func_file_must_exist,$(ETC_PAM_USER),$(ETC_INITD_NCO_TEMPLATE)) ; \
-				$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e "/###[       ]*$(NETCOOL_STARTUP_REMOVE) ONLY/,/###[   ]*END $(NETCOOL_STARTUP_REMOVE) ONLY/d" -e "/###[         ]*$(NETCOOL_STARTUP_KEEP) ONLY/d" -e "/###[       ]*END $(NETCOOL_STARTUP_KEEP) ONLY/d" -e "s#__NCHOME__#$(PATH_INSTALL_NETCOOL)#" -e "s#__OMNIHOME__#$(PATH_INSTALL_ITNM)#" -e "s#__PROCESSAGENT__#$(NETCOOL_PA_NAME)#" -e "s#__SECURE__#$(NETCOOL_PA_SECURE)#" -e "s#__NETCOOL_LICENSE_FILE__#$(NETCOOL_LEGACY_LICENSE_FILE)#" > $(ETC_SYSTEMD_NCO_SCRIPT) || { $(CMD_ECHO) \
-					"Start/Stop Script (FAIL):#$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
-					exit 18; } ; \
-				$(CMD_ECHO) "Start/Stop Script (OK):  #$(CMD_CAT) $(ETC_INITD_NCO_TEMPLATE) | $(CMD_SED) -e ..." ; \
-				\
-				$(call func_chown,$(ITNM_USER),$(ITNM_GROUP),$(ETC_SYSTEMD_NCO_SCRIPT)) ; \
-				$(call func_chmod,755,$(ETC_SYSTEMD_NCO_SCRIPT)) ; \
-			fi ; \
-			if [ -f "$(ETC_SYSTEMD_NCO_SERVICE)" ] ; \
-			then \
-				$(CMD_ECHO) "systemd Service (OK):    #$(ETC_SYSTEMD_NCO_SERVICE) exists" ; \
-			else \
-				$(CMD_ECHO) "systemd Service (OK):    #$(ETC_SYSTEMD_NCO_SERVICE) non-existent so creating..." ; \
-				$(CMD_ECHO) "$$ETC_SYSTEMD_NCO_SERVICE_CONTENT" > $(ETC_SYSTEMD_NCO_SERVICE) || { $(CMD_ECHO) ; \
-				 "nco.service File (FAIL): #$(ETC_SYSTEMD_NCO_SERVICE) failed to configure" ; \
-					exit 19; } ; \
-				$(CMD_ECHO) "nco.service File (OK):   #$(ETC_SYSTEMD_NCO_SERVICE) configured" ; \
-				$(call func_chmod,644,$(ETC_SYSTEMD_NCO_SERVICE)) ; \
-				\
-				$(CMD_SYSTEMCTL) enable $(NETCOOL_SERVICE) || { $(CMD_ECHO) ; \
-					"nco Enable (FAIL):       $(CMD_SYSTEMCTL) enable $(NETCOOL_SERVICE)" ; \
-					exit 20; } ; \
-				$(CMD_ECHO) "nco Enable (OK):         $(CMD_SYSTEMCTL) enable $(NETCOOL_SERVICE)" ; \
-				\
-				$(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE) || { $(CMD_ECHO) ; \
-					"nco Start (FAIL):        $(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE)" ; \
-					exit 21; } ; \
-				$(CMD_ECHO) "nco Start (OK):          $(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE)" ; \
-				\
-				$(CMD_ECHO) "nco Starting:            $(CMD_SLEEP) 5 # to give time to start..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(CMD_ECHO) "nco Start Check:         $(CMD_SLEEP) 5 # to check for pending..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(eval TEMP_PA_PENDING_COUNT=`$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
-				if [ $(TEMP_PA_PENDING_COUNT) -eq 0 ] ; \
-				then \
-					$(CMD_ECHO) "nco Start (OK):          #No pending detected" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
-				else \
-					$(CMD_ECHO) "nco Start (PENDING):     #Seems to be pending, possible configuration problem" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(ITNM_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(ITNM_USER) -password $(ITNM_PASSWD) ; \
-					$(CMD_ECHO) "nco Stopping:            $(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE)" ; \
-					$(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE) ; \
-					$(CMD_ECHO) ; \
-					$(CMD_ECHO) "nco Configuration (FAIL):#Please review Process Agent and OMNIbus logs." ; \
-					$(CMD_ECHO) ; \
-					exit 22; \
-				fi ; \
-			fi ; \
-		fi ; \
-	else \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # non-existent" ; \
-	fi ;
-	@$(CMD_ECHO)
-
-################################################################################
-# CONFIGURE ITNM TO NOT AUTOSTART
-################################################################################
-autostartoff_itnm:	check_whoami \
-						check_commands
-
-	@$(call func_print_caption,"CONFIGURING ITNM TO NOT AUTOMATICALLY START")
-	@if [ -d "$(PATH_INSTALL_ITNM)" ] ; \
-	then \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # exists" ; \
-		\
-		$(CMD_GREP) " 6" /etc/redhat-release 1> /dev/null; rc=$$? ; \
-		if [ $$rc -eq 0 ] ; \
-		then \
-			$(CMD_ECHO) "systemd init Check:      $(CMD_GREP) \" 6\" /etc/redhat-release # Red Hat 6 / Not systemd" ; \
-			\
-			$(CMD_ECHO) "OMNIbus Stop:            $(CMD_SERVICE) $(NETCOOL_SERVICE) stop" ; \
-			$(CMD_SERVICE) $(NETCOOL_SERVICE) stop ; \
-			\
-			$(CMD_ECHO) "Service chkconfig:       $(CMD_CHKCONFIG) --del $(NETCOOL_SERVICE)" ; \
-			$(CMD_CHKCONFIG) --del $(NETCOOL_SERVICE) ; \
-			\
-			$(CMD_ECHO) "Start/Stop Script:       $(CMD_RM) -f $(ETC_INITD_NCO)" ; \
-			$(CMD_RM) -f $(ETC_INITD_NCO); \
-		else \
-			$(CMD_ECHO) "systemd init Check:      $(CMD_GREP) \" 6\" /etc/redhat-release # Red Hat 7+ / systemd" ; \
-			\
-			$(CMD_ECHO) "systemd Reload:          $(CMD_SYSTEMCTL) daemon-reload" ; \
-			$(CMD_SYSTEMCTL) daemon-reload ; \
-			\
-			$(CMD_ECHO) "systemd Stop:            $(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE)" ; \
-			$(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE) ; \
-			\
-			$(CMD_ECHO) "systemd Disable:         $(CMD_SYSTEMCTL) disable $(NETCOOL_SERVICE)" ; \
-			$(CMD_SYSTEMCTL) disable $(NETCOOL_SERVICE) ; \
-			\
-			$(CMD_ECHO) "systemd Service (OK):    $(CMD_RM) -f $(ETC_SYSTEMD_NCO_SERVICE)" ; \
-			$(CMD_RM) -f $(ETC_SYSTEMD_NCO_SERVICE); \
-			$(CMD_ECHO) "systemd Script (OK):     $(CMD_RM) -f $(ETC_SYSTEMD_NCO_SCRIPT)" ; \
-			$(CMD_RM) -f $(ETC_SYSTEMD_NCO_SCRIPT); \
-		fi ; \
-	else \
-		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_ITNM) # non-existent" ; \
 	fi ;
 	@$(CMD_ECHO)
 
