@@ -65,12 +65,8 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 # REPOSITORY PATHS
 ################################################################################
-PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_install
-PATH_REPOSITORY_SYSLOG	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_syslog
-PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_trap
-PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_21_upgrade
+PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/impact_7_1_0_18_install
 
-PATH_REPOSITORY_IMPACT_PACKAGE=com.ibm.tivoli.omnibus.core_
 
 ################################################################################
 # INSTALLATION USERS
@@ -161,10 +157,10 @@ MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 MEDIA_STEP1_D	:= IBM Prerequisite Scanner V1.2.0.17, Build 20150827
 MEDIA_STEP2_D	:= IBM Tivoli Netcool Impact 8.1.0.19 Core Linux 64bit Multilingual\n\t\t(CN8HFML) 
 
-MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
+MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/1.2.0.18-Tivoli-PRS-Unix-fp0001.tar
 MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/TNIV7.1.0.18__LNX_EN.zip
 
-MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
+MEDIA_STEP1_B	:= fe17ed5d7ca2d6df7e139e0d7fe5ce1b615a078bc12831556dd24b0b4515690121d317d9c5a13909573a0dec21532c218ac9db21731e93cddb19424e241b09b4
 MEDIA_STEP2_B	:= 4173d42d653563151b39eb233908f3fc8ba6ea37ef358f0a9ea41e0bfc2bfd06c96b83afad83982650f0f58174ce1d7e12bedfe78450a736c70b6486cb0051ad
 
 ################################################################################
@@ -175,7 +171,7 @@ MEDIA_STEP2_B	:= 4173d42d653563151b39eb233908f3fc8ba6ea37ef358f0a9ea41e0bfc2bfd0
 ################################################################################
 # IMPACT RESPONSE FILE TEMPLATE (INSTALL)
 ################################################################################
-IMPACT_INSTALL_RESPONSE_FILE=$(PATH_TMP)/omnibus_install_response.xml
+IMPACT_INSTALL_RESPONSE_FILE=$(PATH_TMP)/impact_install_response.xml
 define IMPACT_INSTALL_RESPONSE_FILE_CONTENT
 
 endef
@@ -206,14 +202,13 @@ verify:
 
 preinstallchecks:	check_commands \
 					check_media_exists \
-					check_media_checksums \
-					check_prerequisites
+					check_media_checksums 
 
 preinstall:			set_limits
 
-theinstall:			install_omnibus \
+theinstall:			install_impact \
 					confirm_shared_libraries \
-					autostarton_omnibus
+					autostarton_impact
 
 postinstall:		clean
 
@@ -223,16 +218,16 @@ preuninstallchecks:	check_commands \
 
 preuninstall:
 
-theuninstall:		autostartoff_omnibus \
-					uninstall_omnibus
+theuninstall:		autostartoff_impact \
+					uninstall_impact
 
 postuninstall:		remove_netcool_path \
 					remove_root_path \
 					clean
 
 clean:				remove_temp_dir \
-					remove_omnibus_install_response_file \
-					remove_omnibus_upgrade_response_file \
+					remove_impact_install_response_file \
+					remove_impact_upgrade_response_file \
 					clean_tmp
 
 scrub:				uninstall \
@@ -243,7 +238,7 @@ scrub:				uninstall \
 # CONTENT AND ANY INSTALL MANAGERS IN SAME.  IF THE SAME USERNAME IS USED
 # FOR MORE THAN ONE PRODUCT INSTALL, THEN THIS SHOULD BE DONE WITH EXTREME
 # CAUTION
-scrub_users:		remove_omnibus_group \
+scrub_users:		remove_impact_group \
 					clean
 
 ################################################################################
@@ -386,7 +381,7 @@ remove_root_path:	check_whoami \
 ################################################################################
 create_netcool_path:	check_whoami \
 						check_commands \
-						create_omnibus_user
+						create_impact_user
 	@$(call func_print_caption,"CREATING NETCOOL INSTALL DIRECTORY IF NEEDED")
 	@$(call func_mkdir,$(IMPACT_USER),$(IMPACT_GROUP),755,$(PATH_INSTALL_NETCOOL))
 	@$(CMD_ECHO)
@@ -402,7 +397,7 @@ remove_netcool_path:	check_whoami \
 ################################################################################
 # CONFIRM OR CREATE GROUPS
 ################################################################################
-create_omnibus_group:	check_whoami \
+create_impact_group:	check_whoami \
 						check_commands
 	@$(call func_print_caption,"CONFIRMING/CREATING IMPACT GROUP")
 	@$(call func_create_group,$(IMPACT_GROUP),$(MAKE_PRODUCT))
@@ -411,9 +406,9 @@ create_omnibus_group:	check_whoami \
 ################################################################################
 # REMOVE GROUPS
 ################################################################################
-remove_omnibus_group:	check_whoami \
+remove_impact_group:	check_whoami \
 						check_commands \
-						remove_omnibus_user
+						remove_impact_user
 	@$(call func_print_caption,"REMOVING IMPACT GROUP")
 	@$(call func_remove_group,$(IMPACT_GROUP),$(MAKE_PRODUCT))
 	@$(CMD_ECHO)
@@ -421,9 +416,9 @@ remove_omnibus_group:	check_whoami \
 ################################################################################
 # CONFIRM OR CREATE USERS
 ################################################################################
-create_omnibus_user:	check_whoami \
+create_impact_user:	check_whoami \
 						check_commands \
-						create_omnibus_group
+						create_impact_group
 	@$(call func_print_caption,"CONFIRMING/CREATING IMPACT USER")
 	@$(call func_create_user,$(IMPACT_USER),$(MAKE_PRODUCT),$(IMPACT_GROUP),$(IMPACT_HOME),$(IMPACT_SHELL),$(IMPACT_PASSWD))
 
@@ -433,11 +428,11 @@ create_omnibus_user:	check_whoami \
 ################################################################################
 # PREPARE NETCOOL/IMPACT CORE MEDIA (INSTALLATION)
 ################################################################################
-prepare_omnibus_install_media:	check_whoami \
+prepare_impact_install_media:	check_whoami \
 								check_commands \
 								check_media_exists \
 								check_media_checksums \
-								create_omnibus_user
+								create_impact_user
 
 	@$(call func_print_caption,"PREPARING NETCOOL/IMPACT CORE MEDIA (INSTALLATION)")
 	@$(call func_unzip_to_new_dir,$(IMPACT_USER),$(IMPACT_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL))
@@ -446,7 +441,7 @@ prepare_omnibus_install_media:	check_whoami \
 ################################################################################
 # CREATE IMPACT RESPONSE FILE (INSTALLATION)
 ################################################################################
-create_omnibus_install_response_file:	check_whoami \
+create_impact_install_response_file:	check_whoami \
 										check_commands
 
 	@$(call func_print_caption,"CREATING IMPACT INSTALLATION RESPONSE FILE")
@@ -457,7 +452,7 @@ create_omnibus_install_response_file:	check_whoami \
 	@$(call func_chmod,444,$(IMPACT_INSTALL_RESPONSE_FILE))
 	@$(CMD_ECHO)
 
-remove_omnibus_install_response_file:	check_commands
+remove_impact_install_response_file:	check_commands
 	@$(call func_print_caption,"REMOVING IMPACT INSTALLATION RESPONSE FILE")
 	@$(CMD_RM) -f $(IMPACT_INSTALL_RESPONSE_FILE)
 	@$(CMD_ECHO)
@@ -465,11 +460,11 @@ remove_omnibus_install_response_file:	check_commands
 ################################################################################
 # INSTALL NETCOOL/IMPACT CORE AS $(IMPACT_USER)
 ################################################################################
-install_omnibus:		check_whoami \
+install_impact:		check_whoami \
 						check_commands \
-						prepare_omnibus_install_media \
-						create_omnibus_install_response_file \
-						create_omnibus_user \
+						prepare_impact_install_media \
+						create_impact_install_response_file \
+						create_impact_user \
 						create_root_path \
 						create_netcool_path
 
