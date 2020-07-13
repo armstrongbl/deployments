@@ -265,9 +265,7 @@ preinstallchecks:	check_commands \
 
 preinstall:			set_limits
 
-theinstall:			install_impact \
-					confirm_shared_libraries \
-					autostarton_impact
+theinstall:			install_impact 
 
 postinstall:		clean
 
@@ -543,28 +541,6 @@ install_impact:		check_whoami \
 			exit 4; } ; \
 		$(CMD_ECHO) "Impact Install (OK):    $(CMD_SU) - $(IMPACT_USER) -c \"$(IMPACT_CMD_IMCL) input $(IMPACT_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
 	fi ;
-
-################################################################################
-# CONFIRM SHARED LIBRARIES
-################################################################################
-confirm_shared_libraries:	check_whoami \
-							check_commands
-
-	@$(call func_print_caption,"CONFIRMING SHARED LIBRARIES FOR NETCOOL/IMPACT")
-	@$(foreach itr_x,$(IMPACT_LDD_CHECKS),\
-		$(CMD_PRINTF) "Shared Lib Check:        $(CMD_SU) - $(IMPACT_USER) -c \"$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found\"\n" ; \
-		$(CMD_SU) - $(IMPACT_USER) -c "$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found"; $(CMD_TEST) $$? -lt 2; \
-	)
-
-	@$(foreach itr_x,$(IMPACT_LDD_CHECKS),\
-		$(CMD_SU) - $(IMPACT_USER) -c "$(CMD_LDD) $(itr_x) | $(CMD_GREP) not[[:space:]]found 1> /dev/null 2>&1"; $(CMD_TEST) $$? -eq 1 || { \
-			$(CMD_ECHO) "Shared Lib Check (FAIL): #Missing shared library dependencies"; \
-			exit 5; \
-		} ; \
-	)
-
-	@$(CMD_ECHO) "Shared Lib Check (OK):   #No missing shared library dependencies"
-	@$(CMD_ECHO)
 
 ################################################################################
 # REMOVING /TMP FILES AND DIRECTORIES CREATED BY VARIOUS MAKE COMMANDS
