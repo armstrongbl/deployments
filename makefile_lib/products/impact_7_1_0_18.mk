@@ -42,7 +42,7 @@ MAKE_DIR	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 include ${MAKE_DIR}../include/includes
 
 ################################################################################
-# INSTALLATION TUNABLES
+# INSTALLATION INFO
 ################################################################################
 MAKE_PRODUCT		= IMPACT
 MAKE_PRODUCT_PREREQS	= NCI
@@ -127,6 +127,8 @@ OBJSRV_HOST		:= nmsfms01
 OBJSRV_PORT		:= 4100
 OBJSRV_USER		:= root
 OBJSRV_PASS		:= $(IMPACT_USER)
+LIB_USER		:= root
+LIB_PASS		:= $(IMPACT_USER)
 
 
 
