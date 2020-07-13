@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 #                       _
 #                      / \   ___ ___ _   _  ___  ___ ___
 #                     / _ \ / __/ __| | | |/ _ \/ __/ __|
@@ -69,21 +69,18 @@ PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/impact_7_1_0_18_install
 
 
 ################################################################################
-# INSTALLATION USERS
+# INSTALLATION TUNEABLES
 ################################################################################
 IMPACT_USER		:= netcool
 IMPACT_PASSWD		:= $(IMPACT_USER)
 IMPACT_GROUP		:= ncoadmin
 IMPACT_SHELL		:= /bin/bash
 IMPACT_HOME		:= $(PATH_HOME)/$(IMPACT_USER)
-
 IMPACT_BASHRC		:= $(IMPACT_HOME)/.bashrc
 IMPACT_BASHPROFILE	:= $(IMPACT_HOME)/.bash_profile
 
 IMPACT_IMSHARED	= $(IMPACT_HOME)/$(PATH_IM_SHARED_PATH)
 IMPACT_CMD_IMCL	:= $(IMPACT_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
-
-IMPACT_LDD_CHECKS	= $(shell $(CMD_LS) $(PATH_INSTALL_IMPACT)/platform/linux2x86/bin*/nco* | $(CMD_GREP) -v env$)
 
 IMPACT_PACKAGES	=	$(PACKAGES_COMMON) \
 						audit-libs.x86_64 \
@@ -124,6 +121,14 @@ IMPACT_PACKAGES	=	$(PACKAGES_COMMON) \
 						libgcc.i686 \
 						libstdc++.i686 \
 						libX11.i686
+
+OBJSRV_NAME		:= AGG_V
+OBJSRV_HOST		:= nmsfms01
+OBJSRV_PORT		:= 4100
+OBJSRV_USER		:= root
+OBJSRV_PASS		:= $(IMPACT_USER)
+
+
 
 ################################################################################
 # ULIMIT FILES / VALUES
@@ -173,7 +178,59 @@ MEDIA_STEP2_B	:= 4173d42d653563151b39eb233908f3fc8ba6ea37ef358f0a9ea41e0bfc2bfd0
 ################################################################################
 IMPACT_INSTALL_RESPONSE_FILE=$(PATH_TMP)/impact_install_response.xml
 define IMPACT_INSTALL_RESPONSE_FILE_CONTENT
-
+<?xml version='1.0' encoding='UTF-8'?>
+<agent-input>
+  <variables>
+    <variable name='sharedLocation' value='$(IMPACT_IMSHARED)'/>
+  </variables>
+  <server>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/ImpactRepository/disk1'/>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/ImpactExtRepository/disk1'/>
+  </server>
+  <profile id='IBM Tivoli Netcool Impact' installLocation='$(PATH_INSTALL_IMPACT)'>
+    <data key='cic.selector.arch' value='x86_64'/>
+    <data key='user.userRegistry' value='ObjectServer'/>
+    <data key='user.objectServerName' value='$(OBJSRV_NAME)'/>
+    <data key='user.objectServerHost' value='$(OBJSRV_HOST)'/>
+    <data key='user.objectServerPort' value='$(OBJSRV_PORT)'/>
+    <data key='user.objectServerUser' value='$(OBJSRV_USER)'/>
+    <data key='user.objectServerPwd' value='$(OBJSRV_PASS)'/>
+    <data key='user.objectServerConfirmPassword' value='$(OBJSRV_PASS)'/>
+    <data key='user.objectServerPassword' value='$(OBJSRV_PASS)'/>
+    <data key='user.libertyUser' value='$(LIB_USER)'/>
+    <data key='user.libertyPassword' value='$(LIB_PASS)'/>
+    <data key='user.libertyConfirmPassword' value='$(LIB_PASS)'/>
+    <data key='user.GUIInstanceName' value='ImpactUI'/>
+    <data key='user.liberty.guiHttpPort' value='16310'/>
+    <data key='user.liberty.httpPort' value='9080'/>
+    <data key='user.liberty.rmiPort' value='30000'/>
+    <data key='user.activeMQBrokerPort' value='16399'/>
+    <data key='user.nameServerPrimaryPort' value='9080'/>
+    <data key='user.nameServerPrimaryHost' value='nmsimpact01'/>
+    <data key='user.localHostName' value='nmsimpact01'/>
+    <data key='user.nciServerInstanceName,com.ibm.tivoli.impact.server' value='NCI'/>
+    <data key='user.nciPortNumber,com.ibm.tivoli.impact.server' value='2000'/>
+    <data key='user.nciClusterName,com.ibm.tivoli.impact.server' value='NCICLUSTER'/>
+    <data key='user.derbyType,com.ibm.tivoli.impact.server' value='PrimaryStandalone'/>
+    <data key='user.derbyPrimaryHost,com.ibm.tivoli.impact.server' value='$(HOST_FQDN)'/>
+    <data key='user.derbyReplicationPort,com.ibm.tivoli.impact.server' value='4851'/>
+    <data key='user.derbyBackupHost,com.ibm.tivoli.impact.server' value='$(HOST_FQDN)'/>
+    <data key='user.derbyBackupPort,com.ibm.tivoli.impact.server' value='1527'/>
+    <data key='user.derbyPrimaryPort,com.ibm.tivoli.impact.server' value='1527'/>
+    <data key='user.libertyHttpPort' value='9080'/>
+    <data key='user.libertyRmiPort' value='30000'/>
+    <data key='user.nciServerInstanceName' value='NCI'/>
+  </profile>
+  <install>
+    <!-- IBM Tivoli Netcool/Impact GUI Server 7.1.0.18 -->
+    <offering profile='IBM Tivoli Netcool Impact' id='com.ibm.tivoli.impact.gui_server' version='7.1.0.20200311_1939' features='main.gui_feature'/>
+    <!-- IBM Tivoli Netcool/Impact Server 7.1.0.18 -->
+    <offering profile='IBM Tivoli Netcool Impact' id='com.ibm.tivoli.impact.server' version='7.1.0.20200311_1939' features='main.server_feature'/>
+    <!-- IBM Tivoli Netcool/Impact Server Extensions for Netcool Operations Insight 7.1.0.18 -->
+    <offering profile='IBM Tivoli Netcool Impact' id='com.ibm.tivoli.impact.server_extensions' version='7.1.0.20200311_1957' features='main.server_extensions_feature'/>
+  </install>
+  <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
+</agent-input>
 endef
 export IMPACT_INSTALL_RESPONSE_FILE_CONTENT
 
