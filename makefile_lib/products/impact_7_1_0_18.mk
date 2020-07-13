@@ -531,7 +531,7 @@ install_impact:		check_whoami \
 		$(CMD_ECHO) "Impact Exists? (WARN):  -d $(PATH_INSTALL_IMPACT) # already exists" ; \
 	else \
 		$(CMD_ECHO) "Impact Exists? (OK):    -d $(PATH_INSTALL_IMPACT) # non-existent" ; \
-		$(call func_prepare_installation_manager,$(IMPACT_USER),$(IMPACT_HOME),$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64) ; \
+		$(call func_prepare_installation_manager,$(IMPACT_USER),$(IMPACT_HOME),$(PATH_REPOSITORY_INSTALL)/im.linux.x86) ; \
 		$(call func_command_check,$(IMPACT_CMD_IMCL)) ; \
 		\
 		$(CMD_ECHO) "Impact Install:         #In progress..." ; \
