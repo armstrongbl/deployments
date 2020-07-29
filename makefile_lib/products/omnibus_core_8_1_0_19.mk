@@ -297,8 +297,8 @@ define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
   </variables>
   <server>
     <repository location='$(PATH_REPOSITORY_INSTALL)/OMNIbusRepository'/>
-    <repository location='$(PATH_REPOSITORY_INSTALL)/PATH_REPOSITORY_SYSLOG'/>
-    <repository location='$(PATH_REPOSITORY_INSTALL)/PATH_REPOSITORY_TRAP'/>
+    <repository location='$(PATH_REPOSITORY_SYSLOG)'/>
+    <repository location='$(PATH_REPOSITORY_TRAP)'/>
   </server>
   <profile id='IBM Netcool Core Components' installLocation='$(PATH_INSTALL_NETCOOL)'> 
     <data key='cic.selector.arch' value='x86_64'/>
