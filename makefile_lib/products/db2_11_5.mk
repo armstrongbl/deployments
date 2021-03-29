@@ -53,11 +53,13 @@ MAKE_PRODUCT_VERSION	= 11.5
 ################################################################################
 PATH_INSTALL			:= /opt/IBM
 PATH_INSTALL_DB2		= $(PATH_INSTALL)/db2
-PATH_INSTALL_DB2_VER	= $(PATH_INSTALL_DB2)/V11.5
+PATH_INSTALL_DB2_VER	        = $(PATH_INSTALL_DB2)/V11.5
 
 FILE_DB2_LICENSE		= db2ese_o.lic
 PATH_DB2_LICENSE_DIR	= $(PATH_INSTALL_DB2_VER)/license/warehouse
 PATH_DB2_LICENSE_ZIP	= ese_o/warehouse/$(FILE_DB2_LICENSE)
+
+PATH_REPOSITORY_INSTALL := $(PATH_MAKEFILE_REPOSITORY)/db2_server_11_5
 
 ################################################################################
 # TEMPORARY MAKE DIRECTORY
@@ -105,9 +107,9 @@ MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 
 MEDIA_STEP1_D	:= IBM DB2 Server V10.5 for Linux on AMD64 and Intel EM64T systems\n\t\t(x64) Multilingual (CIXV0ML)
 
-MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_Svr_10.5.0.3_Linux_x86-64.tar.gz
+MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar
 
-MEDIA_STEP1_B	:= ae20be99e3cd2cef24d53a28331871d7193cfc7f7c24c580e6e78dc58c9ffb364cbcc69cb3773d2f0135b8c9be7ee40a7dc4e09fec0a4d731c4864bbba87d31e
+MEDIA_STEP1_B	:= ad8fdaf91a9a336401c02fd147f0a0535b0dffba246f8a0923b2906a9f6d6a7d1d5147dbadc3584257d4891910499b52dd04834b1bf53f3446085b4186671368
 
 ################################################################################
 # DB2 INSTALLATION RESPONSE FILE TEMPLATE
@@ -115,43 +117,41 @@ MEDIA_STEP1_B	:= ae20be99e3cd2cef24d53a28331871d7193cfc7f7c24c580e6e78dc58c9ffb3
 DB2_RESPONSE_FILE=$(PATH_TEMP_DIR)/db2server.rsp
 define DB2_RESPONSE_FILE_CONTENT
 *-----------------------------------------------------
-* Generated response file used by AccuOSS DB2 makefile
+* Generated response file used by the DB2 Setup wizard
+* generation time: 3/22/21 5:18 PM
 *-----------------------------------------------------
 *  Product Installation
 LIC_AGREEMENT       = ACCEPT
 PROD       = DB2_SERVER_EDITION
-FILE       = $(PATH_INSTALL_DB2_VER)
+FILE       = /opt/IBM/db2/V11.1
 INSTALL_TYPE       = TYPICAL
 *-----------------------------------------------
 *  Das properties
 *-----------------------------------------------
 DAS_CONTACT_LIST       = LOCAL
-*  DAS user
-DAS_USERNAME       = $(DB2_DAS_USER)
-DAS_UID       = <DAS_UID>
-DAS_GROUP_NAME       = $(DB2_DAS_GROUP)
-DAS_HOME_DIRECTORY       = $(DB2_DAS_HOME)
 * ----------------------------------------------
 *  Instance properties
 * ----------------------------------------------
 INSTANCE       = inst1
 inst1.TYPE       = ese
 *  Instance-owning user
-inst1.NAME       = $(DB2_USER)
-inst1.UID       = <INST_UID>
-inst1.GROUP_NAME       = $(DB2_GROUP)
-inst1.HOME_DIRECTORY       = $(DB2_HOME)
-inst1.AUTOSTART       = NO
-inst1.SVCENAME       = db2c_$(DB2_USER)
-inst1.PORT_NUMBER       = $(DB2_PORT)
+inst1.NAME       = db2inst1
+inst1.GROUP_NAME       = db2iadm1
+inst1.HOME_DIRECTORY       = /db2/db2inst1
+inst1.PASSWORD       = 947158133430482493535347340213354444260815926229646735711384135132319113346723526456370322305053133312848194556215304240356162925986533532484308018521754676050971246153115571961246715061727233135853677532337153954529114441457420523781036012478627389664465573616403403936913402442156925698349719563632403522038332673005336351584745034481430374759546341722693901358436926192343143431917545321732554255209345502145627054340769557632603515228483004452317565508527981043249505034367769552252563246444227946917675986941275204543815073453107522991806203685698542565244582911432154334462402265653276531585742610161902936064771633284433334117352435051563931809516440018027126697865559751752245387334372508948462638622390341309730825410434187791505376201054813632269343646723540
+ENCRYPTED       = inst1.PASSWORD
+inst1.AUTOSTART       = YES
+inst1.SVCENAME       = db2c_db2inst1
+inst1.PORT_NUMBER       = 50000
 inst1.FCM_PORT_NUMBER       = 60000
-inst1.MAX_LOGICAL_NODES       = 4
+inst1.MAX_LOGICAL_NODES       = 6
 inst1.CONFIGURE_TEXT_SEARCH       = NO
 *  Fenced user
-inst1.FENCED_USERNAME       = $(DB2_FENC_USER)
-inst1.FENCED_UID       = <FENC_UID>
-inst1.FENCED_GROUP_NAME       = $(DB2_FENC_GROUP)
-inst1.FENCED_HOME_DIRECTORY       = $(DB2_FENC_HOME)
+inst1.FENCED_USERNAME       = db2fenc2
+inst1.FENCED_GROUP_NAME       = db2fadm1
+inst1.FENCED_HOME_DIRECTORY       = /home/db2fenc2
+inst1.FENCED_PASSWORD       = 484746172253232313477079343345324024635327406241182605226816292976496335603458253253833344621313644412618263358883663412183583512520854201323477736599423028452562686542243836031657532248873446728575673391524007643724661233372056466012666565225057062543465192930305614433523113857332058848365695329144575227127772746875225400821003315942459478132993118544440642353214871424392639836945982362402240224806325357169334673380023851261414052146277859654898235428123262681484620272272262031325329857953055626455562585089234393243105110139242375757686506377323253430323562745258238447256178276644744593821197756153115229252878345638308444565426362928194303524637892124429964519064069571465196972580077042095327461561800068530111105265309446562565323272341146527517533765389373
+ENCRYPTED       = inst1.FENCED_PASSWORD
 *-----------------------------------------------
 *  Installed Languages
 *-----------------------------------------------
@@ -205,10 +205,7 @@ preinstallchecks:		check_commands \
 
 preinstall:		
 
-theinstall:				install_db2 \
-						validate_db2 \
-						license_db2 \
-						autostarton_db2
+theinstall:				install_db2 
 
 postinstall:			clean
 
@@ -388,7 +385,7 @@ prepare_db2_media:					check_whoami \
 									check_commands \
 									create_temp_dir
 	@$(call func_print_caption,"PREPARING DB2 MEDIA")
-	@$(call func_tar_zxf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_TEMP_DIR)/$(MAKE_PRODUCT))
+	@$(call func_tar_xf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_REPOSITORY_INSTALL))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -396,36 +393,8 @@ prepare_db2_media:					check_whoami \
 ################################################################################
 create_db2_install_response_file:	check_whoami \
 									check_commands \
-									create_temp_dir \
-									create_db2_users
-	@$(eval TEMP_DB2_UID=`$(CMD_GREP) ^$(DB2_USER): /etc/passwd | $(CMD_CUT) -d":" -f3`)
-	@$(eval TEMP_DB2_DAS_UID=`$(CMD_GREP) ^$(DB2_DAS_USER): /etc/passwd | $(CMD_CUT) -d":" -f3`)
-	@$(eval TEMP_DB2_FENC_UID=`$(CMD_GREP) ^$(DB2_FENC_USER): /etc/passwd | $(CMD_CUT) -d":" -f3`)
+									create_temp_dir 
 
-	@$(call func_print_caption,"CREATING DB2 INSTALLATION RESPONSE FILE")
-	@if [ "$(TEMP_DB2_UID)" = "" ] ; \
-	then \
-		$(CMD_ECHO) "DB2 Instance UID (FAIL): #$(DB2_USER) does not exist" ; \
-		exit 2; \
-	else \
-		$(CMD_ECHO) "DB2 Instance UID (OK):   #$(TEMP_DB2_UID) for $(DB2_USER)" ; \
-	fi ;
-
-	@if [ "$(TEMP_DB2_DAS_UID)" = "" ] ; \
-	then \
-		$(CMD_ECHO) "DB2 Admin Svr UID (FAIL):#$(DB2_DAS_USER) does not exist" ; \
-		exit 3; \
-	else \
-		$(CMD_ECHO) "DB2 Admin Svr UID (OK):  #$(TEMP_DB2_DAS_UID) for $(DB2_DAS_USER)" ; \
-	fi ;
-
-	@if [ "$(TEMP_DB2_FENC_UID)" = "" ] ; \
-	then \
-		$(CMD_ECHO) "DB2 Fence UID (FAIL):    #$(DB2_FENC_USER) does not exist" ; \
-		exit 4; \
-	else \
-		$(CMD_ECHO) "DB2 Fence UID (OK):      #$(TEMP_DB2_FENC_UID) for $(DB2_FENC_USER)" ; \
-	fi ;
 
 	@$(CMD_ECHO) "$$DB2_RESPONSE_FILE_CONTENT" | $(CMD_SED) -e "s/<INST_UID>/$(TEMP_DB2_UID)/g" | $(CMD_SED) -e "s/<DAS_UID>/$(TEMP_DB2_DAS_UID)/g" | $(CMD_SED) -e "s/<FENC_UID>/$(TEMP_DB2_FENC_UID)/g" > $(DB2_RESPONSE_FILE) || { $(CMD_ECHO) ; \
 		 "DB2 Response File (FAIL):#$(DB2_RESPONSE_FILE)" ; \
@@ -461,7 +430,7 @@ install_db2:						check_whoami \
 		$(CMD_ECHO) "DB2 Exists? (OK):        -d $(PATH_INSTALL_DB2_VER) # non-existent" ; \
 		$(CMD_ECHO) ; \
 		$(CMD_ECHO) "DB2 Setup Installation:" ; \
-		$(PATH_TEMP_DIR)/$(MAKE_PRODUCT)/server/db2setup -r $(DB2_RESPONSE_FILE) ; \
+		$(PATH_REPOSITORY_INSTALL)/server_awse_o/db2setup -r $(DB2_RESPONSE_FILE) ; \
 	fi ;
 	@$(CMD_ECHO)
 
