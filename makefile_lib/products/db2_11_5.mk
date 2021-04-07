@@ -73,7 +73,7 @@ PATH_TEMP_DIR			:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 DB2_USER				:= db2inst1
 DB2_PASSWD				:= $(DB2_USER)
-DB2_GROUP				:= db2iadm
+DB2_GROUP				:= db2iadm1
 DB2_SHELL				:= /bin/bash
 DB2_PORT				:= 50000
 DB2_HOME				:= /db2/$(DB2_USER)
@@ -87,7 +87,7 @@ DB2_DAS_HOME			:= $(PATH_HOME)/$(DB2_DAS_USER)
 
 DB2_FENC_USER			:= db2fenc
 DB2_FENC_PASSWD			:= $(DB2_FENC_USER)
-DB2_FENC_GROUP			:= db2fadm
+DB2_FENC_GROUP			:= db2fadm1
 DB2_FENC_SHELL			:= /bin/bash
 DB2_FENC_HOME			:= $(PATH_HOME)/$(DB2_FENC_USER)
 
@@ -107,7 +107,7 @@ MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 
 MEDIA_STEP1_D	:= IBM DB2 Server V10.5 for Linux on AMD64 and Intel EM64T systems\n\t\t(x64) Multilingual (CIXV0ML)
 
-MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar
+MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar.gz
 
 MEDIA_STEP1_B	:= ad8fdaf91a9a336401c02fd147f0a0535b0dffba246f8a0923b2906a9f6d6a7d1d5147dbadc3584257d4891910499b52dd04834b1bf53f3446085b4186671368
 
@@ -205,7 +205,8 @@ preinstallchecks:		check_commands \
 
 preinstall:		
 
-theinstall:				install_db2 
+theinstall:				install_db2 \	
+						configure_tcp
 
 postinstall:			clean
 
@@ -385,7 +386,7 @@ prepare_db2_media:					check_whoami \
 									check_commands \
 									create_temp_dir
 	@$(call func_print_caption,"PREPARING DB2 MEDIA")
-	@$(call func_tar_xf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_REPOSITORY_INSTALL))
+	@$(call func_tar_zxf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_REPOSITORY_INSTALL))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -448,7 +449,9 @@ validate_db2:						check_commands
 ################################################################################
 configure_tcp:
 
-	$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/bin/db2 update database manager configuration using svcename db2c_db2inst1"
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/bin/db2 update database manager configuration using svcename db2c_db2inst1"
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2stop"
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2start"
 
 
 ################################################################################
