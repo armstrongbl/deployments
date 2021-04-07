@@ -46,14 +46,14 @@ include ${MAKE_DIR}../include/includes
 # INSTALLATION TUNABLES
 ################################################################################
 MAKE_PRODUCT			= DB2EnterpriseServer
-MAKE_PRODUCT_VERSION	= 11.5
+MAKE_PRODUCT_VERSION	= 11.1
 
 ################################################################################
 # INSTALLATION PATHS
 ################################################################################
 PATH_INSTALL			:= /opt/IBM
 PATH_INSTALL_DB2		= $(PATH_INSTALL)/db2
-PATH_INSTALL_DB2_VER	        = $(PATH_INSTALL_DB2)/V11.5
+PATH_INSTALL_DB2_VER	        = $(PATH_INSTALL_DB2)/V11.1
 
 FILE_DB2_LICENSE		= db2ese_o.lic
 PATH_DB2_LICENSE_DIR	= $(PATH_INSTALL_DB2_VER)/license/warehouse
@@ -71,12 +71,12 @@ PATH_TEMP_DIR			:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 # INSTALLATION USERS
 ################################################################################
-DB2_USER				:= db2inst
+DB2_USER				:= db2inst1
 DB2_PASSWD				:= $(DB2_USER)
 DB2_GROUP				:= db2iadm
 DB2_SHELL				:= /bin/bash
 DB2_PORT				:= 50000
-DB2_HOME				:= $(PATH_HOME)/$(DB2_USER)
+DB2_HOME				:= /db2/$(DB2_USER)
 DB2_PROFILE				:= $(DB2_HOME)/sqllib/db2profile
 
 DB2_DAS_USER			:= dasusr
@@ -442,6 +442,14 @@ validate_db2:						check_commands
 	@$(CMD_ECHO)
 	@$(PATH_INSTALL_DB2_VER)/bin/db2val
 	@$(CMD_ECHO)
+
+################################################################################
+# CONFIGURE TCP Communications 
+################################################################################
+configure_tcp:
+
+	$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/bin/db2 update database manager configuration using svcename db2c_db2inst1"
+
 
 ################################################################################
 # CONFIGURE DB2 TO AUTOSTART
