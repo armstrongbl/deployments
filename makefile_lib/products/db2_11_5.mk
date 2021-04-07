@@ -79,13 +79,13 @@ DB2_PORT				:= 50000
 DB2_HOME				:= /db2/$(DB2_USER)
 DB2_PROFILE				:= $(DB2_HOME)/sqllib/db2profile
 
-DB2_DAS_USER			:= dasusr
+DB2_DAS_USER			:= dasusr1
 DB2_DAS_PASSWD			:= $(DB2_DAS_USER)
 DB2_DAS_GROUP			:= dasadm
 DB2_DAS_SHELL			:= /bin/bash
 DB2_DAS_HOME			:= $(PATH_HOME)/$(DB2_DAS_USER)
 
-DB2_FENC_USER			:= db2fenc
+DB2_FENC_USER			:= db2fenc1
 DB2_FENC_PASSWD			:= $(DB2_FENC_USER)
 DB2_FENC_GROUP			:= db2fadm1
 DB2_FENC_SHELL			:= /bin/bash
@@ -212,7 +212,7 @@ postinstall:			clean
 
 preuninstallchecks:		check_commands
 
-preuninstall:			remove_license_file
+preuninstall:			
 
 theuninstall:			autostartoff_db2 \
 						uninstall_db2
@@ -225,7 +225,7 @@ clean:					remove_temp_dir \
 						clean_tmp
 
 scrub:					uninstall \
-						clean
+						scrub_users
 
 # WARNING scrub_users WILL REMOVE USERS AND HOME DIRECTORIES INCLUDING ALL
 # CONTENT AND ANY INSTALL MANAGERS IN SAME.  IF THE SAME USERNAME IS USED
