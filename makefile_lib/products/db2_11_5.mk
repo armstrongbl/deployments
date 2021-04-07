@@ -109,7 +109,7 @@ MEDIA_STEP1_D	:= IBM DB2 Server V10.5 for Linux on AMD64 and Intel EM64T systems
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar.gz
 
-MEDIA_STEP1_B	:= ad8fdaf91a9a336401c02fd147f0a0535b0dffba246f8a0923b2906a9f6d6a7d1d5147dbadc3584257d4891910499b52dd04834b1bf53f3446085b4186671368
+MEDIA_STEP1_B	:= 4e5a24e73f569cda4e195320a469763764390b96ebaff29fcf8a85a482b38f804e5d4293d3ed5949195500163cca961f6238b7f3beb21ba94f2cba6492869808
 
 ################################################################################
 # DB2 INSTALLATION RESPONSE FILE TEMPLATE
@@ -205,7 +205,7 @@ preinstallchecks:		check_commands \
 
 preinstall:		
 
-theinstall:				install_db2 \	
+theinstall:				install_db2 \
 						configure_tcp
 
 postinstall:			clean
