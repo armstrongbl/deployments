@@ -97,7 +97,7 @@ DB_USER   = db2inst
 # OMNIBUS CONFIGURATION
 ################################################################################
 OMNIBUS_OS_HOST		= nmsfms01
-OMNIBUS_OS_NAME		= AGG_P
+OMNIBUS_OS_NAME		= NBN_DIS1
 OMNIBUS_OS_PASSWD	= 
 OMNIBUS_OS_PORT		= 4100
 OMNIBUS_OS_USER		= root
@@ -107,7 +107,7 @@ ITNM_DOMAIN		= NBN
 ################################################################################
 # IBMIM CONFIGURATION AND PACKAGE VERIFICATION
 ################################################################################
-ITNM_IMSHARED	= $(ITNM_HOME)/$(PATH_REPOSITORY_INSTALL)
+ITNM_IMSHARED	:= $(ITNM_HOME)/IBM/IMShared 
 ITNM_CMD_IMCL	:= $(ITNM_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
 
 ITNM_LDD_CHECKS	= $(shell $(CMD_LS) $(PATH_INSTALL_ITNM)/platform/linux2x86/bin*/nco* | $(CMD_GREP) -v env$)
@@ -498,8 +498,8 @@ create_itnm_user:	check_whoami \
 	@$(call func_print_caption,"CONFIRMING/CREATING ITNM USER")
 	@$(call func_create_user,$(ITNM_USER),$(MAKE_PRODUCT),$(ITNM_GROUP),$(ITNM_HOME),$(ITNM_SHELL),$(ITNM_PASSWD))
 
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),PATH,$(PATH_INSTALL_ITNM)/bin)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHPROFILE),PATH,$(PATH_INSTALL_ITNM)/bin)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),PATH,$(PATH_INSTALL_ITNM)/bin)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHPROFILE),PATH,$(PATH_INSTALL_ITNM)/bin)
 
 ################################################################################
 # As instructed by PI Installation Guide, do not set NCHOME if OMNIbus
@@ -509,18 +509,18 @@ create_itnm_user:	check_whoami \
 #	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),NCHOME,$(PATH_INSTALL_NETCOOL),644)
 #	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),NCHOME,$(PATH_INSTALL_NETCOOL),644)
 
-	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),OMNIHOME,$(PATH_INSTALL_ITNM),644)
-	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),OMNIHOME,$(PATH_INSTALL_ITNM),644)
+	#@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),OMNIHOME,$(PATH_INSTALL_ITNM),644)
+	#@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),OMNIHOME,$(PATH_INSTALL_ITNM),644)
 
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre_1.7.0/jre/bin/j9vm)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre64_1.7.0/jre/bin/j9vm)
-	@$(CMD_ECHO)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib64)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib64)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib64)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre_1.7.0/jre/bin/j9vm)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre64_1.7.0/jre/bin/j9vm)
+	#@$(CMD_ECHO)
 
 ################################################################################
 # REMOVE USERS
@@ -569,7 +569,7 @@ remove_response_file:	check_commands
 install_itnm:		check_whoami \
 						check_commands \
 						prepare_itnm_install_media \
-						create_itnm_install_response_file \
+						create_response_file \
 						create_itnm_user \
 						create_root_path \
 						create_netcool_path
