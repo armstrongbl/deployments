@@ -434,6 +434,7 @@ install_db2:						check_whoami \
 	else \
 		$(CMD_ECHO) "DB2 Exists? (OK):        -d $(PATH_INSTALL_DB2_VER) # non-existent" ; \
 		$(CMD_ECHO) ; \
+		$(CMD_MKDIR) -p $(DB2_HOME) \
 		$(CMD_ECHO) "DB2 Setup Installation:" ; \
 		$(PATH_REPOSITORY_INSTALL)/server_awse_o/db2setup -r $(DB2_RESPONSE_FILE) ; \
 	fi ;
