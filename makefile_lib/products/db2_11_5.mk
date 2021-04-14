@@ -467,6 +467,7 @@ configure_itnm_db:
 	@$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/create_db2_database.sh ITNM db2inst1"
 	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2stop"
 	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2start"
+	@$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/populate_db2_database.sh ITNM db2inst1"
 
 ################################################################################
 # CONFIGURE DB2 TO AUTOSTART
