@@ -60,6 +60,7 @@ PATH_DB2_LICENSE_DIR	= $(PATH_INSTALL_DB2_VER)/license/warehouse
 PATH_DB2_LICENSE_ZIP	= ese_o/warehouse/$(FILE_DB2_LICENSE)
 
 PATH_REPOSITORY_INSTALL := $(PATH_MAKEFILE_REPOSITORY)/db2_server_11_5
+PATH_REPOSITORY_INSTALL_SQL := $(PATH_MAKEFILE_REPOSITORY)/db2_itnm_sql
 
 ################################################################################
 # TEMPORARY MAKE DIRECTORY
@@ -108,6 +109,7 @@ MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 MEDIA_STEP1_D	:= IBM DB2 Server V10.5 for Linux on AMD64 and Intel EM64T systems\n\t\t(x64) Multilingual (CIXV0ML)
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar.gz
+MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/db2_creation_scripts.tar.gz
 
 MEDIA_STEP1_B	:= 4e5a24e73f569cda4e195320a469763764390b96ebaff29fcf8a85a482b38f804e5d4293d3ed5949195500163cca961f6238b7f3beb21ba94f2cba6492869808
 
@@ -206,7 +208,8 @@ preinstallchecks:		check_commands \
 preinstall:		
 
 theinstall:				install_db2 \
-						configure_tcp
+						configure_tcp \
+						configure_itnm_db 
 
 postinstall:			clean
 
@@ -387,6 +390,7 @@ prepare_db2_media:					check_whoami \
 									create_temp_dir
 	@$(call func_print_caption,"PREPARING DB2 MEDIA")
 	@$(call func_tar_zxf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_REPOSITORY_INSTALL))
+	@$(call func_tar_zxf_to_new_dir,root,root,755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL_SQL))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -453,6 +457,16 @@ configure_tcp:
 	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2stop"
 	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2start"
 
+
+################################################################################
+# CONFIGURE ITNM Database 
+################################################################################
+configure_itnm_db:
+
+	@$(CMD_SU) - $(DB2_USER) -c ". $(DB2_PROFILE)"
+	@$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/create_db2_database.sh ITNM db2inst1"
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2stop"
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2start"
 
 ################################################################################
 # CONFIGURE DB2 TO AUTOSTART
