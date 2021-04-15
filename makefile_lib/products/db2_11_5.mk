@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 #                       _
 #                      / \   ___ ___ _   _  ___  ___ ___
 #                     / _ \ / __/ __| | | |/ _ \/ __/ __|
@@ -30,7 +30,7 @@
 ## DEALINGS IN THE SOFTWARE.                                                  ##
 ################################################################################
 # Brad Armstrong 
-# March 4, 2020
+# March 1, 2020
 #
 # DB2 installs as root.
 ################################################################################
@@ -46,20 +46,21 @@ include ${MAKE_DIR}../include/includes
 # INSTALLATION TUNABLES
 ################################################################################
 MAKE_PRODUCT			= DB2EnterpriseServer
-MAKE_PRODUCT_VERSION	= 11.5
+MAKE_PRODUCT_VERSION	= 11.1
 
 ################################################################################
 # INSTALLATION PATHS
 ################################################################################
 PATH_INSTALL			:= /opt/IBM
 PATH_INSTALL_DB2		= $(PATH_INSTALL)/db2
-PATH_INSTALL_DB2_VER	        = $(PATH_INSTALL_DB2)/V11.5
+PATH_INSTALL_DB2_VER	        = $(PATH_INSTALL_DB2)/V11.1
 
 FILE_DB2_LICENSE		= db2ese_o.lic
 PATH_DB2_LICENSE_DIR	= $(PATH_INSTALL_DB2_VER)/license/warehouse
 PATH_DB2_LICENSE_ZIP	= ese_o/warehouse/$(FILE_DB2_LICENSE)
 
 PATH_REPOSITORY_INSTALL := $(PATH_MAKEFILE_REPOSITORY)/db2_server_11_5
+PATH_REPOSITORY_INSTALL_SQL := $(PATH_MAKEFILE_REPOSITORY)/db2_itnm_sql
 
 ################################################################################
 # TEMPORARY MAKE DIRECTORY
@@ -71,23 +72,23 @@ PATH_TEMP_DIR			:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 # INSTALLATION USERS
 ################################################################################
-DB2_USER				:= db2inst
+DB2_USER				:= db2inst1
 DB2_PASSWD				:= $(DB2_USER)
-DB2_GROUP				:= db2iadm
+DB2_GROUP				:= db2iadm1
 DB2_SHELL				:= /bin/bash
 DB2_PORT				:= 50000
-DB2_HOME				:= $(PATH_HOME)/$(DB2_USER)
+DB2_HOME				:= /db2/$(DB2_USER)
 DB2_PROFILE				:= $(DB2_HOME)/sqllib/db2profile
 
-DB2_DAS_USER			:= dasusr
+DB2_DAS_USER			:= dasusr1
 DB2_DAS_PASSWD			:= $(DB2_DAS_USER)
 DB2_DAS_GROUP			:= dasadm
 DB2_DAS_SHELL			:= /bin/bash
 DB2_DAS_HOME			:= $(PATH_HOME)/$(DB2_DAS_USER)
 
-DB2_FENC_USER			:= db2fenc
+DB2_FENC_USER			:= db2fenc1
 DB2_FENC_PASSWD			:= $(DB2_FENC_USER)
-DB2_FENC_GROUP			:= db2fadm
+DB2_FENC_GROUP			:= db2fadm1
 DB2_FENC_SHELL			:= /bin/bash
 DB2_FENC_HOME			:= $(PATH_HOME)/$(DB2_FENC_USER)
 
@@ -107,9 +108,10 @@ MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 
 MEDIA_STEP1_D	:= IBM DB2 Server V10.5 for Linux on AMD64 and Intel EM64T systems\n\t\t(x64) Multilingual (CIXV0ML)
 
-MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar
+MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/DB2_AWSE_REST_Svr_11.1_Lnx_86-64.tar.gz
+MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/db2_creation_scripts.tar.gz
 
-MEDIA_STEP1_B	:= ad8fdaf91a9a336401c02fd147f0a0535b0dffba246f8a0923b2906a9f6d6a7d1d5147dbadc3584257d4891910499b52dd04834b1bf53f3446085b4186671368
+MEDIA_STEP1_B	:= 4e5a24e73f569cda4e195320a469763764390b96ebaff29fcf8a85a482b38f804e5d4293d3ed5949195500163cca961f6238b7f3beb21ba94f2cba6492869808
 
 ################################################################################
 # DB2 INSTALLATION RESPONSE FILE TEMPLATE
@@ -203,15 +205,17 @@ preinstallchecks:		check_commands \
 						check_media_exists \
 						check_media_checksums 
 
-preinstall:		
+preinstall:			create_db2_home
 
-theinstall:				install_db2 
+theinstall:				install_db2 \
+						configure_tcp \
+						configure_itnm_db 
 
 postinstall:			clean
 
 preuninstallchecks:		check_commands
 
-preuninstall:			remove_license_file
+preuninstall:			
 
 theuninstall:			autostartoff_db2 \
 						uninstall_db2
@@ -224,7 +228,7 @@ clean:					remove_temp_dir \
 						clean_tmp
 
 scrub:					uninstall \
-						clean
+						scrub_users
 
 # WARNING scrub_users WILL REMOVE USERS AND HOME DIRECTORIES INCLUDING ALL
 # CONTENT AND ANY INSTALL MANAGERS IN SAME.  IF THE SAME USERNAME IS USED
@@ -385,7 +389,8 @@ prepare_db2_media:					check_whoami \
 									check_commands \
 									create_temp_dir
 	@$(call func_print_caption,"PREPARING DB2 MEDIA")
-	@$(call func_tar_xf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_REPOSITORY_INSTALL))
+	@$(call func_tar_zxf_to_new_dir,root,root,755,$(MEDIA_STEP1_F),$(PATH_REPOSITORY_INSTALL))
+	@$(call func_tar_zxf_to_new_dir,root,root,755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL_SQL))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -410,6 +415,23 @@ remove_db2_install_response_file:	check_commands
 	@$(call func_print_caption,"REMOVING DB2 INSTALLATION RESPONSE FILE")
 	@$(CMD_RM) -f $(DB2_RESPONSE_FILE)
 	@$(CMD_ECHO)
+
+################################################################################
+# ENSURE DB2HOME EXISTS 
+################################################################################
+create_db2_home:
+	@$(call func_print_caption,"Creating /db2/db2inst1")
+	@if [ -d "$(DB2_HOME)" ] ; \
+	then \
+		$(CMD_ECHO) "DB2 HOME Exists? (FAIL):      -d $(DB2_HOME) # already exists" ; \
+		exit 9; \
+	else \
+		$(CMD_ECHO) "DB2 HOME Exists? (OK):        -d $(DB2_HOME) # non-existent" ; \
+		$(CMD_MKDIR) -p $(DB2_HOME);  \
+		$(CMD_ECHO) "CREATING DB2_HOME" ; \
+	fi ;
+	@$(CMD_ECHO)
+
 
 ################################################################################
 # INSTALL DB2 AS root
@@ -442,6 +464,31 @@ validate_db2:						check_commands
 	@$(CMD_ECHO)
 	@$(PATH_INSTALL_DB2_VER)/bin/db2val
 	@$(CMD_ECHO)
+
+################################################################################
+# CONFIGURE TCP Communications 
+################################################################################
+configure_tcp:
+
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/bin/db2 update database manager configuration using svcename db2c_db2inst1"
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2stop"
+	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2start"
+
+
+################################################################################
+# CONFIGURE ITNM Database 
+################################################################################
+configure_itnm_db:
+
+	@$(CMD_SU) - $(DB2_USER) -c ". $(DB2_PROFILE)"
+	@$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/create_db2_database.sh ITNM db2inst1"
+
+################################################################################
+# POPULATE ITNM Database 
+################################################################################
+populate_itnm_db:
+
+	$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/populate_db2_database.sh ITNM db2inst1 db2inst1"
 
 ################################################################################
 # CONFIGURE DB2 TO AUTOSTART

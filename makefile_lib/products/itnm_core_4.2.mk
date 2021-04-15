@@ -87,11 +87,11 @@ ITNM_BASHPROFILE	:= $(ITNM_HOME)/.bash_profile
 # ITNM DATABASE CONFIGURATION
 ################################################################################
 DB_HOST   = nmsdb2-01
-DB_NAME   = inst1
-DB_PASSWD = db2inst
+DB_NAME   = db2inst1
+DB_PASSWD = db2inst1
 DB_PORT   = 50000
 DB_TYPE   = db2
-DB_USER   = db2inst
+DB_USER   = db2inst1
 
 ################################################################################
 # OMNIBUS CONFIGURATION
