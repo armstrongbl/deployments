@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 #                       _
 #                      / \   ___ ___ _   _  ___  ___ ___
 #                     / _ \ / __/ __| | | |/ _ \/ __/ __|
@@ -205,7 +205,7 @@ preinstallchecks:		check_commands \
 						check_media_exists \
 						check_media_checksums 
 
-preinstall:		
+preinstall:			create_db2_home
 
 theinstall:				install_db2 \
 						configure_tcp \
@@ -417,6 +417,23 @@ remove_db2_install_response_file:	check_commands
 	@$(CMD_ECHO)
 
 ################################################################################
+# ENSURE DB2HOME EXISTS 
+################################################################################
+create_db2_home:
+	@$(call func_print_caption,"Creating /db2/db2inst1")
+	@if [ -d "$(DB2_HOME)" ] ; \
+	then \
+		$(CMD_ECHO) "DB2 HOME Exists? (FAIL):      -d $(DB2_HOME) # already exists" ; \
+		exit 9; \
+	else \
+		$(CMD_ECHO) "DB2 HOME Exists? (OK):        -d $(DB2_HOME) # non-existent" ; \
+		$(CMD_MKDIR) -p $(DB2_HOME);  \
+		$(CMD_ECHO) "CREATING DB2_HOME" ; \
+	fi ;
+	@$(CMD_ECHO)
+
+
+################################################################################
 # INSTALL DB2 AS root
 ################################################################################
 install_db2:						check_whoami \
@@ -434,7 +451,6 @@ install_db2:						check_whoami \
 	else \
 		$(CMD_ECHO) "DB2 Exists? (OK):        -d $(PATH_INSTALL_DB2_VER) # non-existent" ; \
 		$(CMD_ECHO) ; \
-		$(CMD_MKDIR) -p $(DB2_HOME) \
 		$(CMD_ECHO) "DB2 Setup Installation:" ; \
 		$(PATH_REPOSITORY_INSTALL)/server_awse_o/db2setup -r $(DB2_RESPONSE_FILE) ; \
 	fi ;
@@ -466,9 +482,13 @@ configure_itnm_db:
 
 	@$(CMD_SU) - $(DB2_USER) -c ". $(DB2_PROFILE)"
 	@$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/create_db2_database.sh ITNM db2inst1"
-	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2stop"
-	@$(CMD_SU) - $(DB2_USER) -c "$(DB2_HOME)/sqllib/adm/db2start"
-	@$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/populate_db2_database.sh ITNM db2inst1"
+
+################################################################################
+# POPULATE ITNM Database 
+################################################################################
+populate_itnm_db:
+
+	/usr/bin/cd "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2" && $(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/populate_db2_database.sh ITNM db2inst1 db2inst1"
 
 ################################################################################
 # CONFIGURE DB2 TO AUTOSTART
