@@ -488,7 +488,7 @@ configure_itnm_db:
 ################################################################################
 populate_itnm_db:
 
-	/usr/bin/cd "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2" && $(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/populate_db2_database.sh ITNM db2inst1 db2inst1"
+	$(CMD_SU) - $(DB2_USER) -c "$(PATH_REPOSITORY_INSTALL_SQL)/precision/scripts/sql/db2/populate_db2_database.sh ITNM db2inst1 db2inst1"
 
 ################################################################################
 # CONFIGURE DB2 TO AUTOSTART
