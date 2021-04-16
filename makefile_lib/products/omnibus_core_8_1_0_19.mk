@@ -74,6 +74,8 @@ PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_trap
 PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_21_upgrade
 
 PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core
+PATH_REPOSITORY_SYSLOG_PACKAGE=com.ibm.tivoli.omnibus.integrations.nco-p-syslog
+PATH_REPOSITORY_TRAP_PACKAGE=com.ibm.tivoli.omnibus.integrations.nco-p-mttrapd
 
 ################################################################################
 # INSTALLATION USERS
@@ -171,11 +173,6 @@ OMNIBUS_PACKAGES	=	$(PACKAGES_COMMON) \
 						libstdc++.i686 \
 						libX11.i686
 endif
-
-################################################################################
-# NETCOOL CONFIGURATION
-################################################################################
-NETCOOL_PA_NAME=NCO_PA
 
 ################################################################################
 # OMNIBUS CONFIGURATION
@@ -456,7 +453,6 @@ preinstall:			set_limits
 
 theinstall:			install_omnibus \
 					confirm_shared_libraries \
-					autostarton_omnibus
 
 postinstall:		clean
 
@@ -467,6 +463,8 @@ preuninstallchecks:	check_commands \
 preuninstall:
 
 theuninstall:		autostartoff_omnibus \
+					uninstall_syslog \
+					uninstall_trap \
 					uninstall_omnibus
 
 postuninstall:		remove_netcool_path \
@@ -1110,6 +1108,27 @@ autostartoff_omnibus:	check_whoami \
 	else \
 		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # non-existent" ; \
 	fi ;
+	@$(CMD_ECHO)
+
+################################################################################
+# UNINSTALL NETCOOL/OMNIBUS TRAPD
+################################################################################
+uninstall_trap:	check_whoami \
+					check_commands
+
+	@$(call func_print_caption,"UNINSTALLING NETCOOL/OMNIBUS TRAPD")
+	$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_TRAP_PACKAGE),OMNIbus Core) ; \
+	@$(CMD_ECHO)
+
+
+################################################################################
+# UNINSTALL NETCOOL/OMNIBUS SYSLOG
+################################################################################
+uninstall_syslog:	check_whoami \
+					check_commands
+
+	@$(call func_print_caption,"UNINSTALLING NETCOOL/OMNIBUS SYSLOG")
+	$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_SYSLOG_PACKAGE),OMNIbus Core) ; \
 	@$(CMD_ECHO)
 
 ################################################################################
