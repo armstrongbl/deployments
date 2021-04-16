@@ -67,7 +67,7 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_4_2_install
 
-PATH_REPOSITORY_ITNM_PACKAGE=com.ibm.tivoli.itnm.core_
+PATH_REPOSITORY_ITNM_PACKAGE=com.ibm.tivoli.netcool.itnm.core
 
 ################################################################################
 # INSTALLATION USERS
@@ -87,7 +87,7 @@ ITNM_BASHPROFILE	:= $(ITNM_HOME)/.bash_profile
 # ITNM DATABASE CONFIGURATION
 ################################################################################
 DB_HOST   = nmsdb2-01
-DB_NAME   = db2inst1
+DB_NAME   = ITNM
 DB_PASSWD = db2inst1
 DB_PORT   = 50000
 DB_TYPE   = db2
@@ -96,8 +96,8 @@ DB_USER   = db2inst1
 ################################################################################
 # OMNIBUS CONFIGURATION
 ################################################################################
-OMNIBUS_OS_HOST		= nmsfms01
-OMNIBUS_OS_NAME		= NBN_DIS1
+OMNIBUS_OS_HOST		= nmsfms03
+OMNIBUS_OS_NAME		= NBN_AGG1
 OMNIBUS_OS_PASSWD	= 
 OMNIBUS_OS_PORT		= 4100
 OMNIBUS_OS_USER		= root
@@ -107,7 +107,7 @@ ITNM_DOMAIN		= NBN
 ################################################################################
 # IBMIM CONFIGURATION AND PACKAGE VERIFICATION
 ################################################################################
-ITNM_IMSHARED	:= $(ITNM_HOME)/IBM/IMShared 
+ITNM_IMSHARED	:= $(ITNM_HOME)/IBM/IMShared
 ITNM_CMD_IMCL	:= $(ITNM_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
 
 ITNM_LDD_CHECKS	= $(shell $(CMD_LS) $(PATH_INSTALL_ITNM)/platform/linux2x86/bin*/nco* | $(CMD_GREP) -v env$)
