@@ -73,7 +73,7 @@ PATH_REPOSITORY_SYSLOG	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_sysl
 PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_trap
 PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_21_upgrade
 
-PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core_
+PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core
 
 ################################################################################
 # INSTALLATION USERS
