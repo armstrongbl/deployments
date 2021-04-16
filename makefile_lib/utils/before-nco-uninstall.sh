@@ -11,6 +11,5 @@ echo "System Role is ${SYSTEM_ROLE}.  PA_NAME is ${PA_NAME}"
 
 
 #run installer as root
-echo "Installing Netcool Omnibus"
-echo "Check $LOG for more info"
+echo "Un-installing Netcool Omnibus"
 make -f $BASEDIR/products/omnibus_core_8_1_0_19.mk uninstall PATH_MAKEFILE_MEDIA=/opt/viasat/nms/ibm/software NETCOOL_PA_NAME=${PA_NAME} > $LOG

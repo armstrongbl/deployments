@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOG=/tmp/after-install.log
+LOG=/tmp/nms_install.log
 BASEDIR=/opt/viasat/deployments/makefile_lib
 
 #Determine System Role
@@ -12,5 +12,4 @@ echo "System Role is ${SYSTEM_ROLE}.  PA_NAME is ${PA_NAME}"
 
 #run installer as root
 echo "Installing Netcool Omnibus"
-echo "Check $LOG for more info"
 make -f $BASEDIR/products/omnibus_core_8_1_0_19.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/nms/ibm/software NETCOOL_PA_NAME=${PA_NAME} > $LOG

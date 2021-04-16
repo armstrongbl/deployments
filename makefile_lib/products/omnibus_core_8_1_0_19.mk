@@ -453,6 +453,7 @@ preinstall:			set_limits
 
 theinstall:			install_omnibus \
 					confirm_shared_libraries \
+					autostarton_omnibus
 
 postinstall:		clean
 
@@ -1034,29 +1035,6 @@ autostarton_omnibus:	check_whoami \
 				$(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE) || { $(CMD_ECHO) ; \
 					"nco Start (FAIL):        $(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE)" ; \
 					exit 21; } ; \
-				$(CMD_ECHO) "nco Start (OK):          $(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE)" ; \
-				\
-				$(CMD_ECHO) "nco Starting:            $(CMD_SLEEP) 5 # to give time to start..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(CMD_ECHO) "nco Start Check:         $(CMD_SLEEP) 5 # to check for pending..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(eval TEMP_PA_PENDING_COUNT=`$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
-				if [ $(TEMP_PA_PENDING_COUNT) -eq 0 ] ; \
-				then \
-					$(CMD_ECHO) "nco Start (OK):          #No pending detected" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
-				else \
-					$(CMD_ECHO) "nco Start (PENDING):     #Seems to be pending, possible configuration problem" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
-					$(CMD_ECHO) "nco Stopping:            $(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE)" ; \
-					$(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE) ; \
-					$(CMD_ECHO) ; \
-					$(CMD_ECHO) "nco Configuration (FAIL):#Please review Process Agent and OMNIbus logs." ; \
-					$(CMD_ECHO) ; \
-					exit 22; \
-				fi ; \
 			fi ; \
 		fi ; \
 	else \
@@ -1087,7 +1065,7 @@ autostartoff_omnibus:	check_whoami \
 			$(CMD_CHKCONFIG) --del $(NETCOOL_SERVICE) ; \
 			\
 			$(CMD_ECHO) "Start/Stop Script:       $(CMD_RM) -f $(ETC_INITD_NCO)" ; \
-			$(CMD_RM) -f $(ETC_INITD_NCO); \
+			-$(CMD_RM) -f $(ETC_INITD_NCO); \
 		else \
 			$(CMD_ECHO) "systemd init Check:      $(CMD_GREP) \" 6\" /etc/redhat-release # Red Hat 7+ / systemd" ; \
 			\
@@ -1117,7 +1095,7 @@ uninstall_trap:	check_whoami \
 					check_commands
 
 	@$(call func_print_caption,"UNINSTALLING NETCOOL/OMNIBUS TRAPD")
-	$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_TRAP_PACKAGE),OMNIbus Core) ; \
+	-$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_TRAP_PACKAGE),OMNIbus Core) ; \
 	@$(CMD_ECHO)
 
 
@@ -1128,7 +1106,7 @@ uninstall_syslog:	check_whoami \
 					check_commands
 
 	@$(call func_print_caption,"UNINSTALLING NETCOOL/OMNIBUS SYSLOG")
-	$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_SYSLOG_PACKAGE),OMNIbus Core) ; \
+	-$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_SYSLOG_PACKAGE),OMNIbus Core) ; \
 	@$(CMD_ECHO)
 
 ################################################################################
