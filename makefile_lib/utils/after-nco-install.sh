@@ -15,5 +15,5 @@ chmod 775 /opt/viasat/deployments/makefile_lib/utils/chkversion
 echo "Installing Netcool Omnibus"
 make -f $BASEDIR/products/omnibus_core_8_1_0_19.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/nms/ibmrepo NETCOOL_PA_NAME=${PA_NAME} > $LOG
 sleep 3
-###rm -rf /opt/viasat/deployments
+rm -rf /opt/viasat/deployments
 
