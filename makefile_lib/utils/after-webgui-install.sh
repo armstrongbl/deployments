@@ -12,6 +12,6 @@ chmod 775 /opt/viasat/deployments/makefile_lib/utils/chkversion
 
 #run installer as root
 echo "Installing OMNIbus WebGUI"
-make -f $BASEDIR/products/omnibus_webgui_8_1_0_17.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/ibmrepo  > $LOG
+make -f $BASEDIR/products/omnibus_webgui_8_1_0_17.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/nms/ibmrepo  > $LOG
 sleep 3
 rm -rf /opt/viasat/deployments
