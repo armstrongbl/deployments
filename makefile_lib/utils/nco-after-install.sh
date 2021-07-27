@@ -9,6 +9,6 @@ BASEDIR=/opt/viasat/deployments/makefile_lib/products
 #run installer as root
 echo "Installing OMNIBus"
 chmod 775 /opt/viasat/deployments/makefile_lib/utils/chkversion
-make -f $BASEDIR/omnibus_core_8_1_0_19.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/nms/ibmrepo > $LOG
+make -f $BASEDIR/omnibus_core_8_1_0_19.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/ibmrepo > $LOG
 sleep 3
 rm -rf /opt/viasat/deployments

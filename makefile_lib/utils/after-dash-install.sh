@@ -12,6 +12,6 @@ chmod 775 /opt/viasat/deployments/makefile_lib/utils/chkversion
 
 #run installer as root
 echo "Installing DASH/JazzSM"
-make -f $BASEDIR/products/jazzsm_1_1_3_was_8.5.5.15.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/nms/ibmrepo  > $LOG
+make -f $BASEDIR/products/jazzsm_1_1_3_was_8.5.5.15.mk install PATH_MAKEFILE_MEDIA=/opt/viasat/ibmrepo  > $LOG
 sleep 3
 rm -rf /opt/viasat/deployments
