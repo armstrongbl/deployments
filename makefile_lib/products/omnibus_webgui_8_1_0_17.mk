@@ -29,9 +29,6 @@
 ## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
 ## DEALINGS IN THE SOFTWARE.                                                  ##
 ################################################################################
-# IBM Tivoli Netcool/OMNIbus WebGUI 8.1.0.5
-# Michael T. Brown
-# July 10, 2019
 ################################################################################
 MAKE_FILE	:= $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 MAKE_DIR	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -69,8 +66,13 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/webgui_8_1_0_4_install
 PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/webgui_8_1_0_5_upgrade
+PATH_REPOSITORY_JAZZ_INSTALL := $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_15_install
+PATH_REPOSITORY_JAZZ_UPGRADE := $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_15_upgrade
 
 PATH_REPOSITORY_WEBGUI_PACKAGE=com.ibm.tivoli.netcool.omnibus.webgui
+PATH_REPOSITORY_JAZZSM_EXT_PACKAGE=com.ibm.tivoli.tacct.psc.install.was85.extension_
+PATH_REPOSITORY_JAZZSM_JVM_PACKAGE=com.ibm.websphere.IBMJAVA.v70_
+PATH_REPOSITORY_JAZZSM_WAS_PACKAGE=com.ibm.websphere.BASE.v85_
 
 ################################################################################
 # INSTALLATION USERS
@@ -102,7 +104,7 @@ WAS_JAZZSM_SERVERNAME=server1
 ################################################################################
 # OMNIBUS CONFIGURATION
 ################################################################################
-OMNIBUS_OS_HOST		= $(HOST_FQDN)
+OMNIBUS_OS_HOST		= nmsfms03
 OMNIBUS_OS_PASSWD	=
 OMNIBUS_OS_PORT		= 4100
 OMNIBUS_OS_USER		= root
@@ -215,8 +217,8 @@ CONFIGURATION_TOKEN_OBJECTSERVER_PRIMARY_HOST=$(OMNIBUS_OS_HOST)
 CONFIGURATION_TOKEN_OBJECTSERVER_PRIMARY_PORT=$(OMNIBUS_OS_PORT)
 OBJECTSERVER_ENABLE_SECONDARY_SERVER=false
 CONFIGURATION_TOKEN_OBJECTSERVER_FAILOVER=
-CONFIGURATION_TOKEN_OBJECTSERVER_SECONDARY_HOST=localhost
-CONFIGURATION_TOKEN_OBJECTSERVER_SECONDARY_PORT=4200
+CONFIGURATION_TOKEN_OBJECTSERVER_SECONDARY_HOST=nmsfms04
+CONFIGURATION_TOKEN_OBJECTSERVER_SECONDARY_PORT=4100
 CONFIGURATION_TOKEN_OBJECTSERVER_SSL=false
 OBJECTSERVER_PASSWORD_FIPS=false
 USER_REGISTRY_OBJECTSERVER_SELECTED=true
@@ -238,6 +240,12 @@ define WEBGUI_UNINSTALL_RESPONSE_FILE_CONTENT
   <variables>
     <variable name='sharedLocation' value='$(WEBGUI_IMSHARED)'/>
   </variables>
+  <server>
+    <repository location='$(PATH_REPOSITORY_INSTALL)/OMNIbusWebGUIRepository'/>
+    <repository location='$(PATH_REPOSITORY_JAZZ_INSTALL)/WASRepository/disk1'/>
+    <repository location='$(PATH_REPOSITORY_JAZZ_INSTALL)/JazzSMRepository/disk1'/>
+    <repository location='$(PATH_REPOSITORY_JAZZ_INSTALL)'/>
+  </server>
   <profile id='IBM Netcool GUI Components' installLocation='$(PATH_INSTALL_NETCOOL_WEBGUI)'>
     <data key='cic.selector.arch' value='x86_64'/>
     <data key='user.DashHomeDir' value='$(PATH_INSTALL_JAZZSM)/ui'/>
@@ -293,9 +301,7 @@ theinstall:			install_webgui \
 
 postinstall:		clean
 
-preuninstallchecks:	check_commands \
-					check_media_exists \
-					check_media_checksums
+preuninstallchecks:	check_commands 
 
 preuninstall:
 
