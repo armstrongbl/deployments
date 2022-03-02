@@ -933,9 +933,9 @@ func_uninstall_im_package = \
 		$(CMD_ECHO) "Uninstall Package? (OK): \#$$temp_package found for $(4)" ; \
 		$(CMD_ECHO) "Uninstall Package:       \#In progress..." ; \
 		$(CMD_SU) - $(2) -c "$(1) uninstall $$temp_package $(OPTIONS_MAKEFILE_IM)" || \
-			{ $(CMD_ECHO) "Uninstall Package (FAIL):$(CMD_SU) - $(2) -c \"$(1) uninstall $$temp_package $(OPTIONS_MAKEFILE_IM)\"" ; \
+			{ $(CMD_ECHO) "Uninstall Package (FAIL):$(CMD_SU) - $(2) -c \"$(1) uninstallAll $$temp_package $(OPTIONS_MAKEFILE_IM)\"" ; \
 			exit 188; } ; \
-		$(CMD_ECHO) "Uninstall Package (OK):  $(CMD_SU) - $(2) -c \"$(1) uninstall $$temp_package $(OPTIONS_MAKEFILE_IM)\"" ; \
+		$(CMD_ECHO) "Uninstall Package (OK):  $(CMD_SU) - $(2) -c \"$(1) uninstallAll $$temp_package $(OPTIONS_MAKEFILE_IM)\"" ; \
 	else \
 		if [ $$temp_package_count -eq 0 ] ; \
 		then \

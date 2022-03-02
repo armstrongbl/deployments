@@ -67,7 +67,7 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 ################################################################################
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/itnm_core_4_2_install
 
-PATH_REPOSITORY_ITNM_PACKAGE=com.ibm.tivoli.itnm.core_
+PATH_REPOSITORY_ITNM_PACKAGE=com.ibm.tivoli.netcool.itnm.core
 
 ################################################################################
 # INSTALLATION USERS
@@ -86,18 +86,18 @@ ITNM_BASHPROFILE	:= $(ITNM_HOME)/.bash_profile
 ################################################################################
 # ITNM DATABASE CONFIGURATION
 ################################################################################
-DB_HOST   = nmsdb01
-DB_NAME   = VSAT1
-DB_PASSWD = ncim
-DB_PORT   = 1521
-DB_TYPE   = oracle
-DB_USER   = ncim
+DB_HOST   = nmsdb2-01
+DB_NAME   = ITNM
+DB_PASSWD = db2inst1
+DB_PORT   = 50000
+DB_TYPE   = db2
+DB_USER   = db2inst1
 
 ################################################################################
 # OMNIBUS CONFIGURATION
 ################################################################################
-OMNIBUS_OS_HOST		= nmsfms01
-OMNIBUS_OS_NAME		= AGG_P
+OMNIBUS_OS_HOST		= nmsfms03
+OMNIBUS_OS_NAME		= NBN_AGG1
 OMNIBUS_OS_PASSWD	= 
 OMNIBUS_OS_PORT		= 4100
 OMNIBUS_OS_USER		= root
@@ -107,7 +107,7 @@ ITNM_DOMAIN		= NBN
 ################################################################################
 # IBMIM CONFIGURATION AND PACKAGE VERIFICATION
 ################################################################################
-ITNM_IMSHARED	= $(ITNM_HOME)/$(PATH_REPOSITORY_INSTALL)
+ITNM_IMSHARED	:= $(ITNM_HOME)/IBM/IMShared
 ITNM_CMD_IMCL	:= $(ITNM_HOME)/$(PATH_IM_IMCL_RELATIVE_PATH)
 
 ITNM_LDD_CHECKS	= $(shell $(CMD_LS) $(PATH_INSTALL_ITNM)/platform/linux2x86/bin*/nco* | $(CMD_GREP) -v env$)
@@ -185,10 +185,10 @@ MEDIA_STEP1_D	:=	IBM Prerequisite Scanner V1.2.0.17, Build 20150827
 MEDIA_STEP2_D	:=	IBM Tivoli Network Manager V4.2
 
 MEDIA_STEP1_F	:=	$(PATH_MAKEFILE_MEDIA)/1.2.0.18-Tivoli-PRS-Unix-fp0001.tar
-MEDIA_STEP2_F	:=	$(PATH_MAKEFILE_MEDIA)/ITNMIPEV4.2.0.5LNXML.zip
+MEDIA_STEP2_F	:=	$(PATH_MAKEFILE_MEDIA)/ITNMIPEV4.2.0.7LNXML.zip
 
 MEDIA_STEP1_B	:=	fe17ed5d7ca2d6df7e139e0d7fe5ce1b615a078bc12831556dd24b0b4515690121d317d9c5a13909573a0dec21532c218ac9db21731e93cddb19424e241b09b4
-MEDIA_STEP2_B	:=	bac7203e08a5374eb86e3836a86f1e5a7a4512e09c202fdbfa4106a3e936f402e85b04e690320f2ed6f96d7e355db85b2821063cb44dfa8b23cedd1d791fc838
+MEDIA_STEP2_B	:=	c09a49b5227344e2521d472827f5af655fcb719d4dbaeebb6581d824a818b1c5e8f71baacc38a6a33ae07e3659ccbcc5d46f02866b86b86386afee17844452e9
 
 
 ################################################################################
@@ -230,10 +230,10 @@ define ITNM_INSTALL_RESPONSE_FILE_CONTENT
     <data key='user.itnm.database.port,com.ibm.tivoli.netcool.itnm.core' value='$(DB_PORT)'/>
   </profile>
   <install>
-    <!-- Network Manager Core Components 4.2.0.5 -->
-    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.netcool.itnm.core' version='4.2.4.20180404_2022' features='itnm.core,non.fips.compliant'/>
-    <!-- Network Manager topology database creation scripts 4.2.0.5 -->
-    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.netcool.itnm.dbscripts' version='4.2.4.20180404_2022' features='db2.feature,oracle.feature'/>
+    <!-- Network Manager Core Components 4.2.0.7 -->
+    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.netcool.itnm.core' version='4.2.7.20190531_1310' features='itnm.core,non.fips.compliant'/>
+    <!-- Network Manager topology database creation scripts 4.2.0.7 -->
+    <offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.netcool.itnm.dbscripts' version='4.2.7.20190531_1310' features='db2.feature,oracle.feature'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
 </agent-input>
@@ -498,8 +498,8 @@ create_itnm_user:	check_whoami \
 	@$(call func_print_caption,"CONFIRMING/CREATING ITNM USER")
 	@$(call func_create_user,$(ITNM_USER),$(MAKE_PRODUCT),$(ITNM_GROUP),$(ITNM_HOME),$(ITNM_SHELL),$(ITNM_PASSWD))
 
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),PATH,$(PATH_INSTALL_ITNM)/bin)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHPROFILE),PATH,$(PATH_INSTALL_ITNM)/bin)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),PATH,$(PATH_INSTALL_ITNM)/bin)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHPROFILE),PATH,$(PATH_INSTALL_ITNM)/bin)
 
 ################################################################################
 # As instructed by PI Installation Guide, do not set NCHOME if OMNIbus
@@ -509,18 +509,18 @@ create_itnm_user:	check_whoami \
 #	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),NCHOME,$(PATH_INSTALL_NETCOOL),644)
 #	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),NCHOME,$(PATH_INSTALL_NETCOOL),644)
 
-	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),OMNIHOME,$(PATH_INSTALL_ITNM),644)
-	@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),OMNIHOME,$(PATH_INSTALL_ITNM),644)
+	#@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHRC),OMNIHOME,$(PATH_INSTALL_ITNM),644)
+	#@$(call func_setenv_set_and_export_in_file,$(ITNM_USER),$(ITNM_BASHPROFILE),OMNIHOME,$(PATH_INSTALL_ITNM),644)
 
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib64)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre_1.7.0/jre/bin/j9vm)
-	@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre64_1.7.0/jre/bin/j9vm)
-	@$(CMD_ECHO)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib64)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,/usr/lib)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/lib64)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_ITNM)/platform/linux2x86/lib64)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre_1.7.0/jre/bin/j9vm)
+	#@$(call func_setenv_append_and_export_in_file,$(ITNM_BASHRC),LD_LIBRARY_PATH,$(PATH_INSTALL_NETCOOL)/platform/linux2x86/jre64_1.7.0/jre/bin/j9vm)
+	#@$(CMD_ECHO)
 
 ################################################################################
 # REMOVE USERS
@@ -547,7 +547,7 @@ prepare_itnm_install_media:	check_whoami \
 ################################################################################
 # CREATE ITNM RESPONSE FILE (INSTALLATION)
 ################################################################################
-create_itnm_install_response_file:	check_whoami \
+create_response_file:	check_whoami \
 										check_commands
 
 	@$(call func_print_caption,"CREATING ITNM INSTALLATION RESPONSE FILE")
@@ -558,7 +558,7 @@ create_itnm_install_response_file:	check_whoami \
 	@$(call func_chmod,444,$(ITNM_INSTALL_RESPONSE_FILE))
 	@$(CMD_ECHO)
 
-remove_itnm_install_response_file:	check_commands
+remove_response_file:	check_commands
 	@$(call func_print_caption,"REMOVING ITNM INSTALLATION RESPONSE FILE")
 	@$(CMD_RM) -f $(ITNM_INSTALL_RESPONSE_FILE)
 	@$(CMD_ECHO)
@@ -569,7 +569,7 @@ remove_itnm_install_response_file:	check_commands
 install_itnm:		check_whoami \
 						check_commands \
 						prepare_itnm_install_media \
-						create_itnm_install_response_file \
+						create_response_file \
 						create_itnm_user \
 						create_root_path \
 						create_netcool_path

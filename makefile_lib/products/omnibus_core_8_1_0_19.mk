@@ -71,9 +71,15 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_install
 PATH_REPOSITORY_SYSLOG	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_syslog
 PATH_REPOSITORY_TRAP	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_trap
+PATH_REPOSITORY_PING	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_ping
+PATH_REPOSITORY_JDBC	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_19_jdbc
 PATH_REPOSITORY_UPGRADE	:= $(PATH_MAKEFILE_REPOSITORY)/omnibus_core_8_1_0_21_upgrade
 
-PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core_
+PATH_REPOSITORY_OMNIBUS_PACKAGE=com.ibm.tivoli.omnibus.core
+PATH_REPOSITORY_SYSLOG_PACKAGE=com.ibm.tivoli.omnibus.integrations.nco-p-syslog
+PATH_REPOSITORY_TRAP_PACKAGE=com.ibm.tivoli.omnibus.integrations.nco-p-mttrapd
+PATH_REPOSITORY_PING_PACKAGE=com.ibm.tivoli.omnibus.integrations.nco-p-ping
+PATH_REPOSITORY_JDBC_PACKAGE=com.ibm.tivoli.omnibus.integrations.nco-g-jdbc
 
 ################################################################################
 # INSTALLATION USERS
@@ -173,11 +179,6 @@ OMNIBUS_PACKAGES	=	$(PACKAGES_COMMON) \
 endif
 
 ################################################################################
-# NETCOOL CONFIGURATION
-################################################################################
-NETCOOL_PA_NAME=NCO_PA
-
-################################################################################
 # OMNIBUS CONFIGURATION
 ################################################################################
 NETCOOL_SERVICE=nco
@@ -263,22 +264,30 @@ MEDIA_ALL_DESC	=	\t$(MEDIA_STEP1_D)\n \
 MEDIA_ALL_FILES	=	$(MEDIA_STEP1_F) \
 					$(MEDIA_STEP2_F) \
 					$(MEDIA_STEP3_F) \
-					$(MEDIA_STEP4_F)
+					$(MEDIA_STEP4_F) \
+					$(MEDIA_STEP5_F) \
+					$(MEDIA_STEP6_F)
 
 MEDIA_STEP1_D	:= IBM Prerequisite Scanner V1.2.0.17, Build 20150827
 MEDIA_STEP2_D	:= IBM Tivoli Netcool OMNIbus 8.1.0.19 Core Linux 64bit Multilingual\n\t\t(CN8HFML) 
 MEDIA_STEP3_D	:= IBM Tivoli Netcool OMNIbus Syslog Probe 64bit\n\t\t Multilingual
 MEDIA_STEP4_D	:= IBM Tivoli Netcool OMNIbus MTTrapd Probe 64bit\n\t\t Multilingual
+MEDIA_STEP5_D	:= IBM Tivoli Netcool OMNIbus JDBC Gateway 64bit\n\t\t Multilingual
+MEDIA_STEP6_D	:= IBM Tivoli Netcool OMNIbus Ping Probe 64bit\n\t\t Multilingual
 
 MEDIA_STEP1_F	:= $(PATH_MAKEFILE_MEDIA)/precheck_unix_20150827.tar
 MEDIA_STEP2_F	:= $(PATH_MAKEFILE_MEDIA)/TVL_NTCL_OMN_V8.1.0.19_CORE_LNX_M.zip
 MEDIA_STEP3_F	:= $(PATH_MAKEFILE_MEDIA)/CN4FYEN_SYSLOG.zip
 MEDIA_STEP4_F	:= $(PATH_MAKEFILE_MEDIA)/CN4FZEN_MTTRAPD_v20.zip
+MEDIA_STEP5_F	:= $(PATH_MAKEFILE_MEDIA)/im-nco-g-jdbc-5_0.zip
+MEDIA_STEP6_F	:= $(PATH_MAKEFILE_MEDIA)/im-nco-p-ping-7_0.zip
 
 MEDIA_STEP1_B	:= fda01aa083b92fcb6f25a7b71058dc045b293103731ca61fda10c73499f1473ef59608166b236dcf802ddf576e7469af0ec063215326e620092c1aeeb1d19186
 MEDIA_STEP2_B	:= 36d779246309bb511489e0bfd90c01f38073a4feb45706e9e5185de1deca5cc33df0b7da35c06a8216f4d13cbf16cfab55fa3b253993fd34357763392b8e8cd2
 MEDIA_STEP3_B	:= b29473ee9dec4d28f48d57ac9e70ba9b0fe4d501b2c503e4fb764ceb69ebb2640131b3ea3e682ee203ccaefa267bb12d1c70abb292333313542439cb86214e1b
 MEDIA_STEP4_B	:= 25f5a068ed358a1f6b11af6d418af798405bd449adb16f6fa6c6a118e6b0051646992d55657b9d14e3200763986afe167102c3561bc5f0c2f3696b29c218c082
+MEDIA_STEP5_B	:= 31a4ffc7f920c5671996c8b138bc821c1c418c4e784f5cd04308ef594fe0c981643f702d1ce758c6120d4ed5be76dd73f6efe7ffeab47c6b7986bc293d4376e2 
+MEDIA_STEP6_B	:= f98159064b883c84a249c84f490676a68c56e17db0c70d7254439653777b9be045eadc24bdf361c3ac59fa8404e6c31e47c7dd489caebba6950d48ee470873d5
 
 ################################################################################
 # COMMAND TO BE INSTALLED BEFORE USE
@@ -297,8 +306,10 @@ define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
   </variables>
   <server>
     <repository location='$(PATH_REPOSITORY_INSTALL)/OMNIbusRepository'/>
-    <repository location='$(PATH_REPOSITORY_INSTALL)/PATH_REPOSITORY_SYSLOG'/>
-    <repository location='$(PATH_REPOSITORY_INSTALL)/PATH_REPOSITORY_TRAP'/>
+    <repository location='$(PATH_REPOSITORY_SYSLOG)'/>
+    <repository location='$(PATH_REPOSITORY_TRAP)'/>
+    <repository location='$(PATH_REPOSITORY_JDBC)'/>
+    <repository location='$(PATH_REPOSITORY_PING)'/>
   </server>
   <profile id='IBM Netcool Core Components' installLocation='$(PATH_INSTALL_NETCOOL)'> 
     <data key='cic.selector.arch' value='x86_64'/>
@@ -311,6 +322,10 @@ define OMNIBUS_INSTALL_RESPONSE_FILE_CONTENT
 	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-p-mttrapd' version='1.20.0.2' features='nco-p-mttrapd'/>
 	<!-- Netcool/OMNIbus Probe nco-p-syslog 1.8.0.0 -->
 	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-p-syslog' version='1.8.0.6' features='nco-p-syslog'/>
+	<!-- Netcool/OMNIbus Gateway nco-g-jdbc 1.5.0.0 -->
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-g-jdbc' version='1.5.0.5' features='nco-g-jdbc'/>
+	<!-- Netcool/OMNIbus Probe nco-p-ping 1.7.0.0 -->
+	<offering profile='IBM Netcool Core Components' id='com.ibm.tivoli.omnibus.integrations.nco-p-ping' version='1.7.0.2' features='nco-p-ping'/>
   </install>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
 </agent-input>
@@ -467,6 +482,8 @@ preuninstallchecks:	check_commands \
 preuninstall:
 
 theuninstall:		autostartoff_omnibus \
+					uninstall_syslog \
+					uninstall_trap \
 					uninstall_omnibus
 
 postuninstall:		remove_netcool_path \
@@ -728,6 +745,8 @@ prepare_omnibus_install_media:	check_whoami \
 	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP2_F),$(PATH_REPOSITORY_INSTALL))
 	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP3_F),$(PATH_REPOSITORY_SYSLOG))
 	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP4_F),$(PATH_REPOSITORY_TRAP))
+	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP5_F),$(PATH_REPOSITORY_JDBC))
+	@$(call func_unzip_to_new_dir,$(OMNIBUS_USER),$(OMNIBUS_GROUP),755,$(MEDIA_STEP6_F),$(PATH_REPOSITORY_PING))
 	@$(CMD_ECHO)
 
 ################################################################################
@@ -1036,29 +1055,6 @@ autostarton_omnibus:	check_whoami \
 				$(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE) || { $(CMD_ECHO) ; \
 					"nco Start (FAIL):        $(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE)" ; \
 					exit 21; } ; \
-				$(CMD_ECHO) "nco Start (OK):          $(CMD_SYSTEMCTL) start $(NETCOOL_SERVICE)" ; \
-				\
-				$(CMD_ECHO) "nco Starting:            $(CMD_SLEEP) 5 # to give time to start..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(CMD_ECHO) "nco Start Check:         $(CMD_SLEEP) 5 # to check for pending..." ; \
-				$(CMD_SLEEP) 5 ; \
-				$(eval TEMP_PA_PENDING_COUNT=`$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) | $(CMD_GREP) PENDING | $(CMD_WC) -l`)  \
-				if [ $(TEMP_PA_PENDING_COUNT) -eq 0 ] ; \
-				then \
-					$(CMD_ECHO) "nco Start (OK):          #No pending detected" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
-				else \
-					$(CMD_ECHO) "nco Start (PENDING):     #Seems to be pending, possible configuration problem" ; \
-					$(CMD_ECHO) "nco Status:" ; \
-					$(OMNIBUS_BIN_PASTATUS) -server $(NETCOOL_PA_NAME) -user $(OMNIBUS_USER) -password $(OMNIBUS_PASSWD) ; \
-					$(CMD_ECHO) "nco Stopping:            $(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE)" ; \
-					$(CMD_SYSTEMCTL) stop $(NETCOOL_SERVICE) ; \
-					$(CMD_ECHO) ; \
-					$(CMD_ECHO) "nco Configuration (FAIL):#Please review Process Agent and OMNIbus logs." ; \
-					$(CMD_ECHO) ; \
-					exit 22; \
-				fi ; \
 			fi ; \
 		fi ; \
 	else \
@@ -1089,7 +1085,7 @@ autostartoff_omnibus:	check_whoami \
 			$(CMD_CHKCONFIG) --del $(NETCOOL_SERVICE) ; \
 			\
 			$(CMD_ECHO) "Start/Stop Script:       $(CMD_RM) -f $(ETC_INITD_NCO)" ; \
-			$(CMD_RM) -f $(ETC_INITD_NCO); \
+			-$(CMD_RM) -f $(ETC_INITD_NCO); \
 		else \
 			$(CMD_ECHO) "systemd init Check:      $(CMD_GREP) \" 6\" /etc/redhat-release # Red Hat 7+ / systemd" ; \
 			\
@@ -1110,6 +1106,27 @@ autostartoff_omnibus:	check_whoami \
 	else \
 		$(CMD_ECHO) "OMNIbus Exists? (OK):    -d $(PATH_INSTALL_OMNIBUS) # non-existent" ; \
 	fi ;
+	@$(CMD_ECHO)
+
+################################################################################
+# UNINSTALL NETCOOL/OMNIBUS TRAPD
+################################################################################
+uninstall_trap:	check_whoami \
+					check_commands
+
+	@$(call func_print_caption,"UNINSTALLING NETCOOL/OMNIBUS TRAPD")
+	-$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_TRAP_PACKAGE),OMNIbus Core) ; \
+	@$(CMD_ECHO)
+
+
+################################################################################
+# UNINSTALL NETCOOL/OMNIBUS SYSLOG
+################################################################################
+uninstall_syslog:	check_whoami \
+					check_commands
+
+	@$(call func_print_caption,"UNINSTALLING NETCOOL/OMNIBUS SYSLOG")
+	-$(call func_uninstall_im_package,$(OMNIBUS_CMD_IMCL),$(OMNIBUS_USER),$(PATH_REPOSITORY_SYSLOG_PACKAGE),OMNIbus Core) ; \
 	@$(CMD_ECHO)
 
 ################################################################################

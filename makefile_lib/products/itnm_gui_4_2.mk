@@ -17,7 +17,7 @@ MAKE_FILE               := $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 # MAKE_FILE NAME, MUST BE BEFORE ANY OTHER MAKEFILE INCLUDES
 ################################################################################
 
-include /opt/accuOSS/makefile_lib/include/includes
+include ${MAKE_DIR}../include/includes
 
 ################################################################################
 # INSTALLATION TUNABLES
