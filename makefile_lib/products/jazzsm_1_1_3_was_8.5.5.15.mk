@@ -29,8 +29,12 @@
 ## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
 ## DEALINGS IN THE SOFTWARE.                                                  ##
 ################################################################################
+<<<<<<< HEAD
 # IBM Jazz for Service Management 1.1.3.1
 # IBM WebSphere Application Server V8.5.5.20
+=======
+
+>>>>>>> 4ca845fd8c2c74d02d79e0b16b312f184433e6a6
 ################################################################################
 MAKE_FILE	:= $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 MAKE_DIR	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -149,6 +153,7 @@ WAS_REST_NOTIFICATION_PORT=16324
 # SERVER INFORMATION
 ################################################################################
 HOST_FQDN	:= $(shell $(CMD_HOSTNAME) -f)
+HOST		:= $(shell $(CMD_HOSTNAME))
 TIMESTAMP	=  $(shell $(CMD_DATE) +'%Y%m%d_%H%M%S')
 
 ################################################################################
@@ -316,8 +321,10 @@ define JAZZSM_UNINSTALL_SERVICES_RESPONSE_FILE_CONTENT
     <variable name='sharedLocation' value='$(JAZZSM_IMSHARED)'/>
   </variables>
   <server>
-    <repository location='$(PATH_REPOSITORY_INSTALL)/JazzSMRepository/disk1'/>
-    <repository location='$(PATH_REPOSITORY_INSTALL)/WASRepository/disk1'/>
+	<repository location='$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64'/>
+	<repository location='$(PATH_REPOSITORY_INSTALL)/'/>
+	<repository location='$(PATH_REPOSITORY_INSTALL)/JazzSMRepository/disk1'/>
+	<repository location='$(PATH_REPOSITORY_INSTALL)/WASRepository/disk1'/>
   </server>
   <profile id='Core services in Jazz for Service Management' installLocation='$(PATH_INSTALL_JAZZSM)'>
     <data key='eclipseLocation' value='$(PATH_INSTALL_JAZZSM)'/>
@@ -352,7 +359,7 @@ define JAZZSM_UNINSTALL_SERVICES_RESPONSE_FILE_CONTENT
     <data key='user.WAS_PASSWORD' value='<WAS_JAZZSM_PASSWD>'/>
   </profile>
   <uninstall modify='false'>
-    <offering profile='Core services in Jazz for Service Management' id='com.ibm.tivoli.tacct.psc.tip.install' version='3.1.2001.20150821-0351'/>
+    <offering profile='Core services in Jazz for Service Management' id='com.ibm.tivoli.tacct.psc.tip.install' version='3.1.3100.20191018-0333'/>
   </uninstall>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='$${sharedLocation}'/>
   <preference name='com.ibm.cic.common.core.preferences.connectTimeout' value='30'/>
@@ -490,6 +497,17 @@ WantedBy=default.target
 endef
 export ETC_SYSTEMD_JAZZSM_SERVICE_CONTENT
 
+################################################################################
+# JAVA HEAP CONFIGURATION FILE
+################################################################################
+JAZZSM_JAVA_CONFIG_FILE=$(PATH_TMP)/jazzsm_java_config.py
+define JAZZSM_JAVA_HEAP_CONTENT
+AdminTask.setJVMInitialHeapSize('-serverName server1 -initialHeapSize 1024')
+AdminTask.setJVMMaxHeapSize('-serverName server1 -maximumHeapSize 4098')
+AdminConfig.save()
+endef
+export JAZZSM_JAVA_HEAP_CONTENT
+
 
 ################################################################################
 # MAIN BUILD TARGETS
@@ -509,8 +527,7 @@ install:			preinstallchecks \
 
 uninstall:			preuninstallchecks \
 					preuninstall \
-					theuninstall \
-					postuninstall
+					theuninstall 
 
 verify:			
 
@@ -524,13 +541,13 @@ preinstall:
 theinstall:			install_jazzsm \
 					configure_jazzsm \
 					configure_TLSv1_2 \
+					configure_root_ca \
+					configure_heap_size \
 					autostarton_jazzsm
 
 postinstall:		clean
 
-preuninstallchecks:	check_commands \
-					check_media_exists \
-					check_media_checksums
+preuninstallchecks:	check_commands 
 
 preuninstall:
 
@@ -758,6 +775,19 @@ prepare_was_upgrade_media:   check_whoami \
 
 
 ################################################################################
+# CREATE THE JAZZSM HEAP CONFIGURATION FILE
+################################################################################
+create_jazzsm_java_heap_file:	check_commands 
+
+	@$(call func_print_caption,"CREATING JAZZSM JAVA HEAP CONFIGURATION FILE")
+	@$(CMD_ECHO) "$$JAZZSM_JAVA_HEAP_CONTENT" > $(JAZZSM_JAVA_CONFIG_FILE) || { $(CMD_ECHO) ; \
+		 "JazzSM Resp File (FAIL): #$(JAZZSM_JAVA_CONFIG_FILE)" ; \
+		exit 31; } ; \
+	$(CMD_ECHO) "JazzSM JAVA HEAP File (OK):   #$(JAZZSM_JAVA_CONFIG_FILE)"
+	@$(call func_chmod,444,$(JAZZSM_JAVA_CONFIG_FILE))
+	@$(CMD_ECHO)
+
+################################################################################
 # CREATE THE JAZZSM INSTALLATION RESPONSE FILE
 ################################################################################
 create_jazzsm_install_response_file:	check_commands \
@@ -799,7 +829,7 @@ create_was_upgrade_response_file:	check_commands \
 	@$(CMD_ECHO)
 
 ################################################################################
-# UPGRADE WAS TO 8.5.5.15
+# UPGRADE WAS TO 8.5.5.20
 ################################################################################
 upgrade_was: check_whoami \
                                 check_commands \
@@ -863,6 +893,33 @@ install_jazzsm:		check_whoami \
 		exit 6; }
 	@$(CMD_ECHO) "JazzSM Install (OK):     $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_USERINSTC) input $(JAZZSM_INSTALL_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
 	@$(CMD_ECHO)
+
+################################################################################
+# CONFIGURE ROOT CA
+################################################################################
+configure_root_ca:	check_whoami \
+				check_commands
+
+	@$(call func_print_caption,"CONFIGURING ROOT CA")
+	@$(call func_file_must_exist,$(JAZZSM_USER),$(WAS_CMD_WSADMIN))
+
+	-@$(CMD_SU) - $(JAZZSM_USER) -c "$(WAS_CMD_WSADMIN) -lang jython -c \"AdminTask.retrieveSignerFromPort('[-host ldaps -port 636 -certificateAlias envCa -keyStoreName NodeDefaultTrustStore]')\""
+
+################################################################################
+# CONFIGURE HEAP SIZE 
+################################################################################
+configure_heap_size:	check_whoami \
+					create_jazzsm_java_heap_file \
+						check_commands 	
+
+	@$(call func_print_caption,"CONFIGURING MEMORY HEAP SETTINGS")
+	@$(call func_file_must_exist,$(JAZZSM_USER),$(WAS_CMD_WSADMIN))
+
+	@$(CMD_SU) - $(JAZZSM_USER) -c "$(WAS_CMD_WSADMIN) -lang jython -f $(JAZZSM_JAVA_CONFIG_FILE)"
+	@$(CMD_ECHO)
+
+
+
 
 ################################################################################
 # CONFIGURE JAZZSM
@@ -1124,9 +1181,7 @@ remove_jazzsm_uninstall_response_file:	check_commands
 ################################################################################
 uninstall_jazzsm:	check_whoami \
 					check_commands \
-					create_jazzsm_user \
 					create_jazzsm_uninstall_response_file \
-					prepare_jazzsm_install_media \
 					autostartoff_jazzsm
 
 	@$(call func_print_caption,"UNINSTALLING JAZZ FOR SERVICE MANAGEMENT")
