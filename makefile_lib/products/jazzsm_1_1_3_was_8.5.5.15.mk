@@ -29,10 +29,8 @@
 ## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
 ## DEALINGS IN THE SOFTWARE.                                                  ##
 ################################################################################
-# IBM Jazz for Service Management 1.1.2.1
-# IBM WebSphere Application Server V8.5.5.4
-# Michael T. Brown
-# July 17, 2019
+# IBM Jazz for Service Management 1.1.3.1
+# IBM WebSphere Application Server V8.5.5.20
 ################################################################################
 MAKE_FILE	:= $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 MAKE_DIR	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -73,12 +71,13 @@ PATH_TEMP_DIR		:= $(shell $(CMD_MKTEMP) -d $(PATH_TEMP_TEMPLATE) 2> /dev/null)
 # REPOSITORY PATHS
 ################################################################################
 PATH_REPOSITORY_INSTALL	:= $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_15_install
-PATH_REPOSITORY_UPGRADE := $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_15_upgrade
+PATH_REPOSITORY_UPGRADE := $(PATH_MAKEFILE_REPOSITORY)/jazzsm_1_1_3_was_8_5_5_20_upgrade
 
 PATH_REPOSITORY_JAZZSM_EXT_PACKAGE=com.ibm.tivoli.tacct.psc.install.was85.extension_
 PATH_REPOSITORY_JAZZSM_JVM_PACKAGE=com.ibm.websphere.IBMJAVA.v70_
 PATH_REPOSITORY_JAZZSM_WAS_PACKAGE=com.ibm.websphere.BASE.v85_
 
+PATH_MAKEFILE_UPGRADE_MEDIA=$(PATH_MAKEFILE_MEDIA)/WAS_Updates
 ################################################################################
 # INSTALLATION USERS, SETTINGS AND PATHS
 ################################################################################
@@ -291,15 +290,14 @@ define WAS_UPGRADE_RESPONSE_FILE_CONTENT
   <server>
     <repository location='$(PATH_REPOSITORY_UPGRADE)'/>
   </server>
-<profile installLocation="$(PATH_INSTALL_WEBSPHERE)/AppServer" id="IBM WebSphere Application Server V8.5">
-    <data value="x86" key="cic.selector.arch"/>
-    <data value="java8" key="user.wasjava"/>
-    <data value="java8" key="user.internal.use.only.prev.wasjava"/>
-    <data value="java6" key="user.internal.use.only.rollback.wasjava"/>
+<profile id="IBM WebSphere Application Server V8.5" installLocation="$(PATH_INSTALL_WEBSPHERE)/AppServer">
+	<data key="cic.selector.arch" value="x86"/>
+	<data key="user.wasjava" value="java8"/>
+	<data key="user.internal.use.only.prev.wasjava" value="java8"/>
 </profile>
 <install>
-<!-- IBM WebSphere Application Server 8.5.5.15 -->
-    <offering id="com.ibm.websphere.BASE.v85" features="com.ibm.sdk.6_64bit,core.feature,ejbdeploy,embeddablecontainer,thinclient" version="8.5.5015.20190128_1828" profile="IBM WebSphere Application Server V8.5"/>
+<!-- IBM WebSphere Application Server 8.5.5.20 -->
+	<offering profile="IBM WebSphere Application Server V8.5" id="com.ibm.websphere.BASE.v85" version="8.5.5020.20210708_1826" features="com.ibm.sdk.6_64bit,core.feature,ejbdeploy,embeddablecontainer,thinclient"/>
 </install>
 <preference value="${sharedLocation}" name="com.ibm.cic.common.core.preferences.eclipseCache"/>
 <preference value="false" name="offering.service.repositories.areUsed"/>
@@ -752,9 +750,9 @@ prepare_was_upgrade_media:   check_whoami \
 		$(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # already exists" ; \
 	else \
 		$(CMD_ECHO) "WAS Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE) # non-existent" ; \
-		$(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(MEDIA_STEP3a_F),$(PATH_REPOSITORY_UPGRADE)) ; \
-		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3b_F),$(PATH_REPOSITORY_UPGRADE)) ; \
-		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(MEDIA_STEP3c_F),$(PATH_REPOSITORY_UPGRADE)) ; \
+		$(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(PATH_MAKEFILE_UPGRADE_MEDIA)/8.5.5-WS-WAS-FP020-part1.zip,$(PATH_REPOSITORY_UPGRADE)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(PATH_MAKEFILE_UPGRADE_MEDIA)/8.5.5-WS-WAS-FP020-part2.zip,$(PATH_REPOSITORY_UPGRADE)) ; \
+		$(call func_unzip_to_existing_dir,$(JAZZSM_USER),$(PATH_MAKEFILE_UPGRADE_MEDIA)/8.5.5-WS-WAS-FP020-part3.zip,$(PATH_REPOSITORY_UPGRADE)) ; \
 	fi ;
 	@$(CMD_ECHO)
 
@@ -806,8 +804,7 @@ create_was_upgrade_response_file:	check_commands \
 upgrade_was: check_whoami \
                                 check_commands \
                                 prepare_was_upgrade_media \
-                                create_was_upgrade_response_file \
-				stop_jazzsm_natively
+                                create_was_upgrade_response_file 
 
 	@$(call func_print_caption,"UPGRADING WEBSPHERE")
 	@if [ -d "$(PATH_INSTALL_WEBSPHERE)" ] ; \
