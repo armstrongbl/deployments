@@ -29,12 +29,12 @@
 ## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        ##
 ## DEALINGS IN THE SOFTWARE.                                                  ##
 ################################################################################
-<<<<<<< HEAD
+#<<<<<<< HEAD
 # IBM Jazz for Service Management 1.1.3.1
 # IBM WebSphere Application Server V8.5.5.20
-=======
+#=======
 
->>>>>>> 4ca845fd8c2c74d02d79e0b16b312f184433e6a6
+#>>>>>>> 4ca845fd8c2c74d02d79e0b16b312f184433e6a6
 ################################################################################
 MAKE_FILE	:= $(word $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST))
 MAKE_DIR	:= $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
@@ -281,6 +281,69 @@ define JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
 </agent-input>
 endef
 export JAZZSM_INSTALL_RESPONSE_FILE_CONTENT
+
+################################################################################
+# JAZZSM RESPONSE FILE TEMPLATE (UPGRADE)
+################################################################################
+#<repository location='$(PATH_REPOSITORY_INSTALL)/im.linux.x86_64' temporary='true'/>
+JAZZSM_UPGRADE_RESPONSE_FILE=$(PATH_TMP)/jazzsm_upgrade_response.xml
+define JAZZSM_UPGRADE_RESPONSE_FILE_CONTENT
+<?xml version='1.0' encoding='UTF-8'?>
+<agent-input>
+  <variables>
+    <variable name='sharedLocation' value='$(JAZZSM_IMSHARED)'/>
+  </variables>
+  <server>
+    <repository location='$(PATH_REPOSITORY_UPGRADE)/jazz/JazzSMFPRepository/disk1'/>
+ </server>
+<profile id='IBM WebSphere Application Server V8.5' installLocation='/opt/IBM/WebSphere/AppServer'>
+  <data key='cic.selector.arch' value='x86'/>
+  <data key='user.wasjava' value='java8'/>
+  <data key='user.internal.use.only.prev.wasjava' value='java8'/>
+ </profile>
+ <install>
+    <!-- Jazz for Service Management extension for IBM WebSphere 8.5 1.1.2.1 -->
+    <offering profile='IBM WebSphere Application Server V8.5' id='com.ibm.tivoli.tacct.psc.install.was85.extension' version='1.1.2001.20211109-1038' features='main.feature'/>
+ </install>
+  <profile id='Core services in Jazz for Service Management' installLocation='$(PATH_INSTALL_JAZZSM)'>
+    <data key='cic.selector.os' value='linux'/>
+    <data key='cic.selector.arch' value='x86_64'/>
+    <data key='cic.selector.ws' value='gtk'/>
+    <data key='cic.selector.nl' value='en'/>
+    <data key='user.BOOTSTRAP_ADDRESS' value='$(WAS_BOOTSTRAP_ADDRESS)'/>
+    <data key='user.CSIV2_SSL_MUTUALAUTH_LISTENER_ADDRESS' value='$(WAS_CSIV2_SSL_MUTUALAUTH_LISTENER_ADDRESS)'/>
+    <data key='user.SOAP_CONNECTOR_ADDRESS' value='$(WAS_SOAP_CONNECTOR_ADDRESS)'/>
+    <data key='user.CSIV2_SSL_SERVERAUTH_LISTENER_ADDRESS' value='$(WAS_CSIV2_SSL_SERVERAUTH_LISTENER_ADDRESS)'/>
+    <data key='user.DCS_UNICAST_ADDRESS' value='$(WAS_DCS_UNICAST_ADDRESS)'/>
+    <data key='user.IPC_CONNECTOR_ADDRESS' value='$(WAS_IPC_CONNECTOR_ADDRESS)'/>
+    <data key='user.ORB_LISTENER_ADDRESS' value='$(WAS_ORB_LISTENER_ADDRESS)'/>
+    <data key='user.WC_defaulthost_secure' value='$(WAS_WC_DEFAULTHOST_SECURE)'/>
+    <data key='user.REST_NOTIFICATION_PORT' value='$(WAS_REST_NOTIFICATION_PORT)'/>
+    <data key='user.WC_defaulthost' value='$(WAS_WC_DEFAULTHOST)'/>
+    <data key='user.WC_adminhost_secure' value='$(WAS_WC_ADMINHOST_SECURE)'/>
+    <data key='user.SAS_SSL_SERVERAUTH_LISTENER_ADDRESS' value='$(WAS_SAS_SSL_SERVERAUTH_LISTENER_ADDRESS)'/>
+    <data key='user.WC_adminhost' value='$(WAS_WC_ADMINHOST)'/>
+    <data key='user.TIP_CONTEXT_ROOT' value='$(WAS_JAZZSM_CONTEXTROOT)'/>
+    <data key='user.WAS_HOME' value='$(PATH_INSTALL_WEBSPHERE)/AppServer'/>
+    <data key='user.CREATE_NEW_WAS_PROFILE' value='false'/>
+    <data key='user.WAS_PROFILE_PATH' value='$(PATH_INSTALL_JAZZSM)/profile'/>
+    <data key='user.WAS_PROFILE_NAME' value='$(WAS_JAZZSM_PROFILE)'/>
+    <data key='user.WAS_HOST_NAME' value='$(HOST_FQDN)'/>
+    <data key='user.WAS_SERVER_NAME' value='$(WAS_JAZZSM_SERVERNAME)'/>
+    <data key='user.WAS_NODE' value='$(WAS_JAZZSM_NODE)'/>
+    <data key='user.WAS_USER_NAME' value='$(WAS_JAZZSM_USER)'/>
+    <data key='user.WAS_PASSWORD' value='<WAS_JAZZSM_PASSWD>'/>
+    <data key='user.WAS_CELL' value='$(WAS_JAZZSM_CELL)'/>
+  </profile>
+  <install>
+	<!-- IBM Dashboard Application Services Hub 3.1.3.13 -->
+	<offering profile="Core services in Jazz for Service Management" id="com.ibm.tivoli.tacct.psc.tip.install" version="3.1.3100.20211109-1038" features="com.ibm.tivoli.tacct.psc.install.server.feature.tip.install,com.ibm.tivoli.tacct.psc.install.server.feature.tip.config"/>
+  </install>
+	<preference name="com.ibm.cic.common.core.preferences.eclipseCache" value="${sharedLocation}"/>
+	<preference name="offering.service.repositories.areUsed" value="false"/>
+</agent-input>
+endef
+export JAZZSM_UPGRADE_RESPONSE_FILE_CONTENT
 
 ################################################################################
 # WAS  RESPONSE FILE TEMPLATE (UPGRADE)
@@ -773,6 +836,22 @@ prepare_was_upgrade_media:   check_whoami \
 	fi ;
 	@$(CMD_ECHO)
 
+###s#############################################################################
+# PREPARE JAZZSM UPGRADE INSTALLATION MEDIA
+################################################################################
+prepare_jazzsm_upgrade_media:   check_whoami \
+                                          check_commands \
+
+	@$(call func_print_caption,"PREPARING JAZZ UPGRADE INSTALLATION MEDIA")
+	@if [ -d "$(PATH_REPOSITORY_UPGRADE)/jazz" ];  \
+	then \
+		$(CMD_ECHO) "JAZZ Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE)/jazz # already exists" ; \
+	else \
+		$(CMD_ECHO) "JAZZ Repo? (OK):       -d $(PATH_REPOSITORY_UPGRADE)/jazz # non-existent" ; \
+		$(call func_unzip_to_new_dir,$(JAZZSM_USER),$(JAZZSM_GROUP),755,$(PATH_MAKEFILE_UPGRADE_MEDIA)/jazz/1.1.3-TIV-JazzSM-multi-FP013_signed.zip,$(PATH_REPOSITORY_UPGRADE)/jazz) ; \
+	fi ;
+	@$(CMD_ECHO)
+
 
 ################################################################################
 # CREATE THE JAZZSM HEAP CONFIGURATION FILE
@@ -810,6 +889,56 @@ remove_jazzsm_install_response_file:	check_commands
 	@$(CMD_RM) -f $(JAZZSM_INSTALL_RESPONSE_FILE)
 	@$(CMD_ECHO)
 
+################################################################################
+# CREATE THE JAZZSM UPGRADE RESPONSE FILE
+################################################################################
+create_jazzsm_upgrade_response_file:	check_commands \
+										create_jazzsm_user \
+										prepare_jazzsm_upgrade_media
+	@$(call func_print_caption,"CREATING JAZZSM UPGRADE RESPONSE FILE")
+	@$(call func_command_check,$(CMD_IBM_IMUTILSC))
+	@$(CMD_ECHO) "Encrypt Password:        #$(CMD_IBM_IMUTILSC) encryptString..."
+	@$(eval TEMP_WAS_JAZZSM_PASSWD_ENCRYPT=`$(CMD_SU) - $(JAZZSM_USER) -c "$(CMD_IBM_IMUTILSC) encryptString $(WAS_JAZZSM_PASSWD) -silent -noSplash"`)
+	@$(CMD_ECHO) "Encrypt Password (OK):   #$(TEMP_WAS_JAZZSM_PASSWD_ENCRYPT) for $(WAS_JAZZSM_USER)"
+	@$(CMD_ECHO) "$$JAZZSM_UPGRADE_RESPONSE_FILE_CONTENT" | $(CMD_SED) -e "s/<WAS_JAZZSM_PASSWD>/$(TEMP_WAS_JAZZSM_PASSWD_ENCRYPT)/g" > $(JAZZSM_UPGRADE_RESPONSE_FILE) || { $(CMD_ECHO) ; \
+		 "JazzSM Resp File (FAIL): #$(JAZZSM_UPGRADE_RESPONSE_FILE)" ; \
+		exit 3; } ; \
+	$(CMD_ECHO) "JazzSM Resp File (OK):   #$(JAZZSM_UPGRADE_RESPONSE_FILE)"
+	@$(call func_chmod,444,$(JAZZSM_UPGRADE_RESPONSE_FILE))
+	@$(CMD_ECHO)
+
+remove_jazzsm_upgrade_response_file:	check_commands
+	@$(call func_print_caption,"REMOVING JAZZSM UPGRADE RESPONSE FILE")
+	@$(CMD_RM) -f $(JAZZSM_UPGRADE_RESPONSE_FILE)
+	@$(CMD_ECHO)
+
+################################################################################
+# UPGRADE JAZZSM TO  1.1.3.13
+################################################################################
+upgrade_jazzsm: check_whoami \
+                                check_commands \
+                                prepare_jazzsm_upgrade_media \
+                                create_jazzsm_upgrade_response_file 
+
+	@$(call func_print_caption,"UPGRADING JAZZSM")
+	@if [ -d "$(PATH_INSTALL_JAZZSM)" ] ; \
+	then \
+		$(CMD_ECHO) "JazzSM Exists? (OK):     -d $(PATH_INSTALL_JAZZSM) # exists" ; \
+	else \
+		$(CMD_ECHO) "JazzSM Exists? (FAIL):   -d $(PATH_INSTALL_JAZZSM) # non-existent" ; \
+		exit 7 ; \
+	fi ;
+
+	@$(call func_command_check,$(JAZZSM_CMD_IMCL))
+	@$(CMD_ECHO) "Websphere Upgrade:          #In progress..."
+	@$(CMD_SU) - $(JAZZSM_USER) -c "$(JAZZSM_CMD_IMCL) input \
+		$(JAZZSM_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)" || \
+		{ $(CMD_ECHO) "JazzSM Upgrade (FAIL):   $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(JAZZSM_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\"" ; \
+	exit 8; }
+	@$(CMD_ECHO) "JazzSM Upgrade (OK):     $(CMD_SU) - $(JAZZSM_USER) -c \"$(JAZZSM_CMD_IMCL) input $(JAZZSM_UPGRADE_RESPONSE_FILE) $(OPTIONS_MAKEFILE_IM)\""
+	@$(CMD_ECHO)
+
+################################################################################
 ################################################################################
 # CREATE THE WEBSPHERE UPGRADE RESPONSE FILE
 ################################################################################
